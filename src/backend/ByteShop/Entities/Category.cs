@@ -4,6 +4,8 @@ public class Category : Entity
     public string Name { get; set; }
     public int ParentCategoryId { get; private set; }
 
+    public List<Product> Products { get; set; }
+
     //For EF
     public Category(){}
 

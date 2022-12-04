@@ -11,14 +11,16 @@ public class Product : Entity
     public float Weight { get; private set; }
     public float Heigth { get; private set; }
     public float Lenght { get; private set; }
-    public float CategoryId { get; private set; }
+    public int CategoryId { get; private set; }
+    public Category Category { get; private set; }
 
+    public Product(){}
 
     public Product(
         string name, string description, decimal price,
         decimal costPrice, int stock, int warranty,
         string brand, float weight, float heigth, float lenght,
-        float categoryId)
+        int categoryId)
     {
         Name = name;
         Description = description;
