@@ -18,7 +18,7 @@ public static class Bootstrapper
     {
         var connectionString = configuration.GetConnectionString("BusinessDb");
         services.AddDbContext<ByteShopDbContext>(options =>
-            options.UseSqlServer());
+            options.UseSqlServer(connectionString));
     }
 
     private static void AddRepositories(IServiceCollection services)

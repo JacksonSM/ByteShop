@@ -14,10 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ByteShop.Application\ByteShop.Application.csproj" />
     <ProjectReference Include="..\ByteShop.Infrastructure\ByteShop.Infrastructure.csproj" />
   </ItemGroup>
 
