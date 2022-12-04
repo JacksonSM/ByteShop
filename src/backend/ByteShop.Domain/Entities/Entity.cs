@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace ByteShop.Domain.Entities;
+﻿namespace ByteShop.Domain.Entities;
 public abstract class Entity
 {
     public int Id { get; set; }

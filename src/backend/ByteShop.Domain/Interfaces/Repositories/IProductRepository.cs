@@ -3,5 +3,5 @@
 namespace ByteShop.Domain.Interfaces.Repositories;
 public interface IProductRepository
 {
-    Task Add(Product product);
+    Task AddAsync(Product product);
 }
