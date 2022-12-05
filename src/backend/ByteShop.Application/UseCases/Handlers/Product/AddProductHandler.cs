@@ -36,6 +36,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 name: command.Name,
                 description: command.Description,
                 price: command.Price,
+                sku: command.SKU,
                 costPrice: command.CostPrice,
                 stock: command.Stock,
                 warranty: command.Warranty,
@@ -45,6 +46,13 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 lenght: command.Lenght,
                 categoryId: command.CategoryId
             );
+
+        if(command.MainImageUrl is not null)
+            newProduct.SetMainImage(command.MainImageUrl);
+
+        //Receber url imagem real
+        if(command.SecondaryImageUrl is not null)
+            newProduct.SetSecondaryImage(Array.Empty<string>());
 
         await _productRepo.AddAsync(newProduct);
         await _uow.CommitAsync();

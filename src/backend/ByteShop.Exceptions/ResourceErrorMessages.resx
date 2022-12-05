@@ -135,4 +135,7 @@
   <data name="PRODUCT_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 60 caracteres.</value>
   </data>
+  <data name="PRODUCT_SKU_EMPTY" xml:space="preserve">
+    <value>O campo SKU é obrigatório.</value>
+  </data>
 </root>

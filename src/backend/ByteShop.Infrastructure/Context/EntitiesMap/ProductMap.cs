@@ -14,10 +14,13 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .IsRequired();
 
         builder.Property(x => x.Description)
-       .IsRequired();
+               .IsRequired();
 
         builder.Property(x => x.Brand)
-               .HasColumnType("nvarchar(60)")
+               .HasColumnType("nvarchar(30)")
+               .IsRequired();
+        
+        builder.Property(x => x.SKU)
                .IsRequired();
         
         builder.Property(x => x.Price)
