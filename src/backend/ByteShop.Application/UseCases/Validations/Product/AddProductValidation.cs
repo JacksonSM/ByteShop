@@ -16,6 +16,10 @@ public class AddProductValidation : AbstractValidator<AddProductCommand>
 		RuleFor(c => c.Description)
 			.NotEmpty()
 			.WithMessage(ResourceErrorMessages.PRODUCT_DESCRIPTION_EMPTY);
+		
+		RuleFor(c => c.SKU)
+			.NotEmpty()
+			.WithMessage(ResourceErrorMessages.PRODUCT_SKU_EMPTY);
 
 		RuleFor(c => c.Price)
 			.PrecisionScale(18, 2, false);

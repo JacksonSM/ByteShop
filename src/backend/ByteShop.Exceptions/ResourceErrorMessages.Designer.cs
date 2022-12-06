@@ -113,5 +113,14 @@ namespace ByteShop.Exceptions {
                 return ResourceManager.GetString("PRODUCT_NAME_MAXIMUMLENGTH", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo SKU é obrigatório..
+        /// </summary>
+        public static string PRODUCT_SKU_EMPTY {
+            get {
+                return ResourceManager.GetString("PRODUCT_SKU_EMPTY", resourceCulture);
+            }
+        }
     }
 }
