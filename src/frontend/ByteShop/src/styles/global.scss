@@ -146,3 +146,8 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+.page-item {
+  --#{$prefix}pagination-color: #{$Primary};
+  --#{$prefix}pagination-active-bg: #{$Primary};
+}
