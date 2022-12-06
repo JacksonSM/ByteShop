@@ -3,15 +3,17 @@ using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Infrastructure.Context;
 
 namespace ByteShop.Infrastructure.Repositories;
-public class ProductRepository : IProductRepository
+public class ProductRepository : Repository<Product>, IProductRepository
 {
     private readonly ByteShopDbContext _context;
 
-    public ProductRepository(ByteShopDbContext context)
+    public ProductRepository(ByteShopDbContext context): base(context)
     {
         _context = context;
     }
 
-    public async Task AddAsync(Product product)=>
-        await _context.Product.AddAsync(product); 
+    public Task<List<Product>> GetAllAsync(IQueryable<Product> query)
+    {
+        throw new NotImplementedException();
+    }
 }

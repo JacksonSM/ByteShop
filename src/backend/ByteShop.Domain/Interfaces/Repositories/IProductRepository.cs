@@ -1,7 +1,7 @@
 ﻿using ByteShop.Domain.Entities;
 
 namespace ByteShop.Domain.Interfaces.Repositories;
-public interface IProductRepository
+public interface IProductRepository : IRepository<Product>
 {
-    Task AddAsync(Product product);
+    Task<List<Product>> GetAllAsync(IQueryable<Product> query);
 }
