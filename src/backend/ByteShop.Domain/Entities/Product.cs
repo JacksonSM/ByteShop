@@ -16,6 +16,7 @@ public class Product : Entity
     public string SecondaryImageUrl { get; private set; }
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
+    public bool IsActive { get; private set; }
 
     public Product(){}
 
@@ -37,6 +38,7 @@ public class Product : Entity
         Heigth = heigth;
         Lenght = lenght;
         CategoryId = categoryId;
+        IsActive= true;
     }
 
     public void SetMainImage(string imageUrl)

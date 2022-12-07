@@ -3,6 +3,7 @@ using System;
 using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ByteShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ByteShopDbContext))]
-    partial class ByteShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221207015353_AdicionadoCampoAtivoEmProduto")]
+    partial class AdicionadoCampoAtivoEmProduto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
