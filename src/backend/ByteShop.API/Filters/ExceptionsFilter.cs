@@ -4,7 +4,6 @@ using ByteShop.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace ByteShop.API.Filters;
 
