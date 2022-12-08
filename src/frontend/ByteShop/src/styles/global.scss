@@ -151,3 +151,15 @@ table {
   --#{$prefix}pagination-color: #{$Primary};
   --#{$prefix}pagination-active-bg: #{$Primary};
 }
+
+.offcanvas {
+  max-width: 360px;
+  .offcanvas-body {
+    background: $indigo-100;
+    font-weight: 700;
+
+    .nav-pills {
+      --#{$prefix}nav-pills-link-active-bg: #{$Primary};
+    }
+  }
+}
