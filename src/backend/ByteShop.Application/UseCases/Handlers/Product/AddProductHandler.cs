@@ -47,11 +47,11 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 categoryId: command.CategoryId
             );
 
-        if(command.MainImageUrl is not null)
+        if(!string.IsNullOrEmpty(command.MainImageUrl))
             newProduct.SetMainImage(command.MainImageUrl);
 
         //Receber url imagem real
-        if(command.SecondaryImageUrl is not null)
+        if(!string.IsNullOrEmpty(command.SecondaryImageUrl))
             newProduct.SetSecondaryImage(Array.Empty<string>());
 
         await _productRepo.AddAsync(newProduct);

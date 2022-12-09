@@ -34,20 +34,20 @@ public class AddCategoryHandler : IHandler<AddCategoryCommand, CategoryDTO>
 
         Validate(command, parentCategory);
 
-        var category = new Domain.Entities.Category(command.Name);
+        var newCategory = new Domain.Entities.Category(command.Name);
 
         if (parentCategory != null)
         {
-            parentCategory.AddChild(category);
+            parentCategory.AddChild(newCategory);
             _categoryRepo.Update(parentCategory);
         }
         else
         {
-            await _categoryRepo.AddAsync(category);
+            await _categoryRepo.AddAsync(newCategory);
         }
         await _uow.CommitAsync();
 
-        var categoryDTO = _mapper.Map<CategoryDTO>(category);
+        var categoryDTO = _mapper.Map<CategoryDTO>(newCategory);
         return new RequestResult<CategoryDTO>().Created(categoryDTO);   
     }
 
