@@ -12,5 +12,11 @@ public class CategoryMap
         builder.Property(x => x.Name)
                .HasColumnType("nvarchar(50)")
                .IsRequired();
+
+        builder.HasOne(r => r.ParentCategory)
+               .WithMany(r => r.ChildCategories)
+               .HasForeignKey(f => f.ParentCategoryId);
+
+
     }
 }

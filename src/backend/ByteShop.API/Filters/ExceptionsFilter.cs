@@ -1,6 +1,7 @@
 ﻿using ByteShop.API.Tools;
 using ByteShop.Application.UseCases.Results;
-using ByteShop.Exceptions.ExceptionsBase;
+using ByteShop.Domain.Exceptions;
+using ByteShop.Exceptions.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
@@ -11,20 +12,19 @@ public class ExceptionsFilter : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
-        if (context.Exception is ByteShopException)
+        switch (context.Exception)
         {
-            HandleByteShopException(context);
+            case ByteShopException:
+                HandleByteShopException(context);
+                break;
+            case DomainExecption:
+                HandleDomainExecption(context);
+                break;
+            default:
+                HandleUnknownError(context);
+                break;
         }
-        else
-        {
-            HandleUnknownError(context);
-        }
-    }
 
-    private static void HandleUnknownError(ExceptionContext context)
-    {
-        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Result = new ObjectResult(new { ErrorMessage = "Erro desconhecido" });
     }
 
     private static void HandleByteShopException(ExceptionContext context)
@@ -33,6 +33,19 @@ public class ExceptionsFilter : IExceptionFilter
         {
             HandleValidationErrors(context);
         }
+    }
+
+    private void HandleDomainExecption(ExceptionContext context)
+    {
+        context.Result = new ParseRequestResult<string>()
+            .ParseToActionResult(new RequestResult<string>()
+            .BadRequest("Operação invalida", context.Exception.Message));
+    }
+
+    private static void HandleUnknownError(ExceptionContext context)
+    {
+        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Result = new ObjectResult(new { ErrorMessage = "Erro desconhecido" });
     }
 
     private static void HandleValidationErrors(ExceptionContext context)

@@ -1,9 +1,9 @@
 ﻿using ByteShop.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ByteShop.Domain.Interfaces.Repositories;
 public interface IProductRepository : IRepository<Product>
 {
-    Task<List<Product>> GetAllAsync(IQueryable<Product> query);
-    IQueryable<Product> GetQueryable();
-    Task<int> GetCountAsync(IQueryable<Product> query);
+    Task<(IEnumerable<Product> products, int quantityProduct)> GetAllAsync(
+    string sku, string name, string brand, string category, int? actualPage, int? itemsPerPage);
 }

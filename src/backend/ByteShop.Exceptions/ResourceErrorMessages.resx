@@ -120,6 +120,12 @@
   <data name="CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
     <value>Categoria inexistente.</value>
   </data>
+  <data name="CATEGORY_NAME_EMPTY" xml:space="preserve">
+    <value>O campo nome é obrigatório.</value>
+  </data>
+  <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
+    <value>O campo nome suporta apenas 50 caracteres.</value>
+  </data>
   <data name="PRODUCT_BRAND_EMPTY" xml:space="preserve">
     <value>O campo marca é obrigatório.</value>
   </data>

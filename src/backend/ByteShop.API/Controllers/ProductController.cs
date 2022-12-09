@@ -42,4 +42,19 @@ public class ProductController : ControllerBase
         return new ParseRequestResult<ProductDTO>().ParseToActionResult(await handler.Handle(new GetByIdCommand { Id = id }));
     }
 
+    /// <summary>
+    /// Retorna todos os produtos com ou sem paginação.
+    /// </summary>
+    /// <remarks>As informaçoes da paginação estão no header com a chave: "X-Pagination"</remarks>
+    /// <response code="200">Retorna lista de videos.</response>
+    /// <response code="204">Não foi encontrado nenhum video.</response>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RequestResult<ProductDTO[]>))]
+    public async Task<ActionResult> GetAll(
+    [FromQuery] GetAllProductsCommand command,
+    [FromServices] GetAllProductsHandler handler)
+    {
+        return new ParseRequestResult<IEnumerable<ProductDTO>>().ParseToActionResult(await handler.Handle(command), Response);
+    }
+
 }
