@@ -16,14 +16,14 @@ import {
 const CadastroProduto: React.FC = () => {
   return (
     <>
-      <Breadcrumb className="d-flex justify-content-center mb-3">
-        <BreadcrumbItem href="/">Início</BreadcrumbItem>
-        <BreadcrumbItem href="/cadastro-de-produtos">
-          Cadastrar Produtos
-        </BreadcrumbItem>
-      </Breadcrumb>
-      <Container className="d-flex p-5" fluid>
-        <Form className="w-100 d-flex p-5 form-cadastro-produto">
+      <Container className="p-3 d-flex flex-column m-0" fluid>
+        <Breadcrumb className="align-self-center">
+          <BreadcrumbItem href="/">Início</BreadcrumbItem>
+          <BreadcrumbItem href="/cadastro-de-produtos" active>
+            Cadastrar Produtos
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <Form className="w-75 d-flex p-5 align-self-center form-cadastro-produto">
           <Col>
             <Row className="mb-4">
               {/* Código */}
