@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Col,
@@ -21,6 +22,8 @@ const SideMenu: React.FC = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Button variant="" title="Abrir menu" onClick={handleShow}>
@@ -42,12 +45,20 @@ const SideMenu: React.FC = () => {
                   <TabPane eventKey="produtos">
                     <Nav variant="pills">
                       <NavItem>
-                        <NavLink eventKey="Cadastrar produtos">
+                        <NavLink
+                          onClick={() => navigate("/cadastro-de-produtos")}
+                          eventKey="Cadastrar produtos"
+                        >
                           Cadastrar Produtos
                         </NavLink>
                       </NavItem>
                       <NavItem>
-                        <NavLink eventKey="Iventário">Inventário</NavLink>
+                        <NavLink
+                          eventKey="Iventário"
+                          onClick={() => navigate("/")}
+                        >
+                          Inventário
+                        </NavLink>
                       </NavItem>
                     </Nav>
                   </TabPane>
