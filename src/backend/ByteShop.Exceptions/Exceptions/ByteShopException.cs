@@ -1,4 +1,4 @@
-﻿namespace ByteShop.Exceptions.ExceptionsBase;
+﻿namespace ByteShop.Exceptions.Exceptions;
 
 
 public class ByteShopException : SystemException

@@ -5,7 +5,7 @@ using ByteShop.Application.UseCases.Results;
 using ByteShop.Application.UseCases.Validations.Product;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Exceptions;
-using ByteShop.Exceptions.ExceptionsBase;
+using ByteShop.Exceptions.Exceptions;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
@@ -74,8 +74,8 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
 
         if (!validationResult.IsValid)
         {
-            var mensagesDeErro = validationResult.Errors.Select(c => c.ErrorMessage).ToList();
-            throw new ValidationErrorsException(mensagesDeErro);
+            var errorMessages = validationResult.Errors.Select(c => c.ErrorMessage).ToList();
+            throw new ValidationErrorsException(errorMessages);
         }
     }
 }

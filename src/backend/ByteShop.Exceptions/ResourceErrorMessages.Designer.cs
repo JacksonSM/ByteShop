@@ -70,6 +70,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo nome é obrigatório..
+        /// </summary>
+        public static string CATEGORY_NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("CATEGORY_NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo nome suporta apenas 50 caracteres..
+        /// </summary>
+        public static string CATEGORY_NAME_MAXIMUMLENGTH {
+            get {
+                return ResourceManager.GetString("CATEGORY_NAME_MAXIMUMLENGTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo marca é obrigatório..
         /// </summary>
         public static string PRODUCT_BRAND_EMPTY {

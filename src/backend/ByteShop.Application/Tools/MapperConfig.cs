@@ -13,5 +13,6 @@ public class MapperConfig : Profile
     private void EntityForDTO()
     {
         CreateMap<Product, ProductDTO>();
+        CreateMap<Category, CategoryDTO>();
     }
 }

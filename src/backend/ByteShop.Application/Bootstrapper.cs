@@ -1,4 +1,5 @@
 ﻿using ByteShop.Application.Tools;
+using ByteShop.Application.UseCases.Handlers.Category;
 using ByteShop.Application.UseCases.Handlers.Product;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,5 +22,7 @@ public static class Bootstrapper
         services.AddScoped<AddProductHandler>()
                 .AddScoped<GetProductByIdHandler>()
                 .AddScoped<GetAllProductsHandler>();
+
+        services.AddScoped<AddCategoryHandler>();
     }
 }
