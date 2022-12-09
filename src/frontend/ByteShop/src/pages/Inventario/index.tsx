@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  Breadcrumb,
+  BreadcrumbItem,
   Button,
   Container,
   Form,
@@ -11,6 +13,12 @@ import {
 const Inventario: React.FC = () => {
   return (
     <Container fluid className="vw-100">
+      <Breadcrumb className="d-flex justify-content-center mb-3">
+        <BreadcrumbItem href="/">Início</BreadcrumbItem>
+        <BreadcrumbItem href="/inventario" active>
+          Inventário
+        </BreadcrumbItem>
+      </Breadcrumb>
       <Form className=" d-flex flex-wrap m-auto p-3" style={{ width: "800px" }}>
         <FormGroup className="m-1">
           <FormLabel htmlFor="sku" className="m-1">
