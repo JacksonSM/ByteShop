@@ -3,6 +3,7 @@ using System;
 using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ByteShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ByteShopDbContext))]
-    partial class ByteShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221209133755_AdicionandoRelacionamentoCategoria")]
+    partial class AdicionandoRelacionamentoCategoria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -27,14 +30,10 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParentCategoryId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Category");
                 });
@@ -73,6 +72,7 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("MainImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -88,6 +88,7 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SecondaryImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")
@@ -106,13 +107,19 @@ namespace ByteShop.Infrastructure.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("ByteShop.Domain.Entities.Category", b =>
+            modelBuilder.Entity("CategoryCategory", b =>
                 {
-                    b.HasOne("ByteShop.Domain.Entities.Category", "ParentCategory")
-                        .WithMany("ChildCategories")
-                        .HasForeignKey("ParentCategoryId");
+                    b.Property<int>("ChildCategoriesId")
+                        .HasColumnType("INTEGER");
 
-                    b.Navigation("ParentCategory");
+                    b.Property<int>("ParentCategoriesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ChildCategoriesId", "ParentCategoriesId");
+
+                    b.HasIndex("ParentCategoriesId");
+
+                    b.ToTable("CategoryCategory");
                 });
 
             modelBuilder.Entity("ByteShop.Domain.Entities.Product", b =>
@@ -126,10 +133,23 @@ namespace ByteShop.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("CategoryCategory", b =>
+                {
+                    b.HasOne("ByteShop.Domain.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("ChildCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ByteShop.Domain.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("ParentCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ByteShop.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("ChildCategories");
-
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

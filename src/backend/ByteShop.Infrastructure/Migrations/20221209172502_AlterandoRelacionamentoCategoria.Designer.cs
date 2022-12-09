@@ -3,6 +3,7 @@ using System;
 using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ByteShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ByteShopDbContext))]
-    partial class ByteShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221209172502_AlterandoRelacionamentoCategoria")]
+    partial class AlterandoRelacionamentoCategoria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -27,9 +30,10 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParentCategoryId")
+                    b.Property<int>("ParentCategoryId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -73,6 +77,7 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("MainImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -88,6 +93,7 @@ namespace ByteShop.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SecondaryImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")
@@ -110,7 +116,9 @@ namespace ByteShop.Infrastructure.Migrations
                 {
                     b.HasOne("ByteShop.Domain.Entities.Category", "ParentCategory")
                         .WithMany("ChildCategories")
-                        .HasForeignKey("ParentCategoryId");
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ParentCategory");
                 });
