@@ -19,7 +19,10 @@ const Inventario: React.FC = () => {
           Inventário
         </BreadcrumbItem>
       </Breadcrumb>
-      <Form className=" d-flex flex-wrap m-auto p-3" style={{ width: "800px" }}>
+      <Form
+        className=" d-flex flex-wrap m-auto p-3 form-inventario"
+        style={{ width: "800px" }}
+      >
         <FormGroup className="m-1">
           <FormLabel htmlFor="sku" className="m-1">
             Código
