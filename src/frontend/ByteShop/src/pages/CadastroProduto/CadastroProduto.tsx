@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,8 +13,65 @@ import {
   InputGroup,
   Row,
 } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const CadastroProduto: React.FC = () => {
+  // hooks
+  const [validated, setValidated] = useState(false);
+
+  // refs
+  const codigoRef = useRef<HTMLInputElement>(null);
+  const nomeRef = useRef<HTMLInputElement>(null);
+  const marcaRef = useRef<HTMLInputElement>(null);
+  const categoriaRef = useRef<HTMLInputElement>(null);
+  const garantiaRef = useRef<HTMLInputElement>(null);
+  const descricaoRef = useRef<HTMLTextAreaElement>(null);
+  const comprimentroRef = useRef<HTMLInputElement>(null);
+  const larguraRef = useRef<HTMLInputElement>(null);
+  const alturaRef = useRef<HTMLInputElement>(null);
+  const pesoRef = useRef<HTMLInputElement>(null);
+  const custoRef = useRef<HTMLInputElement>(null);
+  const precoRef = useRef<HTMLInputElement>(null);
+  const estoqueRef = useRef<HTMLInputElement>(null);
+
+  // handlers
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    console.log(
+      JSON.stringify({
+        codigo: codigoRef.current?.value,
+        nome: nomeRef.current?.value,
+        marca: marcaRef.current?.value,
+        categoria: categoriaRef.current?.value,
+        garantia: garantiaRef.current?.value,
+        descricao: descricaoRef.current?.value,
+        comprimentro: Number(comprimentroRef.current?.value),
+        largura: Number(larguraRef.current?.value),
+        altura: Number(alturaRef.current?.value),
+        peso: Number(pesoRef.current?.value),
+        custo: custoRef.current?.value,
+        preco: precoRef.current?.value,
+        estoque: estoqueRef.current?.value,
+      })
+    );
+    setValidated(true);
+    return;
+  }
+
+  function handleCancel() {
+    voltar("/");
+    return;
+  }
+
+  const voltar = useNavigate();
+
   return (
     <>
       <Container className="p-3 d-flex flex-column m-0" fluid>
@@ -23,7 +81,12 @@ const CadastroProduto: React.FC = () => {
             Cadastrar Produtos
           </BreadcrumbItem>
         </Breadcrumb>
-        <Form className="w-75 d-flex p-5 align-self-center form-cadastro-produto">
+        <Form
+          noValidate
+          className="w-75 d-flex p-5 align-self-center form-cadastro-produto"
+          validated={validated}
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <Col>
             <Row className="mb-4">
               {/* Código */}
@@ -31,6 +94,7 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel htmlFor="codigo">Código</FormLabel>
                 <FormControl
                   type="text"
+                  ref={codigoRef}
                   placeholder="SKU"
                   title="insira aqui o SKU do produto"
                   id="codigo"
@@ -45,6 +109,9 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel htmlFor="nome">Nome do produto</FormLabel>
                 <FormControl
                   type="text"
+                  ref={nomeRef}
+                  required
+                  maxLength={60}
                   title="insira aqui o nome do produto"
                   id="nome"
                 />
@@ -60,6 +127,8 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel htmlFor="Marca">Marca</FormLabel>
                 <FormControl
                   type="text"
+                  ref={marcaRef}
+                  maxLength={30}
                   title="insira aqui o marca do produto"
                   id="Marca"
                 />
@@ -73,6 +142,8 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel htmlFor="categoria">Categoria</FormLabel>
                 <FormControl
                   type="text"
+                  ref={categoriaRef}
+                  required
                   title="selecione a categoria do produto"
                   id="categoria"
                 />
@@ -87,6 +158,7 @@ const CadastroProduto: React.FC = () => {
                 <FormControl
                   as="textarea"
                   style={{ width: "50vw", height: "25rem" }}
+                  ref={descricaoRef}
                   maxLength={3000}
                   title="descreva o produto produto em até 3000 caracteres"
                   placeholder="Considerado um dispositivo de alto desempenho, a unidade em estado sólido A400 da Kingston é projetada para...
@@ -120,7 +192,10 @@ const CadastroProduto: React.FC = () => {
                   <InputGroup.Text>R$</InputGroup.Text>
 
                   <FormControl
+                    type="text"
                     aria-label="valor em reais"
+                    ref={precoRef}
+                    pattern="[0-9]+([,][0-9]+)?"
                     title="insira o preço que irá vender o produto"
                     id="preco"
                   />
@@ -133,7 +208,10 @@ const CadastroProduto: React.FC = () => {
                 <InputGroup>
                   <InputGroup.Text>R$</InputGroup.Text>
                   <FormControl
+                    type="text"
                     aria-label="valor em reais"
+                    ref={custoRef}
+                    pattern="[0-9]+([,][0-9]+)?"
                     title="insira o valor que custo o produto"
                     id="custo"
                   />
@@ -146,11 +224,13 @@ const CadastroProduto: React.FC = () => {
                 <Row className="mb-4">
                   <Row className="mb-2">
                     {/* Comprimento */}
-                    <FormGroup style={{ width: "8.5rem" }}>
+                    <FormGroup style={{ width: "10rem" }}>
                       <FormLabel htmlFor="comprimentro">Comprimentro</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
+                          step={0.01}
+                          ref={comprimentroRef}
                           aria-label="valor em centímetro"
                           id="comprimento"
                         />
@@ -159,11 +239,13 @@ const CadastroProduto: React.FC = () => {
                     </FormGroup>
                     {/*  */}
                     {/* Largura */}
-                    <FormGroup style={{ width: "8.5rem" }}>
+                    <FormGroup style={{ width: "10rem" }}>
                       <FormLabel htmlFor="largura">Largura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
+                          step={0.01}
+                          ref={larguraRef}
                           aria-label="valor em centímetro"
                           id="largura"
                         />
@@ -174,11 +256,13 @@ const CadastroProduto: React.FC = () => {
                   </Row>
                   <Row className="mb-2">
                     {/* Altura */}
-                    <FormGroup style={{ width: "8.5rem" }}>
+                    <FormGroup style={{ width: "10rem" }}>
                       <FormLabel htmlFor="altura">Altura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
+                          step={0.01}
+                          ref={alturaRef}
                           aria-label="valor em centímetro"
                           id="altura"
                         />
@@ -192,6 +276,8 @@ const CadastroProduto: React.FC = () => {
                       <InputGroup>
                         <FormControl
                           type="number"
+                          step={0.01}
+                          ref={pesoRef}
                           aria-label="valor em gramas"
                           id="peso"
                         />
@@ -205,10 +291,12 @@ const CadastroProduto: React.FC = () => {
               <Col>
                 <Row>
                   {/* Garantia */}
-                  <FormGroup style={{ width: "8.5rem" }}>
+                  <FormGroup style={{ width: "10rem" }}>
                     <FormLabel htmlFor="garantia">Garantia</FormLabel>
                     <FormControl
                       type="number"
+                      step={0.01}
+                      ref={garantiaRef}
                       placeholder="0 dias"
                       title="insira o valor da garantia em dias. Ex: 90 é o mesmo que 3 meses"
                       aria-label="valor em dia"
@@ -217,10 +305,11 @@ const CadastroProduto: React.FC = () => {
                   </FormGroup>
                   {/* */}
                   {/* Estoque*/}
-                  <FormGroup style={{ width: "9.5rem" }}>
+                  <FormGroup style={{ width: "10.5rem" }}>
                     <FormLabel htmlFor="estoque">Estoque</FormLabel>
                     <FormControl
                       type="number"
+                      ref={estoqueRef}
                       placeholder="0 unidades"
                       title="Ex: 1, 3..."
                       aria-label="valor em dia"
@@ -234,10 +323,14 @@ const CadastroProduto: React.FC = () => {
           </Col>
           {/* buttons*/}
           <FormGroup className="align-self-end">
-            <Button variant="outline-primary" className="me-5">
+            <Button type="submit" variant="outline-primary" className="me-5">
               Cadastrar
             </Button>
-            <Button id="btnCancelar" variant="outline-danger">
+            <Button
+              id="btnCancelar"
+              variant="outline-danger"
+              onClick={handleCancel}
+            >
               Cancelar
             </Button>
           </FormGroup>
