@@ -4,8 +4,8 @@
 */
 
 //Bootstrap’s source Sass files
-@import "../../node_modules/bootstrap/scss/bootstrap.scss";
-@import "./variables";
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "variables";
 
 // fonte padrão
 $font-family-base: "Roboto", sans-serif;
@@ -126,6 +126,7 @@ body {
   line-height: 1;
   font-family: $font-family-base;
   overflow: hidden;
+  color: $secondary;
 }
 ol,
 ul {
@@ -150,4 +151,38 @@ table {
 .page-item {
   --#{$prefix}pagination-color: #{$Primary};
   --#{$prefix}pagination-active-bg: #{$Primary};
+}
+
+.offcanvas {
+  max-width: 360px;
+  .offcanvas-body {
+    background: $indigo-100;
+    font-weight: 700;
+
+    .nav-pills {
+      --#{$prefix}nav-pills-link-active-bg: #{$Primary};
+    }
+  }
+}
+
+textarea {
+  resize: none;
+}
+
+.form-cadastro-produto {
+  background: $container-bg;
+  border-radius: 10px;
+}
+
+.breadcrumb {
+}
+
+a {
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.form-inventario {
+  background: $container-bg;
+  border-radius: 10px;
 }
