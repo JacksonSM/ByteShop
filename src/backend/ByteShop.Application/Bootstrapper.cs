@@ -21,7 +21,8 @@ public static class Bootstrapper
     {
         services.AddScoped<AddProductHandler>()
                 .AddScoped<GetProductByIdHandler>()
-                .AddScoped<GetAllProductsHandler>();
+                .AddScoped<GetAllProductsHandler>()
+                .AddScoped<UpdateProductHandler>();
 
         services.AddScoped<AddCategoryHandler>()
                 .AddScoped<GetAllCategoryHandler>()

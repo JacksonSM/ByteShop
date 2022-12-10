@@ -41,6 +41,28 @@ public class Product : Entity
         IsActive= true;
     }
 
+    public void Update(
+    string name, string description, string sku,
+    decimal price, decimal costPrice, int stock,
+    int warranty, string brand, float weight,
+    float heigth, float lenght, int categoryId)
+    {
+        Name = name;
+        Description = description;
+        SKU = sku;
+        Price = price;
+        CostPrice = costPrice;
+        Stock = stock;
+        Warranty = warranty;
+        Brand = brand;
+        Weight = weight;
+        Heigth = heigth;
+        Lenght = lenght;
+
+        if(categoryId != 0)
+            CategoryId = categoryId;
+    }
+
     public void SetMainImage(string imageUrl)
     {
         MainImageUrl = imageUrl;

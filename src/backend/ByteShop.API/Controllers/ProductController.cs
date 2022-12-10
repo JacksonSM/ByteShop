@@ -57,4 +57,27 @@ public class ProductController : ControllerBase
         return new ParseRequestResult<IEnumerable<ProductDTO>>().ParseToActionResult(await handler.Handle(command), Response);
     }
 
+    /// <summary>
+    /// Atualiza produto.
+    /// </summary>
+    /// <param name="id">Id do produto</param>
+    /// <remarks>
+    /// Se o campo categoryId for igual a 0, a categoria do produto não será atualizado
+    /// </remarks>
+    /// <response code="200">Retorna o produto com as propriedades atualizadas.</response>
+    /// <response code="400">Provavelmente as propriedades estão inválidos, Verifique a mensagem de erro.</response>
+    /// <response code="404">Produto não foi encontrado.</response>
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RequestResult<string>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RequestResult<string>))]
+    public async Task<ActionResult> Update(
+    int id,
+    [FromBody] UpdateProductCommand command,
+    [FromServices] UpdateProductHandler handler)
+    {
+        command.SetId(id);
+        return new ParseRequestResult<ProductDTO>().ParseToActionResult(await handler.Handle(command));
+    }
+
 }
