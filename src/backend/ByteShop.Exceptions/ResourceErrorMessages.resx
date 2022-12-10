@@ -126,6 +126,9 @@
   <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 50 caracteres.</value>
   </data>
+  <data name="PARENT_CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
+    <value>A categoria pai não existe</value>
+  </data>
   <data name="PRODUCT_BRAND_EMPTY" xml:space="preserve">
     <value>O campo marca é obrigatório.</value>
   </data>
@@ -143,5 +146,8 @@
   </data>
   <data name="PRODUCT_SKU_EMPTY" xml:space="preserve">
     <value>O campo SKU é obrigatório.</value>
+  </data>
+  <data name="THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY" xml:space="preserve">
+    <value>Existe produtos associado a categoria.</value>
   </data>
 </root>

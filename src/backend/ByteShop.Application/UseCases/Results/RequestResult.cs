@@ -1,3 +1,4 @@
+using ByteShop.Application.DTOs;
 using System.Text.Json.Serialization;
 
 namespace ByteShop.Application.UseCases.Results;
@@ -37,6 +38,13 @@ public class RequestResult<T>
         return this;
     }
 
+    public RequestResult<T> Accepted()
+    {
+        StatusCode = 202;
+        Message = $"Operação realizar com sucesso";
+        return this;
+    }
+
     public RequestResult<T> BadRequest(string detail, T data)
     {
         StatusCode = 400;
@@ -56,4 +64,6 @@ public class RequestResult<T>
         Message = $"Recurso não encontrado.";
         return this;
     }
+
+
 }

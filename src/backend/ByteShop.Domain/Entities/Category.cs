@@ -29,4 +29,11 @@ public class Category : Entity
         if(ChildCategories != null)
             ChildCategories.Add(category);
     }
+
+    public void Update(string name, int parentCategoryId)
+    {
+        Name = name;
+        if(parentCategoryId != 0)
+            ParentCategoryId = parentCategoryId;
+    }
 }

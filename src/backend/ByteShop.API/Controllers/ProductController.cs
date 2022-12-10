@@ -39,7 +39,7 @@ public class ProductController : ControllerBase
     int id,
     [FromServices] GetProductByIdHandler handler)
     {
-        return new ParseRequestResult<ProductDTO>().ParseToActionResult(await handler.Handle(new GetByIdCommand { Id = id }));
+        return new ParseRequestResult<ProductDTO>().ParseToActionResult(await handler.Handle(new IdCommand { Id = id }));
     }
 
     /// <summary>

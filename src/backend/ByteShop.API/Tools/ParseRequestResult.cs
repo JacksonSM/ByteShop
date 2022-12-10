@@ -16,6 +16,8 @@ namespace ByteShop.API.Tools
                     return Ok(request);
                 case (int)HttpStatusCode.Created:
                     return Created(string.Empty, request);
+                case (int)HttpStatusCode.Accepted:
+                    return Accepted(string.Empty, request);
                 case (int)HttpStatusCode.NoContent:
                     return NoContent();
                 case (int)HttpStatusCode.NotFound:

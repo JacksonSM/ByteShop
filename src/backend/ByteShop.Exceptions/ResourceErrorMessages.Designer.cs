@@ -88,6 +88,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A categoria pai não existe.
+        /// </summary>
+        public static string PARENT_CATEGORY_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("PARENT_CATEGORY_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo marca é obrigatório..
         /// </summary>
         public static string PRODUCT_BRAND_EMPTY {
@@ -138,6 +147,15 @@ namespace ByteShop.Exceptions {
         public static string PRODUCT_SKU_EMPTY {
             get {
                 return ResourceManager.GetString("PRODUCT_SKU_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existe produtos associado a categoria..
+        /// </summary>
+        public static string THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY {
+            get {
+                return ResourceManager.GetString("THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY", resourceCulture);
             }
         }
     }

@@ -5,7 +5,7 @@ using ByteShop.Application.UseCases.Results;
 using ByteShop.Domain.Interfaces.Repositories;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
-public class GetProductByIdHandler : IHandler<GetByIdCommand, ProductDTO>
+public class GetProductByIdHandler : IHandler<IdCommand, ProductDTO>
 {
     private readonly IProductRepository _productRepo;
     private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ public class GetProductByIdHandler : IHandler<GetByIdCommand, ProductDTO>
         _mapper = mapper;
     }
 
-    public async Task<RequestResult<ProductDTO>> Handle(GetByIdCommand command)
+    public async Task<RequestResult<ProductDTO>> Handle(IdCommand command)
     {
         var productEntity = await _productRepo.GetByIdAsync(command.Id);   
 

@@ -1,6 +1,4 @@
-﻿using ByteShop.Domain.Entities;
-
-namespace ByteShop.Application.DTOs;
+﻿namespace ByteShop.Application.DTOs;
 public class CategoryWithAssociationDTO
 {
     public int Id { get; set; }

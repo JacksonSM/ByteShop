@@ -33,6 +33,12 @@ public class ExceptionsFilter : IExceptionFilter
         {
             HandleValidationErrors(context);
         }
+        else
+        {
+            context.Result = new ParseRequestResult<string>()
+                .ParseToActionResult(new RequestResult<string>()
+                .BadRequest("Operação invalida", context.Exception.Message));
+        }
     }
 
     private void HandleDomainExecption(ExceptionContext context)

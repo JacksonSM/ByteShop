@@ -1,5 +1,5 @@
 ﻿namespace ByteShop.Application.UseCases.Commands;
-public class GetByIdCommand : ICommand
+public class IdCommand : ICommand
 {
     public int Id { get; set; }
 }
