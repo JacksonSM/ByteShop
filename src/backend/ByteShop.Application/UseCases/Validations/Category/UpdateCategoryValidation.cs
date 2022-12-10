@@ -3,9 +3,9 @@ using ByteShop.Exceptions;
 using FluentValidation;
 
 namespace ByteShop.Application.UseCases.Validations.Category;
-public class AddCategoryValidation : AbstractValidator<AddCategoryCommand>
+public class UpdateCategoryValidation : AbstractValidator<UpdateCategoryCommand>
 {
-    public AddCategoryValidation()
+    public UpdateCategoryValidation()
     {
         RuleFor(c => c.Name)
             .NotEmpty()
