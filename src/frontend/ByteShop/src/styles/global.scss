@@ -122,11 +122,20 @@ section {
   background: rgba(236, 218, 227, 0.9);
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
 body {
   line-height: 1;
   font-family: $font-family-base;
   overflow: hidden;
   color: $secondary;
+  background: $body-bg-color;
 }
 ol,
 ul {
