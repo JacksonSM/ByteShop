@@ -23,6 +23,7 @@ public static class Bootstrapper
                 .AddScoped<GetProductByIdHandler>()
                 .AddScoped<GetAllProductsHandler>();
 
-        services.AddScoped<AddCategoryHandler>();
+        services.AddScoped<AddCategoryHandler>()
+                .AddScoped<GetAllCategoryHandler>();
     }
 }

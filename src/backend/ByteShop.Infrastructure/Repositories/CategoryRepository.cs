@@ -16,7 +16,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
     public async Task<bool> ExistsById(int id)=>
         await _context.Category.AnyAsync(x =>x.Id == id);
 
-    public async Task<Category> GetByIdWithAssociation(int id)=>
+    public async Task<Category> GetByIdWithAssociationAsync(int id)=>
          await _context.Category
             .AsNoTracking()
             .Include(x => x.ParentCategory)
@@ -24,5 +24,13 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
             .Include(x => x.ChildCategories)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-    
+    public async Task<List<Category>> GetAllWithAssociationAsync() =>
+        await _context.Category
+        .AsNoTracking()
+        .Include(x => x.ParentCategory)
+        .Include(x => x.ParentCategory.ParentCategory)
+        .Include(x => x.ChildCategories)
+        .ToListAsync();
+
+
 }

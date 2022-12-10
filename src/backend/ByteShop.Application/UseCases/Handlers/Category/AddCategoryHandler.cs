@@ -30,7 +30,7 @@ public class AddCategoryHandler : IHandler<AddCategoryCommand, CategoryDTO>
 
         if(command.ParentCategoryId != 0)
             parentCategory = await _categoryRepo
-                .GetByIdWithAssociation(command.ParentCategoryId);
+                .GetByIdWithAssociationAsync(command.ParentCategoryId);
 
         Validate(command, parentCategory);
 

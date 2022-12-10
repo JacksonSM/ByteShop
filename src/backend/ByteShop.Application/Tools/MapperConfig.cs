@@ -14,5 +14,6 @@ public class MapperConfig : Profile
     {
         CreateMap<Product, ProductDTO>();
         CreateMap<Category, CategoryDTO>();
+        CreateMap<Category, CategoryWithAssociationDTO>();
     }
 }
