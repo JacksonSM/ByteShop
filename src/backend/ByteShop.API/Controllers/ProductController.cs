@@ -2,6 +2,7 @@
 using ByteShop.Application.DTOs;
 using ByteShop.Application.UseCases.Commands;
 using ByteShop.Application.UseCases.Commands.Product;
+using ByteShop.Application.UseCases.Handlers.Category;
 using ByteShop.Application.UseCases.Handlers.Product;
 using ByteShop.Application.UseCases.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -80,4 +81,20 @@ public class ProductController : ControllerBase
         return new ParseRequestResult<ProductDTO>().ParseToActionResult(await handler.Handle(command));
     }
 
+    /// <summary>
+    /// Deleta produto por ID.
+    /// </summary>
+    /// <param name="id">Id do produto</param>
+    /// <response code="202">Produto deletado com sucesso</response>
+    /// <response code="404">Produto não foi encontrado.</response>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RequestResult<object>))]
+    public async Task<ActionResult> Delete(
+    int id,
+    [FromServices] DeleteProductHandler handler)
+    {
+        return new ParseRequestResult<object>()
+            .ParseToActionResult(await handler.Handle(new IdCommand { Id = id }));
+    }
 }

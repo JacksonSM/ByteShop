@@ -1,4 +1,3 @@
-using ByteShop.Application.DTOs;
 using System.Text.Json.Serialization;
 
 namespace ByteShop.Application.UseCases.Results;

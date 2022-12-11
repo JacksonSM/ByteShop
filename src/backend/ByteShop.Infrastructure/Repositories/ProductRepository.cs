@@ -2,8 +2,6 @@
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Xml.Linq;
 
 namespace ByteShop.Infrastructure.Repositories;
 public class ProductRepository : Repository<Product>, IProductRepository
@@ -15,9 +13,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
         _context = context;
     }        
 
-    public IQueryable<Product> GetQueryable() =>
-         _context.Product.AsQueryable();
-
     public override async Task<Product> GetByIdAsync(int id)=>
         await _context.Product.FirstOrDefaultAsync(x => x.IsActive == true && x.Id == id);
 
@@ -26,7 +21,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
         string sku, string name, string brand, string category, 
         int? actualPage, int? itemsPerPage)
     {
-        var query = _context.Product.AsQueryable();
+        var query = _context.Product.AsQueryable().Where(x => x.IsActive);
 
         if (!string.IsNullOrEmpty(sku))
             query = query.Where(x => x.SKU.ToLower().Contains(sku.ToLower()));
@@ -49,7 +44,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
         return (products, itemsTotal);
     }
 
-    private IQueryable<Product> SetPagination(int? actualPage, int? itemsPerPage, IQueryable<Product> query)
+    private IQueryable<Product> SetPagination(
+        int? actualPage, int? itemsPerPage, IQueryable<Product> query)
     {
         if (actualPage.HasValue && itemsPerPage.HasValue)
             return query.AsNoTracking()

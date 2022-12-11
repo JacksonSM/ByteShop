@@ -71,4 +71,9 @@ public class Product : Entity
     {
         SecondaryImageUrl = string.Join(" ", imagesUrls); 
     }
+
+    public void Disable()
+    {
+        IsActive = false;
+    }
 }

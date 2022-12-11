@@ -124,6 +124,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Produto inexistente..
+        /// </summary>
+        public static string PRODUCT_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("PRODUCT_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo nome é obrigatório..
         /// </summary>
         public static string PRODUCT_NAME_EMPTY {

@@ -138,6 +138,9 @@
   <data name="PRODUCT_DESCRIPTION_EMPTY" xml:space="preserve">
     <value>O campo descrição é obrigatório.</value>
   </data>
+  <data name="PRODUCT_DOES_NOT_EXIST" xml:space="preserve">
+    <value>Produto inexistente.</value>
+  </data>
   <data name="PRODUCT_NAME_EMPTY" xml:space="preserve">
     <value>O campo nome é obrigatório.</value>
   </data>
