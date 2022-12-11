@@ -29,16 +29,16 @@ public class ProductRepository : Repository<Product>, IProductRepository
         var query = _context.Product.AsQueryable();
 
         if (!string.IsNullOrEmpty(sku))
-            query = query.Where(x => x.SKU.Contains(sku));
+            query = query.Where(x => x.SKU.ToLower().Contains(sku.ToLower()));
 
         if (!string.IsNullOrEmpty(name))
-            query = query.Where(x => x.Name.Contains(name));
+            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
         
         if (!string.IsNullOrEmpty(brand))
-            query = query.Where(x => x.Brand.Contains(brand));
+            query = query.Where(x => x.Brand.ToLower().Contains(brand.ToLower()));
         
         if (!string.IsNullOrEmpty(category))
-            query = query.Where(x => x.Brand.Contains(category));
+            query = query.Where(x => x.Brand.ToLower().Contains(category.ToLower()));
 
         if(actualPage.HasValue && itemsPerPage.HasValue)
             query = SetPagination(actualPage.Value, itemsPerPage.Value, query);
