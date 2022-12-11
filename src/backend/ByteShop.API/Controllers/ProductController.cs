@@ -2,7 +2,6 @@
 using ByteShop.Application.DTOs;
 using ByteShop.Application.UseCases.Commands;
 using ByteShop.Application.UseCases.Commands.Product;
-using ByteShop.Application.UseCases.Handlers.Category;
 using ByteShop.Application.UseCases.Handlers.Product;
 using ByteShop.Application.UseCases.Results;
 using Microsoft.AspNetCore.Mvc;

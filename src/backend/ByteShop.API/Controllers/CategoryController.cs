@@ -3,6 +3,7 @@ using ByteShop.Application.DTOs;
 using ByteShop.Application.UseCases.Commands;
 using ByteShop.Application.UseCases.Commands.Category;
 using ByteShop.Application.UseCases.Handlers.Category;
+using ByteShop.Application.UseCases.Handlers.Product;
 using ByteShop.Application.UseCases.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,22 @@ public class CategoryController : ControllerBase
     {
         return new ParseRequestResult<CategoryWithAssociationDTO[]>()
             .ParseToActionResult(await handler.Handle(new NoParametersCommand()), Response);
+    }
+
+    /// <summary>
+    /// Retorna categoria por ID.
+    /// </summary>
+    /// <param name="id">Id da categoria</param>
+    /// <response code="200">Retorna a categoria com o ID correspondente.</response>
+    /// <response code="404">Categoria não foi encontrado.</response>
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RequestResult<CategoryDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    public async Task<ActionResult> GetById(
+    int id,
+    [FromServices] GetCategoryByIdHandler handler)
+    {
+        return new ParseRequestResult<CategoryDTO>().ParseToActionResult(await handler.Handle(new IdCommand { Id = id }));
     }
 
     /// <summary>

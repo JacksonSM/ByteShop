@@ -28,6 +28,7 @@ public static class Bootstrapper
         services.AddScoped<AddCategoryHandler>()
                 .AddScoped<GetAllCategoryHandler>()
                 .AddScoped<UpdateCategoryHandler>()
+                .AddScoped<GetCategoryByIdHandler>()
                 .AddScoped<DeleteCategoryHandler>();
     }
 }
