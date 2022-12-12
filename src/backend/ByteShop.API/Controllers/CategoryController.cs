@@ -34,11 +34,11 @@ public class CategoryController : ControllerBase
     /// <response code="200">Retorna lista de categorias.</response>
     /// <response code="204">Não foi encontrado nenhuma categoria.</response>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RequestResult<CategoryWithAssociationDTO[]>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RequestResult<CategoryDTO[]>))]
     public async Task<ActionResult> GetAll(
     [FromServices] GetAllCategoryHandler handler)
     {
-        return new ParseRequestResult<CategoryWithAssociationDTO[]>()
+        return new ParseRequestResult<CategoryDTO[]>()
             .ParseToActionResult(await handler.Handle(new NoParametersCommand()), Response);
     }
 

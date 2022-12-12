@@ -5,7 +5,7 @@ using ByteShop.Application.UseCases.Results;
 using ByteShop.Domain.Interfaces.Repositories;
 
 namespace ByteShop.Application.UseCases.Handlers.Category;
-public class GetAllCategoryHandler : IHandler<NoParametersCommand, CategoryWithAssociationDTO[]>
+public class GetAllCategoryHandler : IHandler<NoParametersCommand, CategoryDTO[]>
 {
     private readonly ICategoryRepository _categoryRepo;
     private readonly IMapper _mapper;
@@ -16,14 +16,14 @@ public class GetAllCategoryHandler : IHandler<NoParametersCommand, CategoryWithA
         _mapper = mapper;
     }
 
-    public async Task<RequestResult<CategoryWithAssociationDTO[]>> Handle(NoParametersCommand command)
+    public async Task<RequestResult<CategoryDTO[]>> Handle(NoParametersCommand command)
     {
         var categories = await _categoryRepo.GetAllAsync();
 
         if (categories.Count == 0)
-            return new RequestResult<CategoryWithAssociationDTO[]>().NoContext();
+            return new RequestResult<CategoryDTO[]>().NoContext();
 
-        var categoriesDTOs = _mapper.Map<CategoryWithAssociationDTO[]>(categories);
-        return new RequestResult<CategoryWithAssociationDTO[]>().Ok(categoriesDTOs);
+        var categoriesDTOs = _mapper.Map<CategoryDTO[]>(categories);
+        return new RequestResult<CategoryDTO[]>().Ok(categoriesDTOs);
     }
 }

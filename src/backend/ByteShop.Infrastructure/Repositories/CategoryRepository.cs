@@ -36,4 +36,5 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
         await _context.Category
             .Include(x => x.Products)
             .FirstOrDefaultAsync(x => x.Id == id);
+
 }
