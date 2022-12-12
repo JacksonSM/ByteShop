@@ -24,6 +24,14 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+builder.Services.AddCors(cfg => {
+cfg.AddDefaultPolicy(policy => {
+    policy
+        .WithOrigins("http://127.0.0.1:5173/", "https://127.0.0.1:5173/")
+        .AllowAnyMethod()
+        .SetIsOriginAllowedToAllowWildcardSubdomains() 
+        .AllowAnyHeader();
+});
 
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
 
