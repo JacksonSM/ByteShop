@@ -20,19 +20,19 @@ const CadastroProduto: React.FC = () => {
   const [validated, setValidated] = useState(false);
 
   // refs
-  const codigoRef = useRef<HTMLInputElement>(null);
-  const nomeRef = useRef<HTMLInputElement>(null);
-  const marcaRef = useRef<HTMLInputElement>(null);
-  const categoriaRef = useRef<HTMLInputElement>(null);
-  const garantiaRef = useRef<HTMLInputElement>(null);
-  const descricaoRef = useRef<HTMLTextAreaElement>(null);
-  const comprimentroRef = useRef<HTMLInputElement>(null);
-  const larguraRef = useRef<HTMLInputElement>(null);
-  const alturaRef = useRef<HTMLInputElement>(null);
-  const pesoRef = useRef<HTMLInputElement>(null);
-  const custoRef = useRef<HTMLInputElement>(null);
-  const precoRef = useRef<HTMLInputElement>(null);
-  const estoqueRef = useRef<HTMLInputElement>(null);
+  const skuRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const brandRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLInputElement>(null);
+  const warrantyRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const lengthRef = useRef<HTMLInputElement>(null);
+  const widthRef = useRef<HTMLInputElement>(null);
+  const heigthRef = useRef<HTMLInputElement>(null);
+  const weigthRef = useRef<HTMLInputElement>(null);
+  const costPriceRef = useRef<HTMLInputElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
+  const stockRef = useRef<HTMLInputElement>(null);
 
   // handlers
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -46,19 +46,19 @@ const CadastroProduto: React.FC = () => {
 
     console.log(
       JSON.stringify({
-        codigo: codigoRef.current?.value,
-        nome: nomeRef.current?.value,
-        marca: marcaRef.current?.value,
-        categoria: categoriaRef.current?.value,
-        garantia: garantiaRef.current?.value,
-        descricao: descricaoRef.current?.value,
-        comprimentro: Number(comprimentroRef.current?.value),
-        largura: Number(larguraRef.current?.value),
-        altura: Number(alturaRef.current?.value),
-        peso: Number(pesoRef.current?.value),
-        custo: custoRef.current?.value,
-        preco: precoRef.current?.value,
-        estoque: estoqueRef.current?.value,
+        sku: skuRef.current?.value,
+        name: nameRef.current?.value,
+        brand: brandRef.current?.value,
+        categoryID: categoryRef.current?.value,
+        warranty: warrantyRef.current?.value,
+        description: descriptionRef.current?.value,
+        length: Number(lengthRef.current?.value),
+        width: Number(widthRef.current?.value),
+        heigth: Number(heigthRef.current?.value),
+        weigth: Number(weigthRef.current?.value),
+        costPrice: costPriceRef.current?.value,
+        price: priceRef.current?.value,
+        stock: stockRef.current?.value,
       })
     );
     setValidated(true);
@@ -89,31 +89,31 @@ const CadastroProduto: React.FC = () => {
         >
           <Col>
             <Row className="mb-4">
-              {/* Código */}
+              {/* sku */}
               <FormGroup className="me-5" style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="codigo">Código</FormLabel>
+                <FormLabel htmlFor="sku">SKU</FormLabel>
                 <FormControl
                   type="text"
-                  ref={codigoRef}
+                  ref={skuRef}
                   placeholder="SKU"
                   title="insira aqui o SKU do produto"
-                  id="codigo"
+                  id="sku"
                 />
                 <FormText className="text-muted ms-2 p-1">
                   Ex: ssd480-king
                 </FormText>
               </FormGroup>
               {/*  */}
-              {/* Nome */}
+              {/* name */}
               <FormGroup className="me-5" style={{ width: "25rem" }}>
-                <FormLabel htmlFor="nome">Nome do produto</FormLabel>
+                <FormLabel htmlFor="name">Nome do produto</FormLabel>
                 <FormControl
                   type="text"
-                  ref={nomeRef}
+                  ref={nameRef}
                   required
                   maxLength={60}
                   title="insira aqui o nome do produto"
-                  id="nome"
+                  id="name"
                 />
                 <FormText className="text-muted ms-2 p-1">
                   Ex: SSD 480GB Kingston
@@ -122,60 +122,60 @@ const CadastroProduto: React.FC = () => {
               {/*  */}
             </Row>
             <Row className="mb-4">
-              {/* Marca */}
+              {/* brand */}
               <FormGroup className="me-5" style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="Marca">Marca</FormLabel>
+                <FormLabel htmlFor="brand">Marca</FormLabel>
                 <FormControl
                   type="text"
-                  ref={marcaRef}
+                  ref={brandRef}
                   maxLength={30}
                   title="insira aqui o marca do produto"
-                  id="Marca"
+                  id="brand"
                 />
                 <FormText className="text-muted ms-2 me-5 p-1">
                   Ex: Kingston
                 </FormText>
               </FormGroup>
               {/*  */}
-              {/* Categoria */}
+              {/* category */}
               <FormGroup style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="categoria">Categoria</FormLabel>
+                <FormLabel htmlFor="category">Categoria</FormLabel>
                 <FormControl
                   type="text"
-                  ref={categoriaRef}
+                  ref={categoryRef}
                   required
                   title="selecione a categoria do produto"
-                  id="categoria"
+                  id="category"
                 />
                 <FormText className="text-muted ms-2 p-1">Ex: SSD</FormText>
               </FormGroup>
-              {/* Categoria */}
+              {/* */}
             </Row>
             <Row className="mb-4">
-              {/* Descrição */}
+              {/* description */}
               <FormGroup style={{ width: "28.12rem" }}>
-                <FormLabel htmlFor="descricao">Descrição</FormLabel>
+                <FormLabel htmlFor="description">Descrição</FormLabel>
                 <FormControl
                   as="textarea"
                   style={{ width: "50vw", height: "25rem" }}
-                  ref={descricaoRef}
+                  ref={descriptionRef}
                   maxLength={3000}
                   title="descreva o produto produto em até 3000 caracteres"
                   placeholder="Considerado um dispositivo de alto desempenho, a unidade em estado sólido A400 da Kingston é projetada para...
                 "
-                  id="descricao"
+                  id="description"
                 />
               </FormGroup>
-              {/* Descrição */}
+              {/*   */}
             </Row>
             <Row className="mb-4">
-              {/* Imagens */}
+              {/* images */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel>Imagens do Produto</FormLabel>
                 <FormControl
                   type="file"
                   title="selecione até 5 imagens para o produto"
-                  id="imagem"
+                  id="images"
                   multiple
                 />
                 <FormText className="text-muted ms-2 p-1">
@@ -185,35 +185,35 @@ const CadastroProduto: React.FC = () => {
               {/*  */}
             </Row>
             <Row className="mb-4">
-              {/* Preço */}
+              {/* price */}
               <FormGroup style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="preco">Preço de Venda</FormLabel>
+                <FormLabel htmlFor="price">Preço de Venda</FormLabel>
                 <InputGroup>
                   <InputGroup.Text>R$</InputGroup.Text>
 
                   <FormControl
                     type="text"
                     aria-label="valor em reais"
-                    ref={precoRef}
+                    ref={priceRef}
                     pattern="[0-9]+([,][0-9]+)?"
                     title="insira o preço que irá vender o produto"
-                    id="preco"
+                    id="price"
                   />
                 </InputGroup>
               </FormGroup>
               {/*  */}
               <FormGroup style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="custo">Preço de Custo</FormLabel>
-                {/* Custo */}
+                <FormLabel htmlFor="costPrice">Preço de Custo</FormLabel>
+                {/* cost price */}
                 <InputGroup>
                   <InputGroup.Text>R$</InputGroup.Text>
                   <FormControl
                     type="text"
                     aria-label="valor em reais"
-                    ref={custoRef}
+                    ref={costPriceRef}
                     pattern="[0-9]+([,][0-9]+)?"
                     title="insira o valor que custo o produto"
-                    id="custo"
+                    id="costPrice"
                   />
                 </InputGroup>
               </FormGroup>
@@ -223,31 +223,31 @@ const CadastroProduto: React.FC = () => {
               <Col sm={4}>
                 <Row className="mb-4">
                   <Row className="mb-2">
-                    {/* Comprimento */}
+                    {/* length */}
                     <FormGroup style={{ width: "10rem" }}>
-                      <FormLabel htmlFor="comprimentro">Comprimentro</FormLabel>
+                      <FormLabel htmlFor="length">Comprimentro</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={comprimentroRef}
+                          ref={lengthRef}
                           aria-label="valor em centímetro"
-                          id="comprimento"
+                          id="length"
                         />
                         <InputGroup.Text>cm</InputGroup.Text>
                       </InputGroup>
                     </FormGroup>
                     {/*  */}
-                    {/* Largura */}
+                    {/* width */}
                     <FormGroup style={{ width: "10rem" }}>
-                      <FormLabel htmlFor="largura">Largura</FormLabel>
+                      <FormLabel htmlFor="width">Largura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={larguraRef}
+                          ref={widthRef}
                           aria-label="valor em centímetro"
-                          id="largura"
+                          id="width"
                         />
                         <InputGroup.Text>cm</InputGroup.Text>
                       </InputGroup>
@@ -255,31 +255,31 @@ const CadastroProduto: React.FC = () => {
                     {/* */}
                   </Row>
                   <Row className="mb-2">
-                    {/* Altura */}
+                    {/* heigth */}
                     <FormGroup style={{ width: "10rem" }}>
-                      <FormLabel htmlFor="altura">Altura</FormLabel>
+                      <FormLabel htmlFor="heigth">Altura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={alturaRef}
+                          ref={heigthRef}
                           aria-label="valor em centímetro"
-                          id="altura"
+                          id="heigth"
                         />
                         <InputGroup.Text>cm</InputGroup.Text>
                       </InputGroup>
                     </FormGroup>
                     {/* */}
                     <FormGroup style={{ width: "11.5rem" }}>
-                      <FormLabel htmlFor="peso">Peso</FormLabel>
-                      {/* Peso */}
+                      <FormLabel htmlFor="weigth">Peso</FormLabel>
+                      {/* weigth */}
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={pesoRef}
+                          ref={weigthRef}
                           aria-label="valor em gramas"
-                          id="peso"
+                          id="weigth"
                         />
                         <InputGroup.Text>g</InputGroup.Text>
                       </InputGroup>
@@ -290,30 +290,30 @@ const CadastroProduto: React.FC = () => {
               </Col>
               <Col>
                 <Row>
-                  {/* Garantia */}
+                  {/* warranty */}
                   <FormGroup style={{ width: "10rem" }}>
-                    <FormLabel htmlFor="garantia">Garantia</FormLabel>
+                    <FormLabel htmlFor="warranty">Garantia</FormLabel>
                     <FormControl
                       type="number"
                       step={0.01}
-                      ref={garantiaRef}
+                      ref={warrantyRef}
                       placeholder="0 dias"
                       title="insira o valor da garantia em dias. Ex: 90 é o mesmo que 3 meses"
                       aria-label="valor em dia"
-                      id="garantia"
+                      id="warranty"
                     />
                   </FormGroup>
                   {/* */}
-                  {/* Estoque*/}
+                  {/* stock */}
                   <FormGroup style={{ width: "10.5rem" }}>
-                    <FormLabel htmlFor="estoque">Estoque</FormLabel>
+                    <FormLabel htmlFor="stock">Estoque</FormLabel>
                     <FormControl
                       type="number"
-                      ref={estoqueRef}
+                      ref={stockRef}
                       placeholder="0 unidades"
                       title="Ex: 1, 3..."
                       aria-label="valor em dia"
-                      id="estoque"
+                      id="stock"
                     />
                   </FormGroup>
                   {/* */}
