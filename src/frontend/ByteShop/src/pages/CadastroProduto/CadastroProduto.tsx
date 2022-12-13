@@ -1,3 +1,5 @@
+
+import React from "react";
 import { useRef, useState } from "react";
 import {
   Breadcrumb,
@@ -14,16 +16,18 @@ import {
   Row,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { DropdownSelector } from "../../components/categorias/DropdownSelector";
+import { Category } from "../../services/api/Category";
 
 const CadastroProduto: React.FC = () => {
   // hooks
   const [validated, setValidated] = useState(false);
+  const [categoryCurrentID, setCategoryCurrentID] = useState(0);
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const brandRef = useRef<HTMLInputElement>(null);
-  const categoryRef = useRef<HTMLInputElement>(null);
   const warrantyRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const lengthRef = useRef<HTMLInputElement>(null);
@@ -33,6 +37,7 @@ const CadastroProduto: React.FC = () => {
   const costPriceRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const stockRef = useRef<HTMLInputElement>(null);
+
 
   // handlers
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +54,7 @@ const CadastroProduto: React.FC = () => {
         sku: skuRef.current?.value,
         name: nameRef.current?.value,
         brand: brandRef.current?.value,
-        categoryID: categoryRef.current?.value,
+        categoryID: Number(categoryCurrentID),
         warranty: warrantyRef.current?.value,
         description: descriptionRef.current?.value,
         length: Number(lengthRef.current?.value),
@@ -72,6 +77,9 @@ const CadastroProduto: React.FC = () => {
 
   const voltar = useNavigate();
 
+  Category.getAll();
+
+  
   return (
     <>
       <Container className="p-3 d-flex flex-column m-0" fluid>
@@ -139,15 +147,8 @@ const CadastroProduto: React.FC = () => {
               {/*  */}
               {/* category */}
               <FormGroup style={{ width: "19.56rem" }}>
-                <FormLabel htmlFor="category">Categoria</FormLabel>
-                <FormControl
-                  type="text"
-                  ref={categoryRef}
-                  required
-                  title="selecione a categoria do produto"
-                  id="category"
-                />
-                <FormText className="text-muted ms-2 p-1">Ex: SSD</FormText>
+              <FormLabel className="mb-3" htmlFor="category">Categoria</FormLabel>
+              {<DropdownSelector  onclick={(e)=> setCategoryCurrentID(Number(e.currentTarget.id))} />}
               </FormGroup>
               {/* */}
             </Row>
