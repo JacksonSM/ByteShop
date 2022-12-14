@@ -126,6 +126,12 @@
   <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 50 caracteres.</value>
   </data>
+  <data name="IMAGE_EXTENSION" xml:space="preserve">
+    <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
+  </data>
+  <data name="MAX_IMAGE_SIZE" xml:space="preserve">
+    <value>O tamanho maximo para uma imagem é de 350kb.</value>
+  </data>
   <data name="PARENT_CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
     <value>A categoria pai não existe</value>
   </data>

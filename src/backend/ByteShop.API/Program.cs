@@ -1,13 +1,13 @@
 using ByteShop.API.Filters;
 using ByteShop.Application;
 using ByteShop.Infrastructure;
+using ByteShop.Infrastructure.Settings;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(option => option.LowercaseUrls = true);
-
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddControllers();

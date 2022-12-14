@@ -1,4 +1,6 @@
-﻿namespace ByteShop.Domain.Entities;
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace ByteShop.Domain.Entities;
 public class Product : Entity
 {
     public string Name { get; private set; }
@@ -11,9 +13,10 @@ public class Product : Entity
     public string Brand { get; private set; }
     public float Weight { get; private set; }
     public float Heigth { get; private set; }
-    public float Lenght { get; private set; }
-    public string MainImageUrl { get; private set; }
-    public string SecondaryImageUrl { get; private set; }
+    public float Length { get; private set; }
+    public float Width { get; private set; }
+    public string MainImageUrl { get; private set; } = string.Empty;
+    public string SecondaryImageUrl { get; private set; } = string.Empty;
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
     public bool IsActive { get; private set; }
@@ -24,7 +27,7 @@ public class Product : Entity
         string name, string description, string sku,
         decimal price, decimal costPrice, int stock,
         int warranty, string brand, float weight, 
-        float heigth, float lenght, int categoryId)
+        float heigth, float lenght, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -36,9 +39,10 @@ public class Product : Entity
         Brand = brand;
         Weight = weight;
         Heigth = heigth;
-        Lenght = lenght;
+        Width = width;
+        Length = lenght;
         CategoryId = categoryId;
-        IsActive= true;
+        IsActive = true;
     }
 
     public void Update(
@@ -57,7 +61,7 @@ public class Product : Entity
         Brand = brand;
         Weight = weight;
         Heigth = heigth;
-        Lenght = lenght;
+        Length = lenght;
 
         if(categoryId != 0)
             CategoryId = categoryId;
@@ -67,9 +71,22 @@ public class Product : Entity
     {
         MainImageUrl = imageUrl;
     }
-    public void SetSecondaryImage(string[] imagesUrls)
+    public void AddSecondaryImage(string imageUrl)
     {
-        SecondaryImageUrl = string.Join(" ", imagesUrls); 
+        SecondaryImageUrl += imageUrl + " ";
+    }
+    public string[] SecondaryImageUrlArry()
+    {
+        if(SecondaryImageUrl is not null)
+        {
+            string[] urls = SecondaryImageUrl
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            return urls;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void Disable()

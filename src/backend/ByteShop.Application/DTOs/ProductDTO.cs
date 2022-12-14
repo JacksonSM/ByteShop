@@ -14,5 +14,7 @@ public class ProductDTO
     public float Heigth { get; set; }
     public float Lenght { get; set; }
     public int CategoryId { get; set; }
+    public string MainImageUrl { get; set; }
+    public string[] SecondaryImageUrl { get; set; }
     public DateTime CreatedOn { get; set; }
 }

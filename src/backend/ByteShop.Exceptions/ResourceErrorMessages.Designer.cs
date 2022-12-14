@@ -88,6 +88,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg..
+        /// </summary>
+        public static string IMAGE_EXTENSION {
+            get {
+                return ResourceManager.GetString("IMAGE_EXTENSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O tamanho maximo para uma imagem é de 350kb..
+        /// </summary>
+        public static string MAX_IMAGE_SIZE {
+            get {
+                return ResourceManager.GetString("MAX_IMAGE_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A categoria pai não existe.
         /// </summary>
         public static string PARENT_CATEGORY_DOES_NOT_EXIST {

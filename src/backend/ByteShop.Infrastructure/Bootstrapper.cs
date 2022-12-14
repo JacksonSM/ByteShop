@@ -1,6 +1,9 @@
-﻿using ByteShop.Domain.Interfaces.Repositories;
+﻿using ByteShop.Application.Services;
+using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Infrastructure.Context;
 using ByteShop.Infrastructure.Repositories;
+using ByteShop.Infrastructure.Services;
+using ByteShop.Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +15,11 @@ public static class Bootstrapper
     {
         AddDbContext(services, configuration);
         AddRepositories(services);
+        AddServices(services);
+
+        services.Configure<ImageContainerOptions>(
+            options => configuration.GetSection(ImageContainerOptions.KEY).Bind(options));
+
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -26,5 +34,10 @@ public static class Bootstrapper
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
+
+    private static void AddServices(IServiceCollection services)
+    {
+        services.AddScoped<IImageRepository, ImageRepository>();
     }
 }

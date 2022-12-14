@@ -43,7 +43,7 @@ public class ProductMap : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Heigth)
                .IsRequired();
         
-        builder.Property(x => x.Lenght)
+        builder.Property(x => x.Length)
                .IsRequired();
 
         builder.HasOne(r => r.Category)
