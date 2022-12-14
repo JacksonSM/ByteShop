@@ -49,7 +49,7 @@ public class Product : Entity
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float heigth, float lenght, int categoryId)
+    float heigth, float lenght, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -62,6 +62,7 @@ public class Product : Entity
         Weight = weight;
         Heigth = heigth;
         Length = lenght;
+        Width= width;
 
         if(categoryId != 0)
             CategoryId = categoryId;

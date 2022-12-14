@@ -48,6 +48,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
                 weight: command.Weight,
                 heigth: command.Heigth,
                 lenght: command.Lenght,
+                width: command.Width,
                 categoryId: command.CategoryId
             );
         _productRepo.Update(product);

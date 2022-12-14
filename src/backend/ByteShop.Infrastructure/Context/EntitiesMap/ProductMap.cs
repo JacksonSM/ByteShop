@@ -38,12 +38,19 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .IsRequired();
         
         builder.Property(x => x.Weight)
+               .HasPrecision(10, 3)
                .IsRequired();
         
         builder.Property(x => x.Heigth)
+               .HasPrecision(10, 2)
                .IsRequired();
         
         builder.Property(x => x.Length)
+               .HasPrecision(10, 2)
+               .IsRequired();
+        
+        builder.Property(x => x.Width)
+               .HasPrecision(10, 2)
                .IsRequired();
 
         builder.HasOne(r => r.Category)

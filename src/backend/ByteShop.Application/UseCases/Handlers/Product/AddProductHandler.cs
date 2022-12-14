@@ -49,6 +49,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 weight: command.Weight,
                 heigth: command.Heigth,
                 lenght: command.Lenght,
+                width: command.Width,
                 categoryId: command.CategoryId
             );
 

@@ -13,6 +13,7 @@ public class ProductDTO
     public float Weight { get; set; }
     public float Heigth { get; set; }
     public float Lenght { get; set; }
+    public float Width { get; set; }
     public int CategoryId { get; set; }
     public string MainImageUrl { get; set; }
     public string[] SecondaryImageUrl { get; set; }
