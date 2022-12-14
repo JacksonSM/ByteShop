@@ -26,5 +26,24 @@ public class ProductValidation : AbstractValidator<ProductCommand>
 
         RuleFor(c => c.CostPrice)
             .PrecisionScale(18, 2, false);
+
+        RuleFor(c => c.Weight)
+            .LessThanOrEqualTo(0)
+            .WithMessage(ResourceErrorMessages.PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO);
+
+        RuleFor(c => c.Height)
+            .LessThanOrEqualTo(0)
+            .WithMessage(ResourceErrorMessages.PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO);
+
+        RuleFor(c => c.Width)
+            .LessThanOrEqualTo(0)
+            .WithMessage(ResourceErrorMessages.PRODUCT_WIDTH__LESS_OR_EQUAL_TO_ZERO);
+
+        RuleFor(c => c.Length)
+            .LessThanOrEqualTo(0)
+            .WithMessage(ResourceErrorMessages.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO);
+
+
+
     }
 }

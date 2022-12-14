@@ -147,6 +147,12 @@
   <data name="PRODUCT_DOES_NOT_EXIST" xml:space="preserve">
     <value>Produto inexistente.</value>
   </data>
+  <data name="PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo altura deve ser maior que zero.</value>
+  </data>
+  <data name="PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo comprimento deve ser maior que zero.</value>
+  </data>
   <data name="PRODUCT_NAME_EMPTY" xml:space="preserve">
     <value>O campo nome é obrigatório.</value>
   </data>
@@ -155,6 +161,12 @@
   </data>
   <data name="PRODUCT_SKU_EMPTY" xml:space="preserve">
     <value>O campo SKU é obrigatório.</value>
+  </data>
+  <data name="PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo peso deve ser maior que zero.</value>
+  </data>
+  <data name="PRODUCT_WIDTH _LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo largura deve ser maior que zero.</value>
   </data>
   <data name="THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY" xml:space="preserve">
     <value>Existe produtos associado a categoria.</value>
