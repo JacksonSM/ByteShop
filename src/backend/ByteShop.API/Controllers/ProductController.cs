@@ -46,8 +46,8 @@ public class ProductController : ControllerBase
     /// Retorna todos os produtos com ou sem paginação.
     /// </summary>
     /// <remarks>As informaçoes da paginação estão no header com a chave: "X-Pagination"</remarks>
-    /// <response code="200">Retorna lista de videos.</response>
-    /// <response code="204">Não foi encontrado nenhum video.</response>
+    /// <response code="200">Retorna lista de produtos.</response>
+    /// <response code="204">Não foi encontrado nenhum produto.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RequestResult<ProductDTO[]>))]
     public async Task<ActionResult> GetAll(
