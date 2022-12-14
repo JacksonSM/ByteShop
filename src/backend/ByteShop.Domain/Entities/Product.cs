@@ -27,7 +27,7 @@ public class Product : Entity
         string name, string description, string sku,
         decimal price, decimal costPrice, int stock,
         int warranty, string brand, float weight, 
-        float height, float lenght, float width, int categoryId)
+        float height, float length, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -40,7 +40,7 @@ public class Product : Entity
         Weight = weight;
         Height = height;
         Width = width;
-        Length = lenght;
+        Length = length;
         CategoryId = categoryId;
         IsActive = true;
     }
@@ -49,7 +49,7 @@ public class Product : Entity
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float height, float lenght, float width, int categoryId)
+    float height, float length, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -61,7 +61,7 @@ public class Product : Entity
         Brand = brand;
         Weight = weight;
         Height = height;
-        Length = lenght;
+        Length = length;
         Width= width;
 
         if(categoryId != 0)

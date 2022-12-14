@@ -12,7 +12,7 @@ public class ProductCommand : ICommand
     public string Brand { get; set; }
     public float Weight { get; set; }
     public float Height { get; set; }
-    public float Lenght { get; set; }
+    public float Length { get; set; }
     public float Width { get; set; }
     public int CategoryId { get; set; }
 

@@ -350,3 +350,8 @@ MigrationBackup/
 .ionide/
 /src/backend/ByteShop.API/appsettings.production.json
 /src/backend/ByteShop.API/appsettings.Development.json
+/src/backend/ByteShop.API/DataBase/ByteShopDev.db-wal
+/src/backend/ByteShop.API/DataBase/ByteShopDev.db-wal
+/src/backend/ByteShop.API/DataBase/ByteShopDev.db-wal
+/src/backend/ByteShop.API/DataBase/ByteShopDev.db-wal
+/src/backend/ByteShop.API/DataBase/ByteShopDev.db-shm
