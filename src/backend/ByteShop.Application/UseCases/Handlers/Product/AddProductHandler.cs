@@ -16,14 +16,14 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
     private readonly ICategoryRepository _categoryRepo;
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
-    private readonly IImageRepository _imageService;
+    private readonly IImageService _imageService;
 
     public AddProductHandler(
         IProductRepository productRepo, 
         ICategoryRepository categoryRepo,
         IUnitOfWork uow,
         IMapper mapper,
-        IImageRepository imageService)
+        IImageService imageService)
     {
         _productRepo = productRepo;
         _categoryRepo = categoryRepo;
@@ -47,7 +47,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 warranty: command.Warranty,
                 brand: command.Brand,
                 weight: command.Weight,
-                heigth: command.Heigth,
+                height: command.Height,
                 lenght: command.Lenght,
                 width: command.Width,
                 categoryId: command.CategoryId

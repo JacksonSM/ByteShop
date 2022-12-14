@@ -46,7 +46,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
                 warranty: command.Warranty,
                 brand: command.Brand,
                 weight: command.Weight,
-                heigth: command.Heigth,
+                height: command.Height,
                 lenght: command.Lenght,
                 width: command.Width,
                 categoryId: command.CategoryId

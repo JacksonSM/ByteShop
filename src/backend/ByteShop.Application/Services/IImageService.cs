@@ -1,5 +1,5 @@
 ﻿namespace ByteShop.Application.Services;
-public interface IImageRepository
+public interface IImageService
 {
     Task<string> UploadBase64ImageAsync(string base64Image, string extension);
     Task<bool> DeleteImageAsync(string imageUrl);

@@ -41,7 +41,7 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .HasPrecision(10, 3)
                .IsRequired();
         
-        builder.Property(x => x.Heigth)
+        builder.Property(x => x.Height)
                .HasPrecision(10, 2)
                .IsRequired();
         

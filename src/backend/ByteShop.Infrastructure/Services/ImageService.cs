@@ -6,13 +6,13 @@ using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 
 namespace ByteShop.Infrastructure.Services;
-public class ImageRepository : IImageRepository
+public class ImageService : IImageService
 {
     private const int MAXIMUM_IMAGE_SIZE_IN_BYTES = 350000;
 
     private readonly ImageContainerOptions _options;
 
-    public ImageRepository(IOptions<ImageContainerOptions> options)
+    public ImageService(IOptions<ImageContainerOptions> options)
     {
         _options = options.Value;
     }
