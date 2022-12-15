@@ -11,7 +11,7 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
   useEffect(() => {
     Category.getAll().then((result) => {
       if (result instanceof Error) {
-        alert(result.message);
+        alert(`Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`);
         return;
       } else {
         setDate(result);
