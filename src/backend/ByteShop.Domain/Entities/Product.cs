@@ -49,7 +49,8 @@ public class Product : Entity
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float height, float length, float width, int categoryId)
+    float height, float length, float width, int categoryId,
+    string mainImageUrl, string[] secondaryImageUrl)
     {
         Name = name;
         Description = description;
@@ -63,6 +64,8 @@ public class Product : Entity
         Height = height;
         Length = length;
         Width= width;
+        MainImageUrl= mainImageUrl;
+        SecondaryImageUrl = string.Join(",", secondaryImageUrl);    
 
         if(categoryId != 0)
             CategoryId = categoryId;
@@ -76,6 +79,7 @@ public class Product : Entity
     {
         SecondaryImageUrl += imageUrl + " ";
     }
+
     public string[] SecondaryImageUrlArry()
     {
         if(SecondaryImageUrl is not null)

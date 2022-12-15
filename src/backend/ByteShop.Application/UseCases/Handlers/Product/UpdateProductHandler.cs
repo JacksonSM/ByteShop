@@ -49,8 +49,11 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
                 height: command.Height,
                 length: command.Length,
                 width: command.Width,
-                categoryId: command.CategoryId
+                categoryId: command.CategoryId,
+                mainImageUrl: command.MainImageUrl,
+                secondaryImageUrl: command.SecondaryImageUrl
             );
+        
         _productRepo.Update(product);
         await _uow.CommitAsync();
 
