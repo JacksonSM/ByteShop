@@ -56,14 +56,14 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         await _productRepo.AddAsync(newProduct);
         await _uow.CommitAsync();
 
-        var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.imageBase64,
-            command.MainImageBase64.extension);
+        var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
+            command.MainImageBase64.Extension);
 
         newProduct.SetMainImage(mainImageUrl);
         foreach (var imageBase64 in command.SecondaryImagesBase64)
         {
-            var url = await _imageService.UploadBase64ImageAsync(imageBase64.imageBase64,
-                imageBase64.extension);
+            var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
+                imageBase64.Extension);
             newProduct.AddSecondaryImage(url);
         }
 
@@ -83,8 +83,8 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
 
-        var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.imageBase64,
-            command.MainImageBase64.extension);
+        var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
+            command.MainImageBase64.Extension);
 
         if (!mainImageIsValid.Item1) validationResult.Errors
         .Add(new FluentValidation.Results
@@ -93,7 +93,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         List<Tuple<string, string>> imagesList = new();
         command.SecondaryImagesBase64.ToList().ForEach(x =>
         {
-            imagesList.Add(new Tuple<string, string>(x.imageBase64, x.extension));
+            imagesList.Add(new Tuple<string, string>(x.Base64, x.Extension));
         });
 
         var imagesListIsValid = _imageService.ItsValid(imagesList.ToArray());

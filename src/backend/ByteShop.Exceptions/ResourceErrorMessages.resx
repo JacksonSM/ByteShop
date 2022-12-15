@@ -165,7 +165,7 @@
   <data name="PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
     <value>O campo peso deve ser maior que zero.</value>
   </data>
-  <data name="PRODUCT_WIDTH _LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+  <data name="PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
     <value>O campo largura deve ser maior que zero.</value>
   </data>
   <data name="THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY" xml:space="preserve">

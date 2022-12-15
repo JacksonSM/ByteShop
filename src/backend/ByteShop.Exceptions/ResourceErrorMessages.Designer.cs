@@ -207,9 +207,9 @@ namespace ByteShop.Exceptions {
         /// <summary>
         ///   Looks up a localized string similar to O campo largura deve ser maior que zero..
         /// </summary>
-        public static string PRODUCT_WIDTH__LESS_OR_EQUAL_TO_ZERO {
+        public static string PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO {
             get {
-                return ResourceManager.GetString("PRODUCT_WIDTH _LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+                return ResourceManager.GetString("PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
             }
         }
         

@@ -1,12 +1,12 @@
 ﻿namespace ByteShop.Application.UseCases.Commands.Product;
 public class AddProductCommand : ProductCommand
 {
-    public Image MainImageBase64 { get; set; }
-    public Image[] SecondaryImagesBase64 { get; set; }
+    public ImageBase64 MainImageBase64 { get; set; }
+    public ImageBase64[] SecondaryImagesBase64 { get; set; }
 
 }
-public class Image
+public class ImageBase64
 {
-    public string imageBase64 { get; set; }
-    public string extension { get; set; }
+    public string Base64 { get; set; }
+    public string Extension { get; set; }
 }

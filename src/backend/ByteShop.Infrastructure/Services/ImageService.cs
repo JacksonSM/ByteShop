@@ -57,6 +57,9 @@ public class ImageService : IImageService
 
     private bool ValidateExtension(string extension) 
     {
+        if (extension is null)
+            return false;
+
         return extension.Equals(".jpeg") ||
                extension.Equals(".jpg") ||
                extension.Equals(".jpe") ||
