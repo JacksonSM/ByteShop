@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useRef, useState } from "react";
 import {
@@ -12,6 +11,7 @@ import {
   FormGroup,
   FormLabel,
   FormText,
+  Image,
   InputGroup,
   Row,
 } from "react-bootstrap";
@@ -23,6 +23,19 @@ const CadastroProduto: React.FC = () => {
   // hooks
   const [validated, setValidated] = useState(false);
   const [categoryCurrentID, setCategoryCurrentID] = useState(0);
+
+  interface IImgsJson {
+    id?: string;
+    imageBase64: string;
+    extension: string;
+  }
+
+  type TImgSrc = string | ArrayBuffer | IImgsJson | null | any;
+
+  const [imgSrc, setImgSrc] = useState<TImgSrc[]>([]);
+  const [images, setImages] = useState<JSX.Element[] | Element[] | null>([]);
+  const [imagesIsInvalid, setImagesIsInvalid] = useState(false);
+  const [renderImages, setRenderImages] = useState(false);
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
@@ -37,7 +50,7 @@ const CadastroProduto: React.FC = () => {
   const costPriceRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const stockRef = useRef<HTMLInputElement>(null);
-
+  const refImages = useRef<HTMLInputElement>(null);
 
   // handlers
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +62,21 @@ const CadastroProduto: React.FC = () => {
       e.stopPropagation();
     }
 
-    console.log(
+    const mainImageBase64: IImgsJson = {
+      imageBase64: imgSrc[0]?.imageBase64,
+      extension: imgSrc[0]?.type,
+    };
+
+    let secondaryImagesBase64: IImgsJson[] = [];
+
+    for (let i = 1; i < imgSrc.length; i++) {
+      secondaryImagesBase64.push({
+        imageBase64: imgSrc[i]?.imageBase64,
+        extension: imgSrc[i].type,
+      });
+    }
+
+    console.table(
       JSON.stringify({
         sku: skuRef.current?.value,
         name: nameRef.current?.value,
@@ -64,8 +91,11 @@ const CadastroProduto: React.FC = () => {
         costPrice: costPriceRef.current?.value,
         price: priceRef.current?.value,
         stock: stockRef.current?.value,
+        mainImageBase64,
+        secondaryImagesBase64,
       })
     );
+
     setValidated(true);
     return;
   }
@@ -75,11 +105,43 @@ const CadastroProduto: React.FC = () => {
     return;
   }
 
+  function handleImagesInput(e: React.RefObject<HTMLInputElement>) {
+    const files = e.current!.files;
+    let arr: Array<TImgSrc> = [];
+
+    if (files) {
+      // console.log(files);
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+
+        //limitando o tamanho das imagens(350KB)
+        if (
+          Number((files[i].size / 1024).toFixed(2)) <= 350 &&
+          imgSrc.length < 5
+        ) {
+          reader.readAsDataURL(files[i]);
+          reader.onload = () =>
+            setImgSrc([
+              ...imgSrc,
+              {
+                id: new Date()[Symbol.toPrimitive]("number").toString(),
+                imageBase64: reader.result,
+                extension: files[i].type,
+              },
+            ]);
+          setImagesIsInvalid(false);
+        } else if (Number((files[i].size / 1024).toFixed(2)) >= 350) {
+          alert("foto maior que 350KB");
+          setImagesIsInvalid(true);
+        } else if (imgSrc.length === 5) alert("limite de imagens atingido!");
+      }
+    }
+  }
+
   const voltar = useNavigate();
 
   Category.getAll();
 
-  
   return (
     <>
       <Container className="p-3 d-flex flex-column m-0" fluid>
@@ -147,8 +209,16 @@ const CadastroProduto: React.FC = () => {
               {/*  */}
               {/* category */}
               <FormGroup style={{ width: "19.56rem" }}>
-              <FormLabel className="mb-3" htmlFor="category">Categoria</FormLabel>
-              {<DropdownSelector  onclick={(e)=> setCategoryCurrentID(Number(e.currentTarget.id))} />}
+                <FormLabel className="mb-3" htmlFor="category">
+                  Categoria
+                </FormLabel>
+                {
+                  <DropdownSelector
+                    onclick={(e) =>
+                      setCategoryCurrentID(Number(e.currentTarget.id))
+                    }
+                  />
+                }
               </FormGroup>
               {/* */}
             </Row>
@@ -173,15 +243,42 @@ const CadastroProduto: React.FC = () => {
               {/* images */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel>Imagens do Produto</FormLabel>
-                <FormControl
+                <Form.Control
                   type="file"
-                  title="selecione até 5 imagens para o produto"
+                  isInvalid={imagesIsInvalid}
+                  accept="image/jpeg, image/jpg, image/webp,  image/png"
+                  ref={refImages}
+                  onInput={() => handleImagesInput(refImages)}
+                  title="selecione até 5 imagens para o produto, co tamanho de até 350KB(cada)"
                   id="images"
                   multiple
                 />
                 <FormText className="text-muted ms-2 p-1">
                   Até 5 imagens
                 </FormText>
+              </FormGroup>
+              <FormGroup className="w-100">
+                <Container
+                  className="d-flex justify-content-start"
+                  style={{ width: "fit-content", height: "200px" }}
+                >
+                  {imgSrc !== null ? (
+                    <>
+                      {imgSrc.map((src): JSX.Element => {
+                        return (
+                          <Image
+                            key={src!.id}
+                            className="m-3 w-75"
+                            style={{ maxWidth: "9.61rem", maxHeight: "9.5rem" }}
+                            id={src!.id}
+                            thumbnail
+                            src={src.imageBase64}
+                          />
+                        );
+                      })}
+                    </>
+                  ) : null}
+                </Container>
               </FormGroup>
               {/*  */}
             </Row>
