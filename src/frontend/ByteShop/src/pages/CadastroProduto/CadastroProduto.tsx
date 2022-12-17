@@ -13,7 +13,9 @@ import {
   FormText,
   Image,
   InputGroup,
+  OverlayTrigger,
   Row,
+  Tooltip,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DropdownSelector } from "../../components/categorias/DropdownSelector";
@@ -76,8 +78,7 @@ const CadastroProduto: React.FC = () => {
       });
     }
 
-
-const replacingComma = (value:string)=> value.replaceAll(",",".")
+    const replacingComma = (value: string) => value.replaceAll(",", ".");
 
     console.table(
       JSON.stringify({
@@ -144,6 +145,12 @@ const replacingComma = (value:string)=> value.replaceAll(",",".")
   const voltar = useNavigate();
 
   Category.getAll();
+
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Dois cliques para deletar
+    </Tooltip>
+  );
 
   return (
     <>
@@ -267,16 +274,39 @@ const replacingComma = (value:string)=> value.replaceAll(",",".")
                 >
                   {imgSrc !== null ? (
                     <>
-                      {imgSrc.map((src): JSX.Element => {
+                      {imgSrc.map((src, index): JSX.Element => {
                         return (
-                          <Image
-                            key={src!.id}
-                            className="m-3 w-75"
-                            style={{ maxWidth: "9.61rem", maxHeight: "9.5rem" }}
-                            id={src!.id.toString()}
-                            thumbnail
-                            src={src.imageBase64}
-                          />
+                          <picture key={index}>
+                            <OverlayTrigger
+                              placement="right"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltip}
+                            >
+                              <Image
+                                key={src!.id}
+                                className="m-3 w-75"
+                                onDoubleClick={(e) =>
+                                  setImgSrc(
+                                    imgSrc.filter(
+                                      (item) => item.id !== e.currentTarget.id
+                                    )
+                                  )
+                                }
+                                style={{
+                                  maxWidth: "9.61rem",
+                                  maxHeight: "9.5rem",
+                                }}
+                                id={src!.id.toString()}
+                                thumbnail
+                                src={src.imageBase64}
+                              />
+                            </OverlayTrigger>
+                            <figcaption className="text-center text-muted">
+                              {(index === 0 && `principal`) ||
+                                `secundária
+                               ${index}`}
+                            </figcaption>
+                          </picture>
                         );
                       })}
                     </>
