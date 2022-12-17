@@ -76,6 +76,9 @@ const CadastroProduto: React.FC = () => {
       });
     }
 
+
+const replacingComma = (value:string)=> value.replaceAll(",",".")
+
     console.table(
       JSON.stringify({
         sku: skuRef.current?.value,
@@ -84,12 +87,12 @@ const CadastroProduto: React.FC = () => {
         categoryID: Number(categoryCurrentID),
         warranty: warrantyRef.current?.value,
         description: descriptionRef.current?.value,
-        length: Number(lengthRef.current?.value),
-        width: Number(widthRef.current?.value),
-        heigth: Number(heigthRef.current?.value),
+        length: Number(lengthRef.current!.value),
+        width: Number(widthRef.current!.value),
+        heigth: Number(heigthRef.current!.value),
         weigth: Number(weigthRef.current?.value),
-        costPrice: costPriceRef.current?.value,
-        price: priceRef.current?.value,
+        costPrice: Number(replacingComma(costPriceRef.current!.value)),
+        price: Number(replacingComma(priceRef.current!.value)),
         stock: stockRef.current?.value,
         mainImageBase64,
         secondaryImagesBase64,
@@ -270,7 +273,7 @@ const CadastroProduto: React.FC = () => {
                             key={src!.id}
                             className="m-3 w-75"
                             style={{ maxWidth: "9.61rem", maxHeight: "9.5rem" }}
-                            id={src!.id}
+                            id={src!.id.toString()}
                             thumbnail
                             src={src.imageBase64}
                           />
@@ -393,7 +396,7 @@ const CadastroProduto: React.FC = () => {
                     <FormLabel htmlFor="warranty">Garantia</FormLabel>
                     <FormControl
                       type="number"
-                      step={0.01}
+                      step={1}
                       ref={warrantyRef}
                       placeholder="0 dias"
                       title="insira o valor da garantia em dias. Ex: 90 é o mesmo que 3 meses"
@@ -408,6 +411,7 @@ const CadastroProduto: React.FC = () => {
                     <FormControl
                       type="number"
                       ref={stockRef}
+                      step={1}
                       placeholder="0 unidades"
                       title="Ex: 1, 3..."
                       aria-label="valor em dia"
