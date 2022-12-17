@@ -106,6 +106,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to É necessario ter uma imagem principal..
+        /// </summary>
+        public static string MUST_HAVE_A_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A categoria pai não existe.
         /// </summary>
         public static string PARENT_CATEGORY_DOES_NOT_EXIST {

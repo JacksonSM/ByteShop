@@ -132,6 +132,9 @@
   <data name="MAX_IMAGE_SIZE" xml:space="preserve">
     <value>O tamanho maximo para uma imagem é de 350kb.</value>
   </data>
+  <data name="MUST_HAVE_A_MAIN_IMAGE" xml:space="preserve">
+    <value>É necessario ter uma imagem principal.</value>
+  </data>
   <data name="PARENT_CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
     <value>A categoria pai não existe</value>
   </data>

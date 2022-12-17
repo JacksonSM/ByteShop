@@ -83,24 +83,27 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
 
-        var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
+        if (command.AreThereImages() && !command.MainImageHasItBeenDefined())
+        {
+            validationResult.Errors
+            .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
+        }
+        else
+        {
+            var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
             command.MainImageBase64.Extension);
 
-        if (!mainImageIsValid.Item1) validationResult.Errors
-        .Add(new FluentValidation.Results
-        .ValidationFailure(string.Empty, mainImageIsValid.Item2));
-
-        List<Tuple<string, string>> imagesList = new();
-        command.SecondaryImagesBase64.ToList().ForEach(x =>
-        {
-            imagesList.Add(new Tuple<string, string>(x.Base64, x.Extension));
-        });
-
-        var imagesListIsValid = _imageService.ItsValid(imagesList.ToArray());
-
-        if (!imagesListIsValid.Item1) validationResult.Errors
+            if (!string.IsNullOrEmpty(mainImageIsValid)) validationResult.Errors
                 .Add(new FluentValidation.Results
-                .ValidationFailure(string.Empty, imagesListIsValid.Item2));
+                .ValidationFailure(string.Empty, mainImageIsValid));
+
+            var imagesListIsValid = _imageService.ItsValid(command.SecondaryImagesBase64);
+
+            if (!string.IsNullOrEmpty(imagesListIsValid)) validationResult.Errors
+                .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, imagesListIsValid));
+        }
 
         if (!validationResult.IsValid)
         {
