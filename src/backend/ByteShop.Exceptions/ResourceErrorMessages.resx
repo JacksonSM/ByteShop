@@ -129,6 +129,9 @@
   <data name="IMAGE_EXTENSION" xml:space="preserve">
     <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
   </data>
+  <data name="MAXIMUM_AMOUNT_OF_IMAGES" xml:space="preserve">
+    <value>É permitido apenas 5 imagens.</value>
+  </data>
   <data name="MAX_IMAGE_SIZE" xml:space="preserve">
     <value>O tamanho maximo para uma imagem é de 350kb.</value>
   </data>

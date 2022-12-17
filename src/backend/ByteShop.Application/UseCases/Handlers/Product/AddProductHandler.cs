@@ -7,11 +7,12 @@ using ByteShop.Application.UseCases.Validations.Product;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
 {
+    private const int MAXIMUM_AMOUNT_OF_IMAGES = 5;
+
     private readonly IProductRepository _productRepo;
     private readonly ICategoryRepository _categoryRepo;
     private readonly IUnitOfWork _uow;
@@ -83,13 +84,13 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
 
-        if (command.AreThereImages() && !command.MainImageHasItBeenDefined())
+        if (command.TotalImages() > 0 && !command.MainImageHasItBeenDefined())
         {
             validationResult.Errors
             .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
         }
-        else
+        else if(command.TotalImages() > 0 && command.TotalImages() < MAXIMUM_AMOUNT_OF_IMAGES)
         {
             var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
             command.MainImageBase64.Extension);
@@ -103,6 +104,12 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
             if (!string.IsNullOrEmpty(imagesListIsValid)) validationResult.Errors
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, imagesListIsValid));
+        }
+        else
+        {
+            validationResult.Errors
+                .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES));
         }
 
         if (!validationResult.IsValid)

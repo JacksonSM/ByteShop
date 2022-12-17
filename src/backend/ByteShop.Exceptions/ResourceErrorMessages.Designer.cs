@@ -106,6 +106,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to É permitido apenas 5 imagens..
+        /// </summary>
+        public static string MAXIMUM_AMOUNT_OF_IMAGES {
+            get {
+                return ResourceManager.GetString("MAXIMUM_AMOUNT_OF_IMAGES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to É necessario ter uma imagem principal..
         /// </summary>
         public static string MUST_HAVE_A_MAIN_IMAGE {
