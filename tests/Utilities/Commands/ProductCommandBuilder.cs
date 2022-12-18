@@ -25,7 +25,7 @@ public class ProductCommandBuilder
             .RuleFor(c => c.Height, f => f.Random.Float(1))
             .RuleFor(c => c.Width, f => f.Random.Float(1))
             .RuleFor(c => c.Length, f => f.Random.Float(1))
-            .RuleFor(c => c.CategoryId, f => f.Random.Number(500))
+            .RuleFor(c => c.CategoryId, f => f.Random.Number(0,500))
             .RuleFor(c => c.MainImageBase64, imagesFaker.Generate())
             .RuleFor(c => c.SecondaryImagesBase64, imagesFaker.Generate(numberSecondaryImages).ToArray());
     }
