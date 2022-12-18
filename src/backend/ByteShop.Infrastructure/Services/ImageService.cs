@@ -1,18 +1,19 @@
 ﻿using Azure.Storage.Blobs;
 using ByteShop.Application.Services;
+using ByteShop.Application.UseCases.Commands.Product;
 using ByteShop.Exceptions;
 using ByteShop.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 
 namespace ByteShop.Infrastructure.Services;
-public class ImageRepository : IImageRepository
+public class ImageService : IImageService
 {
     private const int MAXIMUM_IMAGE_SIZE_IN_BYTES = 350000;
 
     private readonly ImageContainerOptions _options;
 
-    public ImageRepository(IOptions<ImageContainerOptions> options)
+    public ImageService(IOptions<ImageContainerOptions> options)
     {
         _options = options.Value;
     }
@@ -43,33 +44,37 @@ public class ImageRepository : IImageRepository
         return response.IsError;
     }
 
-    public (bool, string) ItsValid(string imageBase64, string extension)
+    public string ItsValid(string imageBase64, string extension)
     {
         if (!ValidateExtension(extension))
-            return (false, ResourceErrorMessages.IMAGE_EXTENSION);
+            return ResourceErrorMessages.IMAGE_EXTENSION;
 
         byte[] imageBytes = Convert.FromBase64String(imageBase64);
         if (imageBytes.Length > MAXIMUM_IMAGE_SIZE_IN_BYTES)
-            return (false, ResourceErrorMessages.MAX_IMAGE_SIZE);
+            return  ResourceErrorMessages.MAX_IMAGE_SIZE;
 
-        return (true, string.Empty);
+        return string.Empty;
     }
 
-    private bool ValidateExtension(string extension) 
+    private static bool ValidateExtension(string extension) 
     {
+        if (extension is null)
+            return false;
+
         return extension.Equals(".jpeg") ||
                extension.Equals(".jpg") ||
                extension.Equals(".jpe") ||
                extension.Equals(".webp");
     }
 
-    public (bool, string) ItsValid(Tuple<string, string>[] imagesBase64)
+    public string ItsValid(ImageBase64[] imagesBase64)
     {
         foreach (var image in imagesBase64)
         {
-            var isValid = ItsValid(image.Item1, image.Item2);
-            return (isValid.Item1, isValid.Item2);
+            var result = ItsValid(image.Base64, image.Extension);
+            if (!string.IsNullOrEmpty(result))
+                return result;
         }
-        return (true, string.Empty);
+        return string.Empty;
     }
 }

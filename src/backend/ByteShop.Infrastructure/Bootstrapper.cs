@@ -38,6 +38,6 @@ public static class Bootstrapper
 
     private static void AddServices(IServiceCollection services)
     {
-        services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<IImageService, ImageService>();
     }
 }

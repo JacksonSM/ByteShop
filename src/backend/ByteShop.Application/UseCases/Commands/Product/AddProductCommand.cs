@@ -1,12 +1,25 @@
-﻿namespace ByteShop.Application.UseCases.Commands.Product;
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace ByteShop.Application.UseCases.Commands.Product;
 public class AddProductCommand : ProductCommand
 {
-    public Image MainImageBase64 { get; set; }
-    public Image[] SecondaryImagesBase64 { get; set; }
+    public ImageBase64 MainImageBase64 { get; set; }
+    public ImageBase64[] SecondaryImagesBase64 { get; set; }
 
+    public bool MainImageHasItBeenDefined()
+    {
+        return MainImageBase64 is not null;
+    }
+    public int TotalImages()
+    {
+        int total = 0;
+        if (MainImageBase64 is not null) total++;
+        total += SecondaryImagesBase64?.Length ?? 0;
+        return total;
+    }
 }
-public class Image
+public class ImageBase64
 {
-    public string imageBase64 { get; set; }
-    public string extension { get; set; }
+    public string Base64 { get; set; }
+    public string Extension { get; set; }
 }

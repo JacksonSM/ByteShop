@@ -106,6 +106,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to É permitido apenas 5 imagens..
+        /// </summary>
+        public static string MAXIMUM_AMOUNT_OF_IMAGES {
+            get {
+                return ResourceManager.GetString("MAXIMUM_AMOUNT_OF_IMAGES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to É necessario ter uma imagem principal..
+        /// </summary>
+        public static string MUST_HAVE_A_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A categoria pai não existe.
         /// </summary>
         public static string PARENT_CATEGORY_DOES_NOT_EXIST {
@@ -151,6 +169,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo altura deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo comprimento deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo nome é obrigatório..
         /// </summary>
         public static string PRODUCT_NAME_EMPTY {
@@ -174,6 +210,24 @@ namespace ByteShop.Exceptions {
         public static string PRODUCT_SKU_EMPTY {
             get {
                 return ResourceManager.GetString("PRODUCT_SKU_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo peso deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo largura deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
             }
         }
         

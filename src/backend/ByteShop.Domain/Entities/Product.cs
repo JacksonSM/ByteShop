@@ -12,7 +12,7 @@ public class Product : Entity
     public int Warranty { get; private set; }
     public string Brand { get; private set; }
     public float Weight { get; private set; }
-    public float Heigth { get; private set; }
+    public float Height { get; private set; }
     public float Length { get; private set; }
     public float Width { get; private set; }
     public string MainImageUrl { get; private set; } = string.Empty;
@@ -27,7 +27,7 @@ public class Product : Entity
         string name, string description, string sku,
         decimal price, decimal costPrice, int stock,
         int warranty, string brand, float weight, 
-        float heigth, float lenght, float width, int categoryId)
+        float height, float length, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -38,9 +38,9 @@ public class Product : Entity
         Warranty = warranty;
         Brand = brand;
         Weight = weight;
-        Heigth = heigth;
+        Height = height;
         Width = width;
-        Length = lenght;
+        Length = length;
         CategoryId = categoryId;
         IsActive = true;
     }
@@ -49,7 +49,8 @@ public class Product : Entity
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float heigth, float lenght, float width, int categoryId)
+    float height, float length, float width, int categoryId,
+    string mainImageUrl, string[] secondaryImageUrl)
     {
         Name = name;
         Description = description;
@@ -60,9 +61,11 @@ public class Product : Entity
         Warranty = warranty;
         Brand = brand;
         Weight = weight;
-        Heigth = heigth;
-        Length = lenght;
+        Height = height;
+        Length = length;
         Width= width;
+        MainImageUrl= mainImageUrl;
+        SecondaryImageUrl = string.Join(",", secondaryImageUrl);    
 
         if(categoryId != 0)
             CategoryId = categoryId;
@@ -76,6 +79,7 @@ public class Product : Entity
     {
         SecondaryImageUrl += imageUrl + " ";
     }
+
     public string[] SecondaryImageUrlArry()
     {
         if(SecondaryImageUrl is not null)

@@ -7,23 +7,24 @@ using ByteShop.Application.UseCases.Validations.Product;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
 {
+    private const int MAXIMUM_AMOUNT_OF_IMAGES = 5;
+
     private readonly IProductRepository _productRepo;
     private readonly ICategoryRepository _categoryRepo;
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
-    private readonly IImageRepository _imageService;
+    private readonly IImageService _imageService;
 
     public AddProductHandler(
         IProductRepository productRepo, 
         ICategoryRepository categoryRepo,
         IUnitOfWork uow,
         IMapper mapper,
-        IImageRepository imageService)
+        IImageService imageService)
     {
         _productRepo = productRepo;
         _categoryRepo = categoryRepo;
@@ -47,8 +48,8 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 warranty: command.Warranty,
                 brand: command.Brand,
                 weight: command.Weight,
-                heigth: command.Heigth,
-                lenght: command.Lenght,
+                height: command.Height,
+                length: command.Length,
                 width: command.Width,
                 categoryId: command.CategoryId
             );
@@ -56,14 +57,14 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         await _productRepo.AddAsync(newProduct);
         await _uow.CommitAsync();
 
-        var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.imageBase64,
-            command.MainImageBase64.extension);
+        var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
+            command.MainImageBase64.Extension);
 
         newProduct.SetMainImage(mainImageUrl);
         foreach (var imageBase64 in command.SecondaryImagesBase64)
         {
-            var url = await _imageService.UploadBase64ImageAsync(imageBase64.imageBase64,
-                imageBase64.extension);
+            var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
+                imageBase64.Extension);
             newProduct.AddSecondaryImage(url);
         }
 
@@ -83,24 +84,33 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
 
-        var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.imageBase64,
-            command.MainImageBase64.extension);
-
-        if (!mainImageIsValid.Item1) validationResult.Errors
-        .Add(new FluentValidation.Results
-        .ValidationFailure(string.Empty, mainImageIsValid.Item2));
-
-        List<Tuple<string, string>> imagesList = new();
-        command.SecondaryImagesBase64.ToList().ForEach(x =>
+        if (command.TotalImages() > 0 && !command.MainImageHasItBeenDefined())
         {
-            imagesList.Add(new Tuple<string, string>(x.imageBase64, x.extension));
-        });
+            validationResult.Errors
+            .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
+        }
+        else if(command.TotalImages() > 0 && command.TotalImages() < MAXIMUM_AMOUNT_OF_IMAGES)
+        {
+            var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
+            command.MainImageBase64.Extension);
 
-        var imagesListIsValid = _imageService.ItsValid(imagesList.ToArray());
-
-        if (!imagesListIsValid.Item1) validationResult.Errors
+            if (!string.IsNullOrEmpty(mainImageIsValid)) validationResult.Errors
                 .Add(new FluentValidation.Results
-                .ValidationFailure(string.Empty, imagesListIsValid.Item2));
+                .ValidationFailure(string.Empty, mainImageIsValid));
+
+            var imagesListIsValid = _imageService.ItsValid(command.SecondaryImagesBase64);
+
+            if (!string.IsNullOrEmpty(imagesListIsValid)) validationResult.Errors
+                .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, imagesListIsValid));
+        }
+        else
+        {
+            validationResult.Errors
+                .Add(new FluentValidation.Results
+                .ValidationFailure(string.Empty, ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES));
+        }
 
         if (!validationResult.IsValid)
         {

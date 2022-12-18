@@ -28,8 +28,8 @@ public class GetAllProductsHandler : IHandler<GetAllProductsCommand, IEnumerable
                 name: command.name,
                 brand: command.brand,
                 category: command.category,
-                actualPage: command.ActualPage,
-                itemsPerPage: command.ItemsPerPage
+                actualPage: command.actualPage,
+                itemsPerPage: command.itemsPerPage
             );
 
         if (!(products?.Count() > 0))
@@ -37,12 +37,12 @@ public class GetAllProductsHandler : IHandler<GetAllProductsCommand, IEnumerable
 
         var produtcsDTO = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
-        if (command.ActualPage.HasValue && command.ItemsPerPage.HasValue)
+        if (command.actualPage.HasValue && command.itemsPerPage.HasValue)
         {
             var pagination = new PaginationHeader
                 (
-                    actualPage: command.ActualPage.Value,
-                    itemsPerPage: command.ItemsPerPage.Value,
+                    actualPage: command.actualPage.Value,
+                    itemsPerPage: command.itemsPerPage.Value,
                     itemsTotal: QuantityProduct
                 );
 
