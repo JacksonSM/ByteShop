@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <Container fluid className="vw-100 vh-100 overflow-auto">
+    <Container fluid className="vw-100 vh-100 m-0 p-0 overflow-auto">
       <Router>
         <SideMenu />
         <Routes>

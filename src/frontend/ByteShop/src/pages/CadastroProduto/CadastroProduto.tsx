@@ -154,7 +154,7 @@ const CadastroProduto: React.FC = () => {
 
   return (
     <>
-      <Container className="p-3 d-flex flex-column m-0" fluid>
+      <Container className="p-3 d-flex flex-column m-0 vw-100" fluid>
         <Breadcrumb className="align-self-center">
           <BreadcrumbItem href="/">Início</BreadcrumbItem>
           <BreadcrumbItem href="/cadastro-de-produtos" active>
@@ -168,9 +168,9 @@ const CadastroProduto: React.FC = () => {
           onSubmit={(e) => handleSubmit(e)}
         >
           <Col>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* sku */}
-              <FormGroup className="me-5" style={{ width: "19.56rem" }}>
+              <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="sku">SKU</FormLabel>
                 <FormControl
                   type="text"
@@ -201,9 +201,9 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/*  */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* brand */}
-              <FormGroup className="me-5" style={{ width: "19.56rem" }}>
+              <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="brand">Marca</FormLabel>
                 <FormControl
                   type="text"
@@ -232,7 +232,7 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/* */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* description */}
               <FormGroup style={{ width: "28.12rem" }}>
                 <FormLabel htmlFor="description">Descrição</FormLabel>
@@ -249,7 +249,7 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/*   */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* images */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel>Imagens do Produto</FormLabel>
@@ -315,7 +315,7 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/*  */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* price */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="price">Preço de Venda</FormLabel>
@@ -352,7 +352,7 @@ const CadastroProduto: React.FC = () => {
             </Row>
             <Row>
               <Col sm={4}>
-                <Row className="mb-4">
+                <Row className="mb-4 p-1 border border-light">
                   <Row className="mb-2">
                     {/* length */}
                     <FormGroup style={{ width: "10rem" }}>
@@ -454,17 +454,22 @@ const CadastroProduto: React.FC = () => {
             </Row>
           </Col>
           {/* buttons*/}
-          <FormGroup className="align-self-end">
-            <Button type="submit" variant="outline-primary" className="me-5">
-              Cadastrar
-            </Button>
-            <Button
-              id="btnCancelar"
-              variant="outline-danger"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </Button>
+          <FormGroup
+            className="position-fixed d-flex justify-content-center bottom-0 start-0 p-2 "
+            style={{ width: "100vw", background: "#e0cffc" }}
+          >
+            <Container className="mx-auto w-auto">
+              <Button type="submit" variant="outline-primary" className="me-5">
+                Cadastrar
+              </Button>
+              <Button
+                id="btnCancelar"
+                variant="outline-danger"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </Button>
+            </Container>
           </FormGroup>
         </Form>
       </Container>
