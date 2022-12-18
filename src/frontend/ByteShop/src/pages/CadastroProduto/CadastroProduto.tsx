@@ -47,8 +47,8 @@ const CadastroProduto: React.FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const lengthRef = useRef<HTMLInputElement>(null);
   const widthRef = useRef<HTMLInputElement>(null);
-  const heigthRef = useRef<HTMLInputElement>(null);
-  const weigthRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
+  const weightRef = useRef<HTMLInputElement>(null);
   const costPriceRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const stockRef = useRef<HTMLInputElement>(null);
@@ -90,8 +90,8 @@ const CadastroProduto: React.FC = () => {
         description: descriptionRef.current?.value,
         length: Number(lengthRef.current!.value),
         width: Number(widthRef.current!.value),
-        heigth: Number(heigthRef.current!.value),
-        weigth: Number(weigthRef.current?.value),
+        height: Number(heightRef.current!.value),
+        weight: Number(weightRef.current?.value),
         costPrice: Number(replacingComma(costPriceRef.current!.value)),
         price: Number(replacingComma(priceRef.current!.value)),
         stock: stockRef.current?.value,
@@ -256,7 +256,7 @@ const CadastroProduto: React.FC = () => {
                 <Form.Control
                   type="file"
                   isInvalid={imagesIsInvalid}
-                  accept="image/jpeg, image/jpg, image/webp,  image/png"
+                  accept="image/jpeg, image/jpg, image/webp,  image/jpe"
                   ref={refImages}
                   onInput={() => handleImagesInput(refImages)}
                   title="selecione até 5 imagens para o produto, co tamanho de até 350KB(cada)"
@@ -386,31 +386,31 @@ const CadastroProduto: React.FC = () => {
                     {/* */}
                   </Row>
                   <Row className="mb-2">
-                    {/* heigth */}
+                    {/* height */}
                     <FormGroup style={{ width: "10rem" }}>
-                      <FormLabel htmlFor="heigth">Altura</FormLabel>
+                      <FormLabel htmlFor="height">Altura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={heigthRef}
+                          ref={heightRef}
                           aria-label="valor em centímetro"
-                          id="heigth"
+                          id="height"
                         />
                         <InputGroup.Text>cm</InputGroup.Text>
                       </InputGroup>
                     </FormGroup>
                     {/* */}
                     <FormGroup style={{ width: "11.5rem" }}>
-                      <FormLabel htmlFor="weigth">Peso</FormLabel>
-                      {/* weigth */}
+                      <FormLabel htmlFor="weight">Peso</FormLabel>
+                      {/* weight */}
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={weigthRef}
+                          ref={weightRef}
                           aria-label="valor em gramas"
-                          id="weigth"
+                          id="weight"
                         />
                         <InputGroup.Text>g</InputGroup.Text>
                       </InputGroup>
