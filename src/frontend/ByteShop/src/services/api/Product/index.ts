@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../axios-config";
-import { IProduct } from "./types";
+import { IProductGet } from "./types";
 
 async function getByParameter(
   parameterName:
@@ -10,8 +10,8 @@ async function getByParameter(
     | "category"
     | "actualPage"
     | "itemsPerPage",
-  { ...parameterValue }: IProduct
-): Promise<IProduct[] | Error> {
+  { ...parameterValue }: IProductGet
+): Promise<IProductGet[] | Error> {
   try {
     const { data } = await api.get(
       `product?${parameterName}=${parameterValue[parameterName]}`
