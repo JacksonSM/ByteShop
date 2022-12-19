@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useRef, useState } from "react";
 import {
@@ -12,8 +11,11 @@ import {
   FormGroup,
   FormLabel,
   FormText,
+  Image,
   InputGroup,
+  OverlayTrigger,
   Row,
+  Tooltip,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DropdownSelector } from "../../components/categorias/DropdownSelector";
@@ -24,6 +26,19 @@ const CadastroProduto: React.FC = () => {
   const [validated, setValidated] = useState(false);
   const [categoryCurrentID, setCategoryCurrentID] = useState(0);
 
+  interface IImgsJson {
+    id?: string;
+    imageBase64: string;
+    extension: string;
+  }
+
+  type TImgSrc = string | ArrayBuffer | IImgsJson | null | any;
+
+  const [imgSrc, setImgSrc] = useState<TImgSrc[]>([]);
+  const [images, setImages] = useState<JSX.Element[] | Element[] | null>([]);
+  const [imagesIsInvalid, setImagesIsInvalid] = useState(false);
+  const [renderImages, setRenderImages] = useState(false);
+
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -32,12 +47,12 @@ const CadastroProduto: React.FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const lengthRef = useRef<HTMLInputElement>(null);
   const widthRef = useRef<HTMLInputElement>(null);
-  const heigthRef = useRef<HTMLInputElement>(null);
-  const weigthRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
+  const weightRef = useRef<HTMLInputElement>(null);
   const costPriceRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const stockRef = useRef<HTMLInputElement>(null);
-
+  const refImages = useRef<HTMLInputElement>(null);
 
   // handlers
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +64,23 @@ const CadastroProduto: React.FC = () => {
       e.stopPropagation();
     }
 
-    console.log(
+    const mainImageBase64: IImgsJson = {
+      base64: imgSrc[0]?.base64,
+      extension: imgSrc[0].extension.replace(/^\w*[/]/,"."),
+    };
+
+    let secondaryImagesBase64: IImgsJson[] = [];
+
+    for (let i = 1; i < imgSrc.length; i++) {
+      secondaryImagesBase64.push({
+        base64: imgSrc[i]?.base64,
+        extension: imgSrc[i].extension.replace(/^\w*[/]/,"."),
+      });
+    }
+
+    const replacingComma = (value: string) => value.replaceAll(",", ".");
+
+    console.table(
       JSON.stringify({
         sku: skuRef.current?.value,
         name: nameRef.current?.value,
@@ -57,15 +88,18 @@ const CadastroProduto: React.FC = () => {
         categoryID: Number(categoryCurrentID),
         warranty: warrantyRef.current?.value,
         description: descriptionRef.current?.value,
-        length: Number(lengthRef.current?.value),
-        width: Number(widthRef.current?.value),
-        heigth: Number(heigthRef.current?.value),
-        weigth: Number(weigthRef.current?.value),
-        costPrice: costPriceRef.current?.value,
-        price: priceRef.current?.value,
+        length: Number(lengthRef.current!.value),
+        width: Number(widthRef.current!.value),
+        height: Number(heightRef.current!.value),
+        weight: Number(weightRef.current?.value),
+        costPrice: Number(replacingComma(costPriceRef.current!.value)),
+        price: Number(replacingComma(priceRef.current!.value)),
         stock: stockRef.current?.value,
+        mainImageBase64,
+        secondaryImagesBase64,
       })
     );
+
     setValidated(true);
     return;
   }
@@ -75,14 +109,52 @@ const CadastroProduto: React.FC = () => {
     return;
   }
 
+  function handleImagesInput(e: React.RefObject<HTMLInputElement>) {
+    const files = e.current!.files;
+    let arr: Array<TImgSrc> = [];
+
+    if (files) {
+      // console.log(files);
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+
+        //limitando o tamanho das imagens(350KB)
+        if (
+          Number((files[i].size / 1024).toFixed(2)) <= 350 &&
+          imgSrc.length < 5
+        ) {
+          reader.readAsDataURL(files[i]);
+          reader.onload = () =>
+            setImgSrc([
+              ...imgSrc,
+              {
+                id: new Date()[Symbol.toPrimitive]("number").toString(),
+                imageBase64: reader.result,
+                extension: files[i].type,
+              },
+            ]);
+          setImagesIsInvalid(false);
+        } else if (Number((files[i].size / 1024).toFixed(2)) >= 350) {
+          alert("foto maior que 350KB");
+          setImagesIsInvalid(true);
+        } else if (imgSrc.length === 5) alert("limite de imagens atingido!");
+      }
+    }
+  }
+
   const voltar = useNavigate();
 
   Category.getAll();
 
-  
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Dois cliques para deletar
+    </Tooltip>
+  );
+
   return (
     <>
-      <Container className="p-3 d-flex flex-column m-0" fluid>
+      <Container className="p-3 d-flex flex-column m-0 vw-100" fluid>
         <Breadcrumb className="align-self-center">
           <BreadcrumbItem href="/">Início</BreadcrumbItem>
           <BreadcrumbItem href="/cadastro-de-produtos" active>
@@ -96,9 +168,9 @@ const CadastroProduto: React.FC = () => {
           onSubmit={(e) => handleSubmit(e)}
         >
           <Col>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* sku */}
-              <FormGroup className="me-5" style={{ width: "19.56rem" }}>
+              <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="sku">SKU</FormLabel>
                 <FormControl
                   type="text"
@@ -129,9 +201,9 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/*  */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* brand */}
-              <FormGroup className="me-5" style={{ width: "19.56rem" }}>
+              <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="brand">Marca</FormLabel>
                 <FormControl
                   type="text"
@@ -147,12 +219,20 @@ const CadastroProduto: React.FC = () => {
               {/*  */}
               {/* category */}
               <FormGroup style={{ width: "19.56rem" }}>
-              <FormLabel className="mb-3" htmlFor="category">Categoria</FormLabel>
-              {<DropdownSelector  onclick={(e)=> setCategoryCurrentID(Number(e.currentTarget.id))} />}
+                <FormLabel className="mb-3" htmlFor="category">
+                  Categoria
+                </FormLabel>
+                {
+                  <DropdownSelector
+                    onclick={(e) =>
+                      setCategoryCurrentID(Number(e.currentTarget.id))
+                    }
+                  />
+                }
               </FormGroup>
               {/* */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* description */}
               <FormGroup style={{ width: "28.12rem" }}>
                 <FormLabel htmlFor="description">Descrição</FormLabel>
@@ -169,13 +249,17 @@ const CadastroProduto: React.FC = () => {
               </FormGroup>
               {/*   */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* images */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel>Imagens do Produto</FormLabel>
-                <FormControl
+                <Form.Control
                   type="file"
-                  title="selecione até 5 imagens para o produto"
+                  isInvalid={imagesIsInvalid}
+                  accept="image/jpeg, image/jpg, image/webp,  image/jpe"
+                  ref={refImages}
+                  onInput={() => handleImagesInput(refImages)}
+                  title="selecione até 5 imagens para o produto, co tamanho de até 350KB(cada)"
                   id="images"
                   multiple
                 />
@@ -183,9 +267,55 @@ const CadastroProduto: React.FC = () => {
                   Até 5 imagens
                 </FormText>
               </FormGroup>
+              <FormGroup className="w-100">
+                <Container
+                  className="d-flex justify-content-start"
+                  style={{ width: "fit-content", height: "200px" }}
+                >
+                  {imgSrc !== null ? (
+                    <>
+                      {imgSrc.map((src, index): JSX.Element => {
+                        return (
+                          <picture key={index}>
+                            <OverlayTrigger
+                              placement="right"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltip}
+                            >
+                              <Image
+                                key={src!.id}
+                                className="m-3 w-75"
+                                onDoubleClick={(e) =>
+                                  setImgSrc(
+                                    imgSrc.filter(
+                                      (item) => item.id !== e.currentTarget.id
+                                    )
+                                  )
+                                }
+                                style={{
+                                  maxWidth: "9.61rem",
+                                  maxHeight: "9.5rem",
+                                }}
+                                id={src!.id.toString()}
+                                thumbnail
+                                src={src.imageBase64}
+                              />
+                            </OverlayTrigger>
+                            <figcaption className="text-center text-muted">
+                              {(index === 0 && `principal`) ||
+                                `secundária
+                               ${index}`}
+                            </figcaption>
+                          </picture>
+                        );
+                      })}
+                    </>
+                  ) : null}
+                </Container>
+              </FormGroup>
               {/*  */}
             </Row>
-            <Row className="mb-4">
+            <Row className="mb-4 p-1 border border-light">
               {/* price */}
               <FormGroup style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="price">Preço de Venda</FormLabel>
@@ -222,7 +352,7 @@ const CadastroProduto: React.FC = () => {
             </Row>
             <Row>
               <Col sm={4}>
-                <Row className="mb-4">
+                <Row className="mb-4 p-1 border border-light">
                   <Row className="mb-2">
                     {/* length */}
                     <FormGroup style={{ width: "10rem" }}>
@@ -256,31 +386,31 @@ const CadastroProduto: React.FC = () => {
                     {/* */}
                   </Row>
                   <Row className="mb-2">
-                    {/* heigth */}
+                    {/* height */}
                     <FormGroup style={{ width: "10rem" }}>
-                      <FormLabel htmlFor="heigth">Altura</FormLabel>
+                      <FormLabel htmlFor="height">Altura</FormLabel>
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={heigthRef}
+                          ref={heightRef}
                           aria-label="valor em centímetro"
-                          id="heigth"
+                          id="height"
                         />
                         <InputGroup.Text>cm</InputGroup.Text>
                       </InputGroup>
                     </FormGroup>
                     {/* */}
                     <FormGroup style={{ width: "11.5rem" }}>
-                      <FormLabel htmlFor="weigth">Peso</FormLabel>
-                      {/* weigth */}
+                      <FormLabel htmlFor="weight">Peso</FormLabel>
+                      {/* weight */}
                       <InputGroup>
                         <FormControl
                           type="number"
                           step={0.01}
-                          ref={weigthRef}
+                          ref={weightRef}
                           aria-label="valor em gramas"
-                          id="weigth"
+                          id="weight"
                         />
                         <InputGroup.Text>g</InputGroup.Text>
                       </InputGroup>
@@ -296,7 +426,7 @@ const CadastroProduto: React.FC = () => {
                     <FormLabel htmlFor="warranty">Garantia</FormLabel>
                     <FormControl
                       type="number"
-                      step={0.01}
+                      step={1}
                       ref={warrantyRef}
                       placeholder="0 dias"
                       title="insira o valor da garantia em dias. Ex: 90 é o mesmo que 3 meses"
@@ -311,6 +441,7 @@ const CadastroProduto: React.FC = () => {
                     <FormControl
                       type="number"
                       ref={stockRef}
+                      step={1}
                       placeholder="0 unidades"
                       title="Ex: 1, 3..."
                       aria-label="valor em dia"
@@ -323,17 +454,22 @@ const CadastroProduto: React.FC = () => {
             </Row>
           </Col>
           {/* buttons*/}
-          <FormGroup className="align-self-end">
-            <Button type="submit" variant="outline-primary" className="me-5">
-              Cadastrar
-            </Button>
-            <Button
-              id="btnCancelar"
-              variant="outline-danger"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </Button>
+          <FormGroup
+            className="position-fixed d-flex justify-content-center bottom-0 start-0 p-2 "
+            style={{ width: "100vw", background: "#e0cffc" }}
+          >
+            <Container className="mx-auto w-auto">
+              <Button type="submit" variant="outline-primary" className="me-5">
+                Cadastrar
+              </Button>
+              <Button
+                id="btnCancelar"
+                variant="outline-danger"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </Button>
+            </Container>
           </FormGroup>
         </Form>
       </Container>

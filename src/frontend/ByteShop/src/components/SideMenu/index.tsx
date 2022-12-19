@@ -29,7 +29,7 @@ const SideMenu: React.FC = () => {
       <Button variant="" title="Abrir menu" onClick={handleShow}>
         {<img src={mnuHamburger} alt="ícone menu hamburger" />}
       </Button>
-      <Offcanvas show={show} onHide={handleClose} className="offcanvas">
+      <Offcanvas show={show} onHide={handleClose} className="offcanvas" style={{width:"20rem"}} >
         <OffcanvasBody className="offcanvas-body">
           <TabContainer>
             <Row>
