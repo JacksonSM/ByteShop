@@ -35,9 +35,7 @@ const CadastroProduto: React.FC = () => {
   type TImgSrc = string | ArrayBuffer | IImgsJson | null | any;
 
   const [imgSrc, setImgSrc] = useState<TImgSrc[]>([]);
-  const [images, setImages] = useState<JSX.Element[] | Element[] | null>([]);
   const [imagesIsInvalid, setImagesIsInvalid] = useState(false);
-  const [renderImages, setRenderImages] = useState(false);
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
