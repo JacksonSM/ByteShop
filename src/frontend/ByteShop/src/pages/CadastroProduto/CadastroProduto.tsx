@@ -65,16 +65,16 @@ const CadastroProduto: React.FC = () => {
     }
 
     const mainImageBase64: IImgsJson = {
-      imageBase64: imgSrc[0]?.imageBase64,
-      extension: imgSrc[0].extension,
+      base64: imgSrc[0]?.base64,
+      extension: imgSrc[0].extension.replace(/^\w*[/]/,"."),
     };
 
     let secondaryImagesBase64: IImgsJson[] = [];
 
     for (let i = 1; i < imgSrc.length; i++) {
       secondaryImagesBase64.push({
-        imageBase64: imgSrc[i]?.imageBase64,
-        extension: imgSrc[i].extension,
+        base64: imgSrc[i]?.base64,
+        extension: imgSrc[i].extension.replace(/^\w*[/]/,"."),
       });
     }
 
