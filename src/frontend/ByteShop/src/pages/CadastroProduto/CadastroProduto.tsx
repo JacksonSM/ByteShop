@@ -28,7 +28,7 @@ const CadastroProduto: React.FC = () => {
 
   interface IImgsJson {
     id?: string;
-    imageBase64: string;
+    base64: string;
     extension: string;
   }
 
@@ -129,7 +129,7 @@ const CadastroProduto: React.FC = () => {
               ...imgSrc,
               {
                 id: new Date()[Symbol.toPrimitive]("number").toString(),
-                imageBase64: reader.result,
+                base64: reader.result,
                 extension: files[i].type,
               },
             ]);
@@ -298,7 +298,7 @@ const CadastroProduto: React.FC = () => {
                                 }}
                                 id={src!.id.toString()}
                                 thumbnail
-                                src={src.imageBase64}
+                                src={src.base64}
                               />
                             </OverlayTrigger>
                             <figcaption className="text-center text-muted">
