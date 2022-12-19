@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace ByteShop.Application.UseCases.Commands.Product;
+﻿namespace ByteShop.Application.UseCases.Commands.Product;
 public class AddProductCommand : ProductCommand
 {
     public ImageBase64 MainImageBase64 { get; set; }
@@ -17,9 +15,4 @@ public class AddProductCommand : ProductCommand
         total += SecondaryImagesBase64?.Length ?? 0;
         return total;
     }
-}
-public class ImageBase64
-{
-    public string Base64 { get; set; }
-    public string Extension { get; set; }
 }

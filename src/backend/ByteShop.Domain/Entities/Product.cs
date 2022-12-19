@@ -49,8 +49,7 @@ public class Product : Entity
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float height, float length, float width, int categoryId,
-    string mainImageUrl, string[] secondaryImageUrl)
+    float height, float length, float width, int categoryId)
     {
         Name = name;
         Description = description;
@@ -64,8 +63,6 @@ public class Product : Entity
         Height = height;
         Length = length;
         Width= width;
-        MainImageUrl= mainImageUrl;
-        SecondaryImageUrl = string.Join(",", secondaryImageUrl);    
 
         if(categoryId != 0)
             CategoryId = categoryId;
@@ -80,7 +77,7 @@ public class Product : Entity
         SecondaryImageUrl += imageUrl + " ";
     }
 
-    public string[] SecondaryImageUrlArry()
+    public string[] GetSecondaryImageUrl()
     {
         if(SecondaryImageUrl is not null)
         {
@@ -92,6 +89,19 @@ public class Product : Entity
         {
             return null;
         }
+    }
+    public void SetSecondaryImageUrl(string[] urls)
+    {
+        SecondaryImageUrl = string.Join(" ", urls);
+    }
+
+    public int GetImagesTotal()
+    {
+        int total = 0;
+        if (!string.IsNullOrEmpty(MainImageUrl)) total++;
+        var secondary = GetSecondaryImageUrl();
+        total += secondary?.Length ?? 0;
+        return total;
     }
 
     public void Disable()

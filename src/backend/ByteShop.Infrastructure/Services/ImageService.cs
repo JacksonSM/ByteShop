@@ -48,8 +48,9 @@ public class ImageService : IImageService
     {
         if (!ValidateExtension(extension))
             return ResourceErrorMessages.IMAGE_EXTENSION;
+        var data = new Regex(@"^data:image\/[a-z]+;base64,").Replace(imageBase64, "");
 
-        byte[] imageBytes = Convert.FromBase64String(imageBase64);
+        byte[] imageBytes = Convert.FromBase64String(data);
         if (imageBytes.Length > MAXIMUM_IMAGE_SIZE_IN_BYTES)
             return  ResourceErrorMessages.MAX_IMAGE_SIZE;
 

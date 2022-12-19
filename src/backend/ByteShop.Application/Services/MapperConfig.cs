@@ -14,7 +14,7 @@ public class MapperConfig : Profile
     {
         CreateMap<Product, ProductDTO>()
             .ForMember(x => x.SecondaryImageUrl,
-            x => x.MapFrom(x => x.SecondaryImageUrlArry()));
+            x => x.MapFrom(x => x.GetSecondaryImageUrl()));
 
         CreateMap<Category, CategoryDTO>();
         CreateMap<Category, CategoryWithAssociationDTO>();
