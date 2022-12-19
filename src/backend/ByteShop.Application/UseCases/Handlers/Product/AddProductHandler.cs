@@ -54,9 +54,6 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 categoryId: command.CategoryId
             );
 
-        await _productRepo.AddAsync(newProduct);
-        await _uow.CommitAsync();
-
         var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
             command.MainImageBase64.Extension);
 
@@ -68,8 +65,10 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
             newProduct.AddSecondaryImage(url);
         }
 
-        var produtcDTO = _mapper.Map<ProductDTO>(newProduct);
+        await _productRepo.AddAsync(newProduct);
+        await _uow.CommitAsync();
 
+        var produtcDTO = _mapper.Map<ProductDTO>(newProduct);
         return new RequestResult<ProductDTO>().Created(produtcDTO);
     }
 
