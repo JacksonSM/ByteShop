@@ -24,10 +24,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddCors();
 
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
-
 
 var app = builder.Build();
 
@@ -38,9 +36,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(option => option.AllowAnyOrigin()); 
 app.UseAuthorization();
-
+app.UseCors(cfg =>
+{
+    cfg.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .SetIsOriginAllowedToAllowWildcardSubdomains()
+        .AllowAnyHeader();
+});
 app.MapControllers();
 
 app.Run();
