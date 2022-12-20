@@ -18,6 +18,8 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { Product } from "../../services/api/Product";
+import { IImgsJson } from "../../services/api/Product/types";
 import { DropdownSelector } from "../../components/categorias/DropdownSelector";
 import { Category } from "../../services/api/Category";
 
@@ -26,11 +28,6 @@ const CadastroProduto: React.FC = () => {
   const [validated, setValidated] = useState(false);
   const [categoryCurrentID, setCategoryCurrentID] = useState(0);
 
-  interface IImgsJson {
-    id?: string;
-    base64: string;
-    extension: string;
-  }
 
   type TImgSrc = string | ArrayBuffer | IImgsJson | null | any;
 
@@ -78,24 +75,24 @@ const CadastroProduto: React.FC = () => {
 
     const replacingComma = (value: string) => value.replaceAll(",", ".");
 
-    console.table(
-      JSON.stringify({
-        sku: skuRef.current?.value,
-        name: nameRef.current?.value,
-        brand: brandRef.current?.value,
-        categoryID: Number(categoryCurrentID),
-        warranty: warrantyRef.current?.value,
-        description: descriptionRef.current?.value,
+    Product.post(
+      {
+        sku: String(skuRef.current?.value),
+        name: String(nameRef.current?.value),
+        brand: String(brandRef.current?.value),
+        categoryId: Number(categoryCurrentID),
+        warranty: Number(warrantyRef.current?.value),
+        description: String(descriptionRef.current?.value),
         length: Number(lengthRef.current!.value),
         width: Number(widthRef.current!.value),
         height: Number(heightRef.current!.value),
         weight: Number(weightRef.current?.value),
         costPrice: Number(replacingComma(costPriceRef.current!.value)),
         price: Number(replacingComma(priceRef.current!.value)),
-        stock: stockRef.current?.value,
+        stock: Number(stockRef.current?.value),
         mainImageBase64,
         secondaryImagesBase64,
-      })
+      }
     );
 
     setValidated(true);

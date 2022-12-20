@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../axios-config";
-import { IProductGet } from "./types";
+import { IProductGet, IProductPost } from "./types";
 
 async function getByParameter(
   parameterName:
@@ -26,4 +26,32 @@ async function getByParameter(
   }
 }
 
-export const Product = { getByParameter };
+async function post({ ...attribute }: IProductPost): Promise<void | Error> {
+  try {
+    const values: IProductPost | any = {
+      name: attribute.name,
+      description: attribute.description,
+      sku: attribute.sku,
+      price: attribute.price,
+      costPrice: attribute.costPrice,
+      stock: attribute.stock,
+      warranty: attribute.warranty,
+      brand: attribute.brand,
+      weight: attribute.weight,
+      height: attribute.weight,
+      length: attribute.length,
+      width: attribute.width,
+      categoryId: attribute.categoryId,
+      mainImageBase64: attribute.mainImageBase64,
+      secondaryImagesBase64: attribute.secondaryImagesBase64,
+    };
+
+    console.log(values);
+
+    api.post("product", values).then((response) => console.log(response));
+  } catch (error) {
+    throw new Error((error as { message: string }).message);
+  }
+}
+
+export const Product = { getByParameter, post };
