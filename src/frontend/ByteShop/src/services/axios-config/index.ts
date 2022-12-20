@@ -4,7 +4,6 @@ import { responseinterceptor } from "./interceptors/Responseinterceptor";
 
 
 const api = axios.create({
-    headers:{ 'Content-Type': 'application/json'},
     baseURL:"https://localhost:7069/api/"}
     );
 

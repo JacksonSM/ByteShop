@@ -9,8 +9,10 @@ import {
   FormGroup,
   FormLabel,
 } from "react-bootstrap";
+import { Product } from "../../services/api/Product";
 
 const Inventario: React.FC = () => {
+  console.log(Product.getByParameter("itemsPerPage",{itemsPerPage: 1}));
   return (
     <Container fluid className="vw-100">
       <Breadcrumb className="d-flex justify-content-center">
