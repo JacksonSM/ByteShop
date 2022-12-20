@@ -37,7 +37,6 @@ builder.Services.AddCors(cfg => {
 
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
 
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -48,7 +47,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
+app.UseCors(cfg =>
+{
+    cfg.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .SetIsOriginAllowedToAllowWildcardSubdomains()
+        .AllowAnyHeader();
+});
 app.MapControllers();
 
 app.Run();
