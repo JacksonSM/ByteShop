@@ -39,7 +39,7 @@ async function getById(id: number): Promise<IProductGet[] | Error> {
   }
 }
 
-async function post({ ...attribute }: IProductPost): Promise<void | Error> {
+async function post({ ...attribute }: IProductPost): Promise<any | Error> {
   try {
     const values: IProductPost | any = {
       name: attribute.name,
@@ -61,7 +61,7 @@ async function post({ ...attribute }: IProductPost): Promise<void | Error> {
 
     console.log(values);
 
-    api.post("product", values).then((response) => console.log(response));
+    return api.post("product", values).then((response) => response.data.data);
   } catch (error) {
     throw new Error((error as { message: string }).message);
   }
