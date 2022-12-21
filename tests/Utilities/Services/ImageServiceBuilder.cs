@@ -30,38 +30,6 @@ public class ImageServiceBuilder
         return this;
     }
 
-    public ImageServiceBuilder SetupItsValid(bool valid)
-    {
-        if (valid)
-        {
-            _service.Setup(
-                m => m.ItsValid(It.IsAny<string>(), It.IsAny<string>())).Returns("");
-        }
-        else
-        {
-            _service.Setup(
-                m => m.ItsValid(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("Algum erro!");
-        }
-        return this;
-    }
-
-    public ImageServiceBuilder SetupItsValidWithArrayParameter(bool valid)
-    {
-        if (valid)
-        {
-            _service.Setup(
-                m => m.ItsValid(It.IsAny<string>(), It.IsAny<string>())).Returns("");
-        }
-        else
-        {
-            _service.Setup(
-                m => m.ItsValid(It.IsAny<ImageBase64[]>()))
-                .Returns("Algum erro!");
-        }
-        return this;
-    }
-
     public IImageService Build()
     {
         return _service.Object;
