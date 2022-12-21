@@ -97,6 +97,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imagem está incorreta. verifique os campos de base64 e extension..
+        /// </summary>
+        public static string INCORRECT_IMAGE {
+            get {
+                return ResourceManager.GetString("INCORRECT_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Esta solicitação contém base64 inválida..
+        /// </summary>
+        public static string INVALID_BASE64 {
+            get {
+                return ResourceManager.GetString("INVALID_BASE64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O tamanho maximo para uma imagem é de 350kb..
         /// </summary>
         public static string MAX_IMAGE_SIZE {

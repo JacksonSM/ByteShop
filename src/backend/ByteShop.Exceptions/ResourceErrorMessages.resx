@@ -129,6 +129,12 @@
   <data name="IMAGE_EXTENSION" xml:space="preserve">
     <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
   </data>
+  <data name="INCORRECT_IMAGE" xml:space="preserve">
+    <value>Imagem está incorreta. verifique os campos de base64 e extension.</value>
+  </data>
+  <data name="INVALID_BASE64" xml:space="preserve">
+    <value>Esta solicitação contém base64 inválida.</value>
+  </data>
   <data name="MAXIMUM_AMOUNT_OF_IMAGES" xml:space="preserve">
     <value>É permitido apenas 5 imagens.</value>
   </data>
