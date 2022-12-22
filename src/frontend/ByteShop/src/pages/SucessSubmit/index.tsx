@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { IImgsJson } from "../../services/api/Product/types";
 import { Product } from "../../services/api/Product";
 import { useNavigate } from "react-router-dom";
 
@@ -12,8 +11,11 @@ import {
   Row,
 } from "react-bootstrap";
 import { IpropsSucessSubmit } from "./types";
+import { useData } from "../../pages/CadastroProduto/context";
 
-const SucessSubmit = ({ id }: { id: number }) => {
+const SucessSubmit = () => {
+  const { id } = useData();
+  console.log(id);
   const [data, setdata] = useState<IpropsSucessSubmit>({});
   useEffect(() => {
     Product.getById(id).then((response) => setdata(response));
