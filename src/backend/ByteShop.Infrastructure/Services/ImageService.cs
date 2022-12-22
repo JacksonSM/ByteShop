@@ -3,6 +3,7 @@ using ByteShop.Application.Services;
 using ByteShop.Application.UseCases.Commands.Product;
 using ByteShop.Exceptions;
 using ByteShop.Infrastructure.Settings;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 
@@ -45,8 +46,9 @@ public class ImageService : IImageService
 
     public async Task<bool> DeleteImageAsync(string imageUrl)
     {
-        var blobClient = new BlobClient(new Uri(imageUrl));
-        var response = await blobClient.DeleteAsync();
-        return response.IsError;
+        var blobName = Path.GetFileName(imageUrl);
+        var blobClient = new BlobClient(_options.ConnectionString, _options.NameContainer, blobName);
+        var response = await blobClient.DeleteIfExistsAsync();
+        return response.Value;
     }
 }

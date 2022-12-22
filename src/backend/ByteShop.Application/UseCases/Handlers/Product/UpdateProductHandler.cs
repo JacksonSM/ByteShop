@@ -62,6 +62,10 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
         if (command.RemoveSecondaryImageUrl?.Length > 0)
         {
             await _imageService.DeleteImageAsync(command.RemoveSecondaryImageUrl);
+            foreach (var url in command.RemoveSecondaryImageUrl)
+            {
+                product.RemoveSecondaryImage(url);
+            }
         }
 
         if (command.SetMainImageBase64 != null)
