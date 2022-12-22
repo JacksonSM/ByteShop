@@ -38,7 +38,7 @@ public class ImageBase64Validator : AbstractValidator<ImageBase64>
         {
             RuleFor(c => c).Custom((image, context) =>
             {
-                if(!(string.IsNullOrEmpty(image.Base64) && string.IsNullOrEmpty(image.Base64)))
+                if(string.IsNullOrEmpty(image.Base64) || string.IsNullOrEmpty(image.Base64))
                     context.AddFailure(ResourceErrorMessages.INCORRECT_IMAGE);
             });
         });
