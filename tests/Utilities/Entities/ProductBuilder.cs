@@ -1,9 +1,5 @@
 ﻿using Bogus;
-using ByteShop.Application.UseCases.Commands.Product;
 using ByteShop.Domain.Entities;
-using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Utilities.Entities;
 public class ProductBuilder
@@ -11,6 +7,7 @@ public class ProductBuilder
     public static Product ProductBuild(int numberSecondaryImages = 3)
     {
         return new Faker<Product>()
+            .RuleFor(c => c.Id, f => f.Random.Number(0, 500))
             .RuleFor(c => c.Name, f => f.Commerce.ProductName())
             .RuleFor(c => c.Description, f => f.Commerce.ProductDescription())
             .RuleFor(c => c.SKU, f => f.Commerce.Ean13())

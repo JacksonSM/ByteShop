@@ -51,35 +51,70 @@ public class AddProductHandlerTest
     }
 
     [Fact]
-    public async void ImagemPrincipalNaoDefinida()
+    public async void ImageServiceRecebendoDadosCorretos()
     {
         var command = ProductCommandBuilder.AddProductCommandBuild();
+        var productRepo = ProductRepositoryBuilder.Instance().Build();
+        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
+        var imageService = ImageServiceBuilder.Instance()
+            .SetupUpload()
+            .GetMock();
+
+        var mapper = MapperBuilder.Instance();
+        var uow = UnitOfWorkBuilder.Instance().Build();
+
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object);
+
+        var response = await handler.Handle(command);
+
+        response.StatusCode.Should().Be(201);
+        imageService
+            .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
+                command.MainImageBase64.Extension));
+
+        foreach (var image in command.SecondaryImagesBase64)
+        {
+            imageService
+                .Verify(m => m.UploadBase64ImageAsync(image.Base64,
+                    image.Extension));
+        }
+    }
+    [Fact]
+    public async void ProdutoComNenhumaImagem()
+    {
+        var command = ProductCommandBuilder.AddProductCommandBuild(numberSecondaryImages:0);
         command.MainImageBase64 = null;
         var handler = CreateAddProductHandler(command.CategoryId);
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        var response = await handler.Handle(command);
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
+        response.StatusCode.Should().Be(201);
     }
 
     [Fact]
-    public async void ProdutoComImagensAlemDoPermitido()
+    public async void ProdutoApenasComAImagemPrincipal()
     {
-        var command = ProductCommandBuilder.AddProductCommandBuild(6);
-        var handler = CreateAddProductHandler(command.CategoryId);
+        var command = ProductCommandBuilder.AddProductCommandBuild();
+        var productRepo = ProductRepositoryBuilder.Instance().Build();
+        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
+        var imageService = ImageServiceBuilder.Instance()
+            .SetupUpload()
+            .GetMock();
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        var mapper = MapperBuilder.Instance();
+        var uow = UnitOfWorkBuilder.Instance().Build();
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES));
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object);
+
+        var response = await handler.Handle(command);
+
+        response.StatusCode.Should().Be(201);
+        imageService
+            .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
+                command.MainImageBase64.Extension),Moq.Times.Once);
     }
 
-    private static AddProductHandler CreateAddProductHandler(int categoryId,
-        bool itsValid = true,
-        bool itsValidWithArrayParameter = true)
+    private static AddProductHandler CreateAddProductHandler(int categoryId)
     {
         var productRepo = ProductRepositoryBuilder.Instance().Build();
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(categoryId).Build();

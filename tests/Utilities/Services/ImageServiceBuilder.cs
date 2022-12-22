@@ -34,4 +34,8 @@ public class ImageServiceBuilder
     {
         return _service.Object;
     }
+    public Mock<IImageService> GetMock()
+    {
+        return _service;
+    }
 }
