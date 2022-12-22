@@ -4,7 +4,6 @@ using ByteShop.Application.UseCases.Commands.Product;
 using ByteShop.Application.UseCases.Results;
 using ByteShop.Domain.Interfaces.Repositories;
 using Newtonsoft.Json;
-using System.Linq.Expressions;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class GetAllProductsHandler : IHandler<GetAllProductsCommand, IEnumerable<ProductDTO>>
