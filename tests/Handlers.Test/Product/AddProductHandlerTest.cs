@@ -1,6 +1,4 @@
-﻿using ByteShop.Application.DTOs;
-using ByteShop.Application.UseCases.Handlers.Product;
-using ByteShop.Application.UseCases.Results;
+﻿using ByteShop.Application.UseCases.Handlers.Product;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
@@ -87,8 +85,6 @@ public class AddProductHandlerTest
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(categoryId).Build();
         var imageService = ImageServiceBuilder.Instance()
             .SetupUpload()
-            .SetupItsValid(itsValid)
-            .SetupItsValidWithArrayParameter(itsValidWithArrayParameter)
             .Build();
 
         var mapper = MapperBuilder.Instance();

@@ -1,4 +1,5 @@
-﻿using ByteShop.Domain.Interfaces.Repositories;
+﻿using ByteShop.Domain.Entities;
+using ByteShop.Domain.Interfaces.Repositories;
 using Moq;
 
 namespace Utilities.Repositories;
@@ -18,6 +19,12 @@ public class ProductRepositoryBuilder
     {
         _instance = new ProductRepositoryBuilder();
         return _instance;
+    }
+
+    public ProductRepositoryBuilder SetupGetById(Product product)
+    {
+        _repository.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(product);
+        return this;
     }
 
     public IProductRepository Build()

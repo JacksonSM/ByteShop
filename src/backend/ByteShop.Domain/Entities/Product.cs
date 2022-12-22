@@ -90,7 +90,7 @@ public class Product : Entity
             return null;
         }
     }
-    public void SetSecondaryImageUrl(string[] urls)
+    private void SetSecondaryImageUrl(string[] urls)
     {
         SecondaryImageUrl = string.Join(" ", urls);
     }
@@ -107,5 +107,12 @@ public class Product : Entity
     public void Disable()
     {
         IsActive = false;
+    }
+
+    public void RemoveSecondaryImage(string url)
+    {
+        var urls = GetSecondaryImageUrl().ToList();
+        urls.Remove(url);
+        SetSecondaryImageUrl(urls.ToArray());
     }
 }

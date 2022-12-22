@@ -150,4 +150,53 @@ public class AddProductValidationTest
         result.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO));
     }
+    [Fact]
+    public void ProdutoComImagemMaiorQue350KB()
+    {
+        var validator = new AddProductValidation();
+        var command = ProductCommandBuilder.AddProductCommandBuild(withImageOfMoreThan350KB: true);
+
+        var result = validator.Validate(command);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.MAX_IMAGE_SIZE));
+    }
+    [Fact]
+    public void ProdutoComMaisDe5Imagens()
+    {
+        var validator = new AddProductValidation();
+        var command = ProductCommandBuilder.AddProductCommandBuild(numberSecondaryImages: 7);
+
+        var result = validator.Validate(command);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES));
+    }
+    [Fact]
+    public void ProdutoSemImagemPrincipal()
+    {
+        var validator = new AddProductValidation();
+        var command = ProductCommandBuilder.AddProductCommandBuild();
+        command.MainImageBase64 = null;
+
+        var result = validator.Validate(command);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
+    }
+    [Fact]
+    public void ProdutoSemImagens()
+    {
+        var validator = new AddProductValidation();
+        var command = ProductCommandBuilder.AddProductCommandBuild();
+        command.MainImageBase64 = null;
+        command.SecondaryImagesBase64= null;
+
+        var result = validator.Validate(command);
+
+        result.IsValid.Should().BeTrue();
+    }
 }

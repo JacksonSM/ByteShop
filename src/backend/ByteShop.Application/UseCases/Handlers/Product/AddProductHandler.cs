@@ -78,41 +78,9 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         var validationResult = validator.Validate(command);
 
         var IsThereCategory = await _categoryRepo.ExistsById(command.CategoryId);
-
         if (!IsThereCategory) validationResult.Errors
                 .Add(new FluentValidation.Results
                 .ValidationFailure(string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
-
-        if(command.TotalImages() > MAXIMUM_AMOUNT_OF_IMAGES)
-            validationResult.Errors
-            .Add(new FluentValidation.Results
-            .ValidationFailure(string.Empty, ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES));
-
-        if (command.TotalImages() > 1 && !command.MainImageHasItBeenDefined())
-        {
-            validationResult.Errors
-            .Add(new FluentValidation.Results
-                .ValidationFailure(string.Empty, ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE));
-        }
-
-        if(command.MainImageBase64 != null)
-        {
-            var mainImageIsValid = _imageService.ItsValid(command.MainImageBase64.Base64,
-                command.MainImageBase64.Extension);
-
-            if (!string.IsNullOrEmpty(mainImageIsValid)) validationResult.Errors
-                .Add(new FluentValidation.Results
-                .ValidationFailure(string.Empty, mainImageIsValid));
-        }
-
-        if (command.SecondaryImagesBase64?.Length > 0)
-        {
-            var imagesListIsValid = _imageService.ItsValid(command.SecondaryImagesBase64);
-
-            if (!string.IsNullOrEmpty(imagesListIsValid)) validationResult.Errors
-                .Add(new FluentValidation.Results
-                .ValidationFailure(string.Empty, imagesListIsValid));
-        }
 
 
         if (!validationResult.IsValid)
