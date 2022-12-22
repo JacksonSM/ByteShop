@@ -26,7 +26,20 @@ async function getByParameter(
   }
 }
 
-async function post({ ...attribute }: IProductPost): Promise<void | Error> {
+async function getById(id: number): Promise<IProductGet[] | Error> {
+  try {
+    const { data } = await api.get(`product/${id}`);
+
+    if (data) {
+      return data.data;
+    }
+    return new Error("Erro ao listar os as categorias!");
+  } catch (error) {
+    return error as AxiosError;
+  }
+}
+
+async function post({ ...attribute }: IProductPost): Promise<any | Error> {
   try {
     const values: IProductPost | any = {
       name: attribute.name,
@@ -48,10 +61,10 @@ async function post({ ...attribute }: IProductPost): Promise<void | Error> {
 
     console.log(values);
 
-    api.post("product", values).then((response) => console.log(response));
+    return api.post("product", values).then((response) => response.data.data);
   } catch (error) {
     throw new Error((error as { message: string }).message);
   }
 }
 
-export const Product = { getByParameter, post };
+export const Product = { getByParameter, post, getById };
