@@ -48,7 +48,7 @@ public class UpdateCategoryHandler : IHandler<UpdateCategoryCommand, CategoryDTO
 
         if(command.ParentCategoryId != 0)
         {
-            var IsThereParentCategory = await _categoryRepo.ExistsById(command.Id);
+            var IsThereParentCategory = await _categoryRepo.ExistsById(command.ParentCategoryId);
 
             if (!IsThereParentCategory) validationResult.Errors
                     .Add(new FluentValidation.Results.ValidationFailure(string.Empty,
