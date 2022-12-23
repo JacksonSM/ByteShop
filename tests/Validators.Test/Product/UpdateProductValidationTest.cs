@@ -6,7 +6,7 @@ using Utilities.Commands;
 using Utilities.Entities;
 using Xunit;
 
-namespace Validators.Test.Products;
+namespace Validators.Test.Product;
 public class UpdateProductValidationTest
 {
     [Fact]

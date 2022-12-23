@@ -6,7 +6,7 @@ using Moq;
 namespace Utilities.Repositories;
 public class ProductRepositoryBuilder
 {
-    private static ProductRepositoryBuilder _instance;
+    private static ProductRepositoryBuilder? _instance;
     private readonly Mock<IProductRepository> _repository;
 
     private ProductRepositoryBuilder()

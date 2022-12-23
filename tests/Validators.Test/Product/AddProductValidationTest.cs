@@ -4,7 +4,7 @@ using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
 
-namespace Validators.Test.Products;
+namespace Validators.Test.Product;
 public class AddProductValidationTest
 {
     [Fact]
@@ -36,7 +36,7 @@ public class AddProductValidationTest
     {
         var validator = new AddProductValidation();
         var command = ProductCommandBuilder.AddProductCommandBuild();
-        command.Name = string.Join("",Enumerable.Repeat("x",66));
+        command.Name = string.Join("", Enumerable.Repeat("x", 66));
 
         var result = validator.Validate(command);
 
@@ -193,7 +193,7 @@ public class AddProductValidationTest
         var validator = new AddProductValidation();
         var command = ProductCommandBuilder.AddProductCommandBuild();
         command.MainImageBase64 = null;
-        command.SecondaryImagesBase64= null;
+        command.SecondaryImagesBase64 = null;
 
         var result = validator.Validate(command);
 

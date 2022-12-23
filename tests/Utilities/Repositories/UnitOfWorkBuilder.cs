@@ -4,7 +4,7 @@ using Moq;
 namespace Utilities.Repositories;
 public class UnitOfWorkBuilder
 {
-    private static UnitOfWorkBuilder _instance;
+    private static UnitOfWorkBuilder? _instance;
     private readonly Mock<IUnitOfWork> _uow;
 
     private UnitOfWorkBuilder()
