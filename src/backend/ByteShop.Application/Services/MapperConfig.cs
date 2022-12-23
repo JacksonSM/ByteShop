@@ -2,13 +2,13 @@
 using ByteShop.Application.DTOs;
 using ByteShop.Domain.Entities;
 
-namespace ByteShop.Application.Tools;
+namespace ByteShop.Application.Services;
 public class MapperConfig : Profile
 {
-	public MapperConfig()
-	{
-		EntityForDTO();
-	}
+    public MapperConfig()
+    {
+        EntityForDTO();
+    }
 
     private void EntityForDTO()
     {

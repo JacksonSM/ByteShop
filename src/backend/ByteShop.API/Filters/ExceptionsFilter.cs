@@ -1,6 +1,5 @@
 ﻿using ByteShop.API.Tools;
 using ByteShop.Application.UseCases.Results;
-using ByteShop.Domain.Exceptions;
 using ByteShop.Exceptions.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -17,9 +16,6 @@ public class ExceptionsFilter : IExceptionFilter
             case ByteShopException:
                 HandleByteShopException(context);
                 break;
-            case DomainExecption:
-                HandleDomainExecption(context);
-                break;
             default:
                 HandleUnknownError(context);
                 break;
@@ -33,6 +29,10 @@ public class ExceptionsFilter : IExceptionFilter
         {
             HandleValidationErrors(context);
         }
+        else if(context.Exception is DomainExecption)
+        {
+            HandleDomainExecption(context);
+        }
         else
         {
             context.Result = new ParseRequestResult<string>()
@@ -41,7 +41,7 @@ public class ExceptionsFilter : IExceptionFilter
         }
     }
 
-    private void HandleDomainExecption(ExceptionContext context)
+    private static void HandleDomainExecption(ExceptionContext context)
     {
         context.Result = new ParseRequestResult<string>()
             .ParseToActionResult(new RequestResult<string>()
