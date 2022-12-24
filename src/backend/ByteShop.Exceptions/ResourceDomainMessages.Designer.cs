@@ -68,5 +68,14 @@ namespace ByteShop.Exceptions {
                 return ResourceManager.GetString("MAXIMUM_CATEGORY_LEVEL", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to É necessario ter uma imagem principal, para adicionar uma imagem segundaria..
+        /// </summary>
+        public static string MUST_HAVE_A_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
+            }
+        }
     }
 }

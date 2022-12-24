@@ -120,4 +120,7 @@
   <data name="MAXIMUM_CATEGORY_LEVEL" xml:space="preserve">
     <value>Apenas 3 niveis de categoria são permitida.</value>
   </data>
+  <data name="MUST_HAVE_A_MAIN_IMAGE" xml:space="preserve">
+    <value>É necessario ter uma imagem principal, para adicionar uma imagem segundaria.</value>
+  </data>
 </root>
