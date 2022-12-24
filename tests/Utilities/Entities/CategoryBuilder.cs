@@ -18,8 +18,6 @@ public class CategoryBuilder
         var categoryLevelOne = BuildCategoryWithoutLevel();
         var categoryLevelTwo = BuildCategoryWithoutLevel(categoryLevelOne);
         var categoryLevelThree = BuildCategoryWithoutLevel(categoryLevelTwo);
-        categoryLevelOne.AddChild(categoryLevelTwo);
-        categoryLevelTwo.AddChild(categoryLevelThree);
         return categoryLevelThree;
     }
 
