@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SucessSubmit from "./pages/SucessSubmit";
 import { ContextProductID} from "./pages/CadastroProduto/context";
 import { useState } from "react";
+import FailSubmit from "./pages/FailSubmit";
 
 function App() {
   const [id, setID] = useState(12);
@@ -22,6 +23,7 @@ function App() {
               element={<CadastroProduto />}
             />
             <Route path={"/sucess-submit"} element={<SucessSubmit />} />
+            <Route path={"/fail-submit"} element={<FailSubmit />} />
           </Routes>
         </Router>
       </ContextProductID.Provider>
