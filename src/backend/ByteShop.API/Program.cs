@@ -2,6 +2,7 @@ using ByteShop.API.Filters;
 using ByteShop.Application;
 using ByteShop.Infrastructure;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,14 @@ builder.Services.AddCors(cfg => {
 
 
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
+
+var logger = Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+
 
 var app = builder.Build();
 
