@@ -93,11 +93,16 @@ const CadastroProduto: React.FC = () => {
       mainImageBase64,
       secondaryImagesBase64,
     }).then((response) => {
-      <ContextProductID.Provider
-        value={{ id, setID }}
-      ></ContextProductID.Provider>;
-      setID(Number(response.id));
-      rota("/sucess-submit");
+      if (response instanceof Error) {
+        alert(response.stack);
+        rota("/fail-submit");
+      } else {
+        <ContextProductID.Provider
+          value={{ id, setID }}
+        ></ContextProductID.Provider>;
+        setID(Number(response.data.data.id));
+        rota("/sucess-submit");
+      }
     });
 
     setValidated(true);
@@ -114,7 +119,6 @@ const CadastroProduto: React.FC = () => {
     let arr: Array<TImgSrc> = [];
 
     if (files) {
-      // console.log(files);
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
 
