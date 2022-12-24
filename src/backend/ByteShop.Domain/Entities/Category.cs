@@ -1,4 +1,5 @@
-﻿using ByteShop.Exceptions.Exceptions;
+﻿using ByteShop.Exceptions;
+using ByteShop.Exceptions.Exceptions;
 
 namespace ByteShop.Domain.Entities;
 public class Category : Entity
@@ -36,7 +37,7 @@ public class Category : Entity
     private void ValidateLevel(Category category)
     {
         var exists = category.ParentCategory?.ParentCategory;
-        DomainExecption.When(exists != null, "Apenas 3 niveis de categoria são permitida.");
+        DomainExecption.When(exists != null, ResourceDomainMessages.MAXIMUM_CATEGORY_LEVEL);
     }
 
     public void Update(string name, int parentCategoryId)
