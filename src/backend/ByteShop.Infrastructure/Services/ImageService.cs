@@ -2,7 +2,7 @@
 using ByteShop.Application.Services;
 using ByteShop.Application.UseCases.Commands.Product;
 using ByteShop.Exceptions;
-using ByteShop.Infrastructure.Settings;
+using ByteShop.Infrastructure.Options;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;

@@ -1,7 +1,6 @@
 using ByteShop.API.Filters;
 using ByteShop.Application;
 using ByteShop.Infrastructure;
-using ByteShop.Infrastructure.Settings;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 

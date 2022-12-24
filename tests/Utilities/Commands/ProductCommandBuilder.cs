@@ -96,7 +96,9 @@ public class ProductCommandBuilder
     {
         try
         {
-            string startupPath = Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            string startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             return Path.Combine(startupPath, $"Utilities\\Commands\\Base64\\{fileName}");
         }
         catch

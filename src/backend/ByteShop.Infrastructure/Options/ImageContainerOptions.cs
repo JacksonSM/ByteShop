@@ -1,4 +1,4 @@
-﻿namespace ByteShop.Infrastructure.Settings;
+﻿namespace ByteShop.Infrastructure.Options;
 public class ImageContainerOptions
 {
     public const string KEY = "ImageContainer";

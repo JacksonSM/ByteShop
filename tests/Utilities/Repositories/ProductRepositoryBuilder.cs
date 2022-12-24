@@ -1,11 +1,12 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Application.Services;
+using ByteShop.Domain.Entities;
 using ByteShop.Domain.Interfaces.Repositories;
 using Moq;
 
 namespace Utilities.Repositories;
 public class ProductRepositoryBuilder
 {
-    private static ProductRepositoryBuilder _instance;
+    private static ProductRepositoryBuilder? _instance;
     private readonly Mock<IProductRepository> _repository;
 
     private ProductRepositoryBuilder()
@@ -23,12 +24,16 @@ public class ProductRepositoryBuilder
 
     public ProductRepositoryBuilder SetupGetById(Product product)
     {
-        _repository.Setup(m => m.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(product);
+        _repository.Setup(m => m.GetByIdAsync(product.Id)).ReturnsAsync(product);
         return this;
     }
 
     public IProductRepository Build()
     {
         return _repository.Object;
+    }
+    public Mock<IProductRepository> GetMock()
+    {
+        return _repository;
     }
 }

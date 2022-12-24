@@ -1,8 +1,9 @@
-﻿namespace ByteShop.Domain.Exceptions;
-public class DomainExecption : Exception
+﻿namespace ByteShop.Exceptions.Exceptions;
+public class DomainExecption : ByteShopException
 {
     public DomainExecption(string error) : base(error)
-    { }
+    { 
+    }
 
     public static void When(bool hasError, string error)
     {

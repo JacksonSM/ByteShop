@@ -28,27 +28,27 @@ public class AddCategoryHandler : IHandler<AddCategoryCommand, CategoryDTO>
     {
         Domain.Entities.Category parentCategory = null;
 
-        if(command.ParentCategoryId != 0)
+        if (command.ParentCategoryId != 0)
             parentCategory = await _categoryRepo
                 .GetByIdWithAssociationAsync(command.ParentCategoryId);
 
         Validate(command, parentCategory);
 
-        var newCategory = new Domain.Entities.Category(command.Name);
-
+        Domain.Entities.Category newCategory;
         if (parentCategory != null)
         {
-            parentCategory.AddChild(newCategory);
-            _categoryRepo.Update(parentCategory);
+            newCategory = new Domain.Entities.Category(command.Name, parentCategory);
+            await _categoryRepo.AddAsync(newCategory);
         }
         else
         {
+            newCategory = new Domain.Entities.Category(command.Name);
             await _categoryRepo.AddAsync(newCategory);
         }
         await _uow.CommitAsync();
 
         var categoryDTO = _mapper.Map<CategoryDTO>(newCategory);
-        return new RequestResult<CategoryDTO>().Created(categoryDTO);   
+        return new RequestResult<CategoryDTO>().Created(categoryDTO);
     }
 
     private void Validate(AddCategoryCommand command,
@@ -57,7 +57,7 @@ public class AddCategoryHandler : IHandler<AddCategoryCommand, CategoryDTO>
         var validator = new AddCategoryValidation();
         var validationResult = validator.Validate(command);
 
-        if(parentCategory is null && command.ParentCategoryId != 0)
+        if (parentCategory is null && command.ParentCategoryId != 0)
             validationResult.Errors.Add(new FluentValidation.Results.ValidationFailure(
                 string.Empty, ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
 

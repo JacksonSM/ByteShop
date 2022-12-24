@@ -11,8 +11,6 @@ using ByteShop.Exceptions.Exceptions;
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
 {
-    private const int MAXIMUM_AMOUNT_OF_IMAGES = 5;
-
     private readonly IProductRepository _productRepo;
     private readonly ICategoryRepository _categoryRepo;
     private readonly IUnitOfWork _uow;
@@ -20,7 +18,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
     private readonly IImageService _imageService;
 
     public AddProductHandler(
-        IProductRepository productRepo, 
+        IProductRepository productRepo,
         ICategoryRepository categoryRepo,
         IUnitOfWork uow,
         IMapper mapper,
@@ -54,15 +52,21 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
                 categoryId: command.CategoryId
             );
 
-        var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
-            command.MainImageBase64.Extension);
-
-        newProduct.SetMainImage(mainImageUrl);
-        foreach (var imageBase64 in command.SecondaryImagesBase64)
+        if (command.MainImageBase64 is not null)
         {
-            var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
-                imageBase64.Extension);
-            newProduct.AddSecondaryImage(url);
+            var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
+                command.MainImageBase64.Extension);
+            newProduct.SetMainImage(mainImageUrl);
+        }
+
+        if (command.SecondaryImagesBase64.Length > 0)
+        {
+            foreach (var imageBase64 in command.SecondaryImagesBase64)
+            {
+                var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
+                    imageBase64.Extension);
+                newProduct.AddSecondaryImage(url);
+            }
         }
 
         await _productRepo.AddAsync(newProduct);

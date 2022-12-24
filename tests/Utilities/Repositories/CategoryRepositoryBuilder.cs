@@ -1,4 +1,5 @@
-﻿using ByteShop.Domain.Interfaces.Repositories;
+﻿using ByteShop.Domain.Entities;
+using ByteShop.Domain.Interfaces.Repositories;
 using Moq;
 
 namespace Utilities.Repositories;
@@ -23,6 +24,20 @@ public class CategoryRepositoryBuilder
     {
         if (id != 0)
             _repository.Setup(i => i.ExistsById(id)).ReturnsAsync(true);
+
+        return this;
+    }
+    public CategoryRepositoryBuilder SetupGetByIdWithAssociationAsync(Category category)
+    {
+        if (category is not null)
+            _repository.Setup(i => i.GetByIdWithAssociationAsync(category.Id)).ReturnsAsync(category);
+
+        return this;
+    }
+    public CategoryRepositoryBuilder SetupGetByIdAsync(Category category)
+    {
+        if (category is not null)
+            _repository.Setup(i => i.GetByIdAsync(category.Id)).ReturnsAsync(category);
 
         return this;
     }

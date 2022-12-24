@@ -1,9 +1,9 @@
 ﻿using ByteShop.Application.Services;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Infrastructure.Context;
+using ByteShop.Infrastructure.Options;
 using ByteShop.Infrastructure.Repositories;
 using ByteShop.Infrastructure.Services;
-using ByteShop.Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
