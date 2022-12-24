@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useRef, useState } from "react";
 import {
   Breadcrumb,
@@ -22,12 +22,13 @@ import { Product } from "../../services/api/Product";
 import { IImgsJson } from "../../services/api/Product/types";
 import { DropdownSelector } from "../../components/categorias/DropdownSelector";
 import { Category } from "../../services/api/Category";
+import { ContextProductID, useData } from "./context";
 
 const CadastroProduto: React.FC = () => {
   // hooks
   const [validated, setValidated] = useState(false);
   const [categoryCurrentID, setCategoryCurrentID] = useState(0);
-
+  const { id, setID } = useData();
 
   type TImgSrc = string | ArrayBuffer | IImgsJson | null | any;
 
@@ -61,7 +62,7 @@ const CadastroProduto: React.FC = () => {
 
     const mainImageBase64: IImgsJson = {
       base64: imgSrc[0]?.base64,
-      extension: imgSrc[0].extension.replace(/^\w*[/]/,"."),
+      extension: imgSrc[0].extension.replace(/^\w*[/]/, "."),
     };
 
     let secondaryImagesBase64: IImgsJson[] = [];
@@ -69,38 +70,42 @@ const CadastroProduto: React.FC = () => {
     for (let i = 1; i < imgSrc.length; i++) {
       secondaryImagesBase64.push({
         base64: imgSrc[i]?.base64,
-        extension: imgSrc[i].extension.replace(/^\w*[/]/,"."),
+        extension: imgSrc[i].extension.replace(/^\w*[/]/, "."),
       });
     }
 
     const replacingComma = (value: string) => value.replaceAll(",", ".");
 
-    Product.post(
-      {
-        sku: String(skuRef.current?.value),
-        name: String(nameRef.current?.value),
-        brand: String(brandRef.current?.value),
-        categoryId: Number(categoryCurrentID),
-        warranty: Number(warrantyRef.current?.value),
-        description: String(descriptionRef.current?.value),
-        length: Number(lengthRef.current!.value),
-        width: Number(widthRef.current!.value),
-        height: Number(heightRef.current!.value),
-        weight: Number(weightRef.current?.value),
-        costPrice: Number(replacingComma(costPriceRef.current!.value)),
-        price: Number(replacingComma(priceRef.current!.value)),
-        stock: Number(stockRef.current?.value),
-        mainImageBase64,
-        secondaryImagesBase64,
-      }
-    );
+    Product.post({
+      sku: String(skuRef.current?.value),
+      name: String(nameRef.current?.value),
+      brand: String(brandRef.current?.value),
+      categoryId: Number(categoryCurrentID),
+      warranty: Number(warrantyRef.current?.value),
+      description: String(descriptionRef.current?.value),
+      length: Number(lengthRef.current!.value),
+      width: Number(widthRef.current!.value),
+      height: Number(heightRef.current!.value),
+      weight: Number(weightRef.current?.value),
+      costPrice: Number(replacingComma(costPriceRef.current!.value)),
+      price: Number(replacingComma(priceRef.current!.value)),
+      stock: Number(stockRef.current?.value),
+      mainImageBase64,
+      secondaryImagesBase64,
+    }).then((response) => {
+      <ContextProductID.Provider
+        value={{ id, setID }}
+      ></ContextProductID.Provider>;
+      setID(Number(response.id));
+      rota("/sucess-submit");
+    });
 
     setValidated(true);
     return;
   }
 
   function handleCancel() {
-    voltar("/");
+    rota("/");
     return;
   }
 
@@ -137,7 +142,7 @@ const CadastroProduto: React.FC = () => {
     }
   }
 
-  const voltar = useNavigate();
+  const rota = useNavigate();
 
   Category.getAll();
 

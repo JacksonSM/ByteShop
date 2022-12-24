@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { IImgsJson } from "../../services/api/Product/types";
 import { Product } from "../../services/api/Product";
 import { useNavigate } from "react-router-dom";
 
@@ -12,8 +11,11 @@ import {
   Row,
 } from "react-bootstrap";
 import { IpropsSucessSubmit } from "./types";
+import { useData } from "../../pages/CadastroProduto/context";
 
-const SucessSubmit = ({ id }: { id: number }) => {
+const SucessSubmit = () => {
+  const { id } = useData();
+  console.log(id);
   const [data, setdata] = useState<IpropsSucessSubmit>({});
   useEffect(() => {
     Product.getById(id).then((response) => setdata(response));
@@ -34,7 +36,7 @@ const SucessSubmit = ({ id }: { id: number }) => {
         <Col className="d-flex flex-wrap">
           <Carousel
             className="w-50 ms-3 rounded shadow"
-            style={{ maxHeight: "60vh" }}
+            style={{ height: "50vh" }}
           >
             <CarouselItem key={1}>
               <img
@@ -108,13 +110,13 @@ const SucessSubmit = ({ id }: { id: number }) => {
               <p className="text-primary ms-3 fs-5 mb-2">{props.stock}</p>
             </article>
           </Col>
-          <article className="my-4">
+        </Col>
+          <article className="my-4 ">
             <h2 className="fs-4 ms-3 mb-2">descrição</h2>
-            <p className="text-primary col-1 text-truncate ms-3 fs-5 mb-2 shadow ">
+            <p className="text-primary text-truncate col-1  ms-3 fs-5 mb-2 shadow" style={{width:"700px"}}>
               {props.description}
             </p>
           </article>
-        </Col>
         <Row className="d-flex w-100 justify-content-between p-1">
           <Button
             variant="primary"

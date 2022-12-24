@@ -1,25 +1,32 @@
 import { Container } from "react-bootstrap";
-import Paginacao from "./components/Paginacao";
+// import Paginacao from "./components/Paginacao";
 import SideMenu from "./components/SideMenu";
 import CadastroProduto from "./pages/CadastroProduto/CadastroProduto";
 import Inventario from "./pages/Inventario";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SucessSubmit from "./pages/SucessSubmit";
+import { ContextProductID} from "./pages/CadastroProduto/context";
+import { useState } from "react";
 
 function App() {
+  const [id, setID] = useState(12);
   return (
     <Container fluid className="vw-100 vh-100 m-0 p-0 overflow-auto">
-      <Router>
-        <SideMenu />
-        <Routes>
-          <Route path={"/"} element={<Inventario />} />
-          <Route path={"/cadastro-de-produtos"} element={<CadastroProduto />} />
-        </Routes>
-      </Router>
+      <ContextProductID.Provider value={{ id, setID }}>
+        <Router>
+          <SideMenu />
+          <Routes>
+            <Route path={"/"} element={<Inventario />} />
+            <Route
+              path={"/cadastro-de-produtos"}
+              element={<CadastroProduto />}
+            />
+            <Route path={"/sucess-submit"} element={<SucessSubmit />} />
+          </Routes>
+        </Router>
+      </ContextProductID.Provider>
     </Container>
   );
 }
 
 export default App;
-function useState(arg0: boolean): [any, any] {
-  throw new Error("Function not implemented.");
-}
