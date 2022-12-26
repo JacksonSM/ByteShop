@@ -2,20 +2,23 @@ import axios, { AxiosError } from "axios";
 import { api } from "../../axios-config";
 import { IProductGet, IProductPost } from "./types";
 
-async function getByParameter(
-  parameterName:
-    | "sku"
-    | "name"
-    | "brand"
-    | "category"
-    | "actualPage"
-    | "itemsPerPage",
-  { ...parameterValue }: IProductGet
+type IParameters = {
+  [key: string]: IProductGet;
+  value?: any;
+};
+
+async function get(
+  parameters: IParameters | ""
 ): Promise<IProductGet[] | Error> {
   try {
-    const { data } = await api.get(
-      `product?${parameterName}=${parameterValue[parameterName]}`
-    );
+    let queryString = "";
+
+    for (const [key, value] of Object.entries(parameters)) {
+      queryString += `${key}=${value[key]}&`;
+    }
+    queryString = queryString.slice(0, -1); // remove o último "&"
+
+    const { data } = await api.get(`product?${queryString}`);
 
     if (data) {
       return data.data;
@@ -70,4 +73,4 @@ async function post({ ...attribute }: IProductPost): Promise<any | Error> {
   }
 }
 
-export const Product = { getByParameter, post, getById };
+export const Product = { get: get, post, getById };
