@@ -74,6 +74,7 @@ public class AddCategoryHandler : IHandler<AddCategoryCommand, CategoryDTO>
         {
             var errorMessages = validationResult.Errors.Select(c => c.ErrorMessage).ToList();
             _logger.LogInformation("A validation error occurred: {@errorMessages}", errorMessages);
+            _logger.LogDebug("Command: {@command}", command);
             throw new ValidationErrorsException(errorMessages);
         }
     }

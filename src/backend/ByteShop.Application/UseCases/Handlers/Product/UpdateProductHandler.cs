@@ -7,6 +7,7 @@ using ByteShop.Application.UseCases.Validations.Product;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
@@ -16,29 +17,34 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
     private readonly IImageService _imageService;
+    private readonly ILogger<UpdateProductHandler> _logger;
 
     public UpdateProductHandler(
         IProductRepository productRepo,
         ICategoryRepository categoryRepo,
         IUnitOfWork uow,
         IMapper mapper,
-        IImageService imageService)
+        IImageService imageService,
+        ILogger<UpdateProductHandler> logger)
     {
         _productRepo = productRepo;
         _categoryRepo = categoryRepo;
         _uow = uow;
         _mapper = mapper;
         _imageService = imageService;
+        _logger = logger;
     }
 
     public async Task<RequestResult<ProductDTO>> Handle(UpdateProductCommand command)
     {
+        _logger.LogInformation("Entered the update product handler");
         var product = await _productRepo.GetByIdAsync(command.Id);
         if (product == null)
             return new RequestResult<ProductDTO>().NotFound();
 
         await ValidateAsync(command, product);
 
+        _logger.LogInformation("product before being updated: {@product}", product);
         product.Update
             (
                 name: command.Name,
@@ -57,7 +63,11 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
             );
 
         if (command.SetMainImageBase64 is not null)
+        {
             await _imageService.DeleteImageAsync(product.MainImageUrl);
+            _logger.LogInformation("Main image has been deleted: {@MainImageUrl}", product.MainImageUrl);
+        }
+            
 
         if (command.RemoveSecondaryImageUrl?.Length > 0)
         {
@@ -65,6 +75,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
             foreach (var url in command.RemoveSecondaryImageUrl)
             {
                 product.RemoveSecondaryImage(url);
+                _logger.LogInformation("Secondary image has been deleted: {@url}", url);
             }
         }
 
@@ -73,7 +84,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
             var mainImageUrl = await _imageService.UploadBase64ImageAsync(
                 command.SetMainImageBase64.Base64,
                 command.SetMainImageBase64.Extension);
-
+            _logger.LogInformation("added a new url for main image: {@mainImageUrl}", mainImageUrl);
             product.SetMainImage(mainImageUrl);
         }
 
@@ -83,6 +94,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
             {
                 var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
                     imageBase64.Extension);
+                _logger.LogInformation("added a new URL for secondary image: {@mainImageUrl}", url);
                 product.AddSecondaryImage(url);
             }
         }
@@ -90,6 +102,7 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
         _productRepo.Update(product);
         await _uow.CommitAsync();
 
+        _logger.LogInformation("The entity has been updated in the database {@product}", product);
         var produtcDTO = _mapper.Map<ProductDTO>(product);
         return new RequestResult<ProductDTO>().Ok(produtcDTO);
     }
@@ -109,6 +122,8 @@ public class UpdateProductHandler : IHandler<UpdateProductCommand, ProductDTO>
         if (!validationResult.IsValid)
         {
             var errorMessages = validationResult.Errors.Select(c => c.ErrorMessage).ToList();
+            _logger.LogInformation("A validation error occurred: {@errorMessages}", errorMessages);
+            _logger.LogDebug("Command: {@command}", command);
             throw new ValidationErrorsException(errorMessages);
         }
 

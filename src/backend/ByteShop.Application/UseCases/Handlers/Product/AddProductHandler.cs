@@ -7,6 +7,7 @@ using ByteShop.Application.UseCases.Validations.Product;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace ByteShop.Application.UseCases.Handlers.Product;
 public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
@@ -16,23 +17,28 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
     private readonly IImageService _imageService;
+    private readonly ILogger<AddProductHandler> _logger;
 
     public AddProductHandler(
         IProductRepository productRepo,
         ICategoryRepository categoryRepo,
         IUnitOfWork uow,
         IMapper mapper,
-        IImageService imageService)
+        IImageService imageService,
+        ILogger<AddProductHandler> logger)
     {
         _productRepo = productRepo;
         _categoryRepo = categoryRepo;
         _uow = uow;
         _mapper = mapper;
         _imageService = imageService;
+        _logger = logger;
     }
 
     public async Task<RequestResult<ProductDTO>> Handle(AddProductCommand command)
     {
+        _logger.LogInformation("Entered the add product handler");
+
         await ValidateAsync(command);
 
         var newProduct = new Domain.Entities.Product
@@ -54,17 +60,22 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
 
         if (command.MainImageBase64 is not null)
         {
+            _logger.LogInformation("Uploading main image...");
             var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension);
+
+            _logger.LogDebug("Generated link: {@mainImageUrl}", mainImageUrl);
             newProduct.SetMainImage(mainImageUrl);
         }
 
         if (command.SecondaryImagesBase64.Length > 0)
         {
+            _logger.LogInformation("Uploading secondary image...");
             foreach (var imageBase64 in command.SecondaryImagesBase64)
             {
                 var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
                     imageBase64.Extension);
+                _logger.LogDebug("Generated link: {@url}", url);
                 newProduct.AddSecondaryImage(url);
             }
         }
@@ -72,6 +83,7 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         await _productRepo.AddAsync(newProduct);
         await _uow.CommitAsync();
 
+        _logger.LogInformation("Entity has been saved to the database {@newProduct}", newProduct);
         var produtcDTO = _mapper.Map<ProductDTO>(newProduct);
         return new RequestResult<ProductDTO>().Created(produtcDTO);
     }
@@ -90,6 +102,8 @@ public class AddProductHandler : IHandler<AddProductCommand, ProductDTO>
         if (!validationResult.IsValid)
         {
             var errorMessages = validationResult.Errors.Select(c => c.ErrorMessage).ToList();
+            _logger.LogInformation("A validation error occurred: {@errorMessages}", errorMessages);
+            _logger.LogDebug("Command: {@command}", command);
             throw new ValidationErrorsException(errorMessages);
         }
     }
