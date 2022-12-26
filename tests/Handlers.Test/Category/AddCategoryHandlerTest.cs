@@ -1,16 +1,12 @@
-﻿using Bogus;
-using ByteShop.Application.UseCases.Handlers.Category;
-using ByteShop.Domain.Entities;
-using ByteShop.Domain.Interfaces.Repositories;
+﻿using ByteShop.Application.UseCases.Handlers.Category;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
-using Moq;
-using System;
 using Utilities.Commands;
 using Utilities.Entities;
 using Utilities.Mapper;
 using Utilities.Repositories;
+using Utilities.Services;
 using Xunit;
 
 namespace Handlers.Test.Category;
@@ -72,7 +68,8 @@ public class AddCategoryHandlerTest
             .Build();
         var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
+        var logger = LoggerBuilder<AddCategoryHandler>.Instance().Build();
 
-        return new AddCategoryHandler(categoryRepo, uow, mapper);
+        return new AddCategoryHandler(categoryRepo, uow, mapper,logger);
     }
 }

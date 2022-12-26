@@ -1,5 +1,4 @@
-﻿using ByteShop.Application.Services;
-using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.Entities;
 using ByteShop.Domain.Interfaces.Repositories;
 using Moq;
 

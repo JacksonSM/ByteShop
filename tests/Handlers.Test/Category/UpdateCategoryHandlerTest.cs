@@ -6,6 +6,7 @@ using FluentAssertions;
 using Utilities.Mapper;
 using Utilities.Repositories;
 using Xunit;
+using Utilities.Services;
 
 namespace Handlers.Test.Category;
 
@@ -74,7 +75,8 @@ public class UpdateCategoryHandlerTest
             .Build();
         var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
+        var logger = LoggerBuilder<AddCategoryHandler>.Instance().Build();
 
-        return new UpdateCategoryHandler(categoryRepo, uow, mapper);
+        return new UpdateCategoryHandler(categoryRepo, uow, mapper,logger);
     }
 }
