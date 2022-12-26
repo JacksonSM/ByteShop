@@ -73,4 +73,4 @@ async function post({ ...attribute }: IProductPost): Promise<any | Error> {
   }
 }
 
-export const Product = { get: get, post, getById };
+export const Product = { get, post, getById };
