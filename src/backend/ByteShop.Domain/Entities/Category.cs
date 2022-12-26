@@ -34,6 +34,7 @@ public class Category : Entity
         if(ChildCategories != null)
             ChildCategories.Add(category);
     }
+
     private void ValidateLevel(Category category)
     {
         var exists = category.ParentCategory?.ParentCategory;

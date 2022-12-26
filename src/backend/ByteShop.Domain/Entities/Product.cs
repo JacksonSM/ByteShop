@@ -1,4 +1,5 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿using ByteShop.Exceptions.Exceptions;
+using ByteShop.Exceptions;
 
 namespace ByteShop.Domain.Entities;
 public class Product : Entity
@@ -72,8 +73,10 @@ public class Product : Entity
     {
         MainImageUrl = imageUrl;
     }
+
     public void AddSecondaryImage(string imageUrl)
     {
+        ThereisMainImage();
         SecondaryImageUrl += imageUrl + " ";
     }
 
@@ -89,10 +92,6 @@ public class Product : Entity
         {
             return null;
         }
-    }
-    private void SetSecondaryImageUrl(string[] urls)
-    {
-        SecondaryImageUrl = string.Join(" ", urls);
     }
 
     public int GetImagesTotal()
@@ -114,5 +113,16 @@ public class Product : Entity
         var urls = GetSecondaryImageUrl().ToList();
         urls.Remove(url);
         SetSecondaryImageUrl(urls.ToArray());
+    }
+
+    private void SetSecondaryImageUrl(string[] urls)
+    {
+        SecondaryImageUrl = string.Join(" ", urls);
+    }
+
+    private void ThereisMainImage()
+    {
+        var exists = !string.IsNullOrEmpty(MainImageUrl);
+        DomainExecption.When(exists, ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 }
