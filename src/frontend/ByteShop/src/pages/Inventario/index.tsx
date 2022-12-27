@@ -53,14 +53,12 @@ const Inventario: React.FC = () => {
     });
   }
 
-
   function handleClear() {
-    skuRef.current!.value= ""
-    nameRef.current!.value= ""
-    brandRef.current!.value= ""
+    skuRef.current!.value = "";
+    nameRef.current!.value = "";
+    brandRef.current!.value = "";
     getData("");
-  };
-
+  }
 
   return (
     <Container fluid className="vw-100">
@@ -150,15 +148,14 @@ const Inventario: React.FC = () => {
       </h2>
       <Table
         size="lg"
-        className="mt-3 border bg-light shadow-sm"
+        className="mt-3 border bg-white shadow-sm"
         bordered={true}
-        hover
       >
         <thead>
           <tr>
-            <th className="fs-5 text-start">#</th>
-            <th className="fs-5 text-start">SKU</th>
-            <th className="fs-5 text-start">Imagem</th>
+            <th className="fs-5 text-start" style={{float: "left"}}>#</th>
+            <th className="fs-5 text-start" style={{float: "left"}}>SKU</th>
+            <th className="fs-5 text-start" >Imagem</th>
             <th className="fs-5 text-start">Nome</th>
             <th className="fs-5 text-start">Preço</th>
             <th className="fs-5 text-start">Categoria</th>
@@ -170,9 +167,9 @@ const Inventario: React.FC = () => {
           {data.length > 0
             ? data.map((item: IProductGet, index: number) => {
                 return (
-                  <tr id={String(item.id)} key={index} className="border">
-                    <td className="fs-6">{index}</td>
-                    <td>{item.sku}</td>
+                  <tr  id={String(item.id)} key={index} className="border text-start">
+                    <td className="fs-6 fw-bold" style={{float: "left"}}>{index +1}</td>
+                    <td style={{float: "left"}}>{item.sku}</td>
                     <td>
                       {item.mainImageUrl && (
                         <Image
@@ -183,15 +180,15 @@ const Inventario: React.FC = () => {
                         />
                       )}
                     </td>
-                    <td>{item.name}</td>
-                    <td>{Formatter.format(Number(item.price))}</td>
+                    <td  style={{float: "left"}}>{item.name}</td>
+                    <td >{Formatter.format(Number(item.price))}</td>
                     <td>{item.categoryId}</td>
                     <td>{item.stock} un</td>
                     <td>
-                      <button className="border border-0 bg-body rounded me-2">
+                      <button className="border border-0 bg-body rounded me-2 my-auto">
                         <img alt="ícone lixeira" src={takeNoteIcon} />
                       </button>
-                      <button className="border border-0 rounded bg-body">
+                      <button className="border border-0 rounded bg-body my-auto">
                         <img alt="ícone papel e lápis" src={trashIcon} />
                       </button>
                     </td>
