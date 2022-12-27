@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ByteShop.Infrastructure.Context.EntitiesMap;
+namespace ByteShop.Infrastructure.EntitiesMap;
 public class CategoryMap
 {
     public void Configure(EntityTypeBuilder<Category> builder)

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ByteShop.Infrastructure.Context.EntitiesMap;
+namespace ByteShop.Infrastructure.EntitiesMap;
 public class ProductMap : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
@@ -19,36 +19,36 @@ public class ProductMap : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Brand)
                .HasColumnType("nvarchar(30)")
                .IsRequired();
-        
+
         builder.Property(x => x.SKU)
                .IsRequired();
-        
+
         builder.Property(x => x.Price)
-               .HasPrecision(18,2)
+               .HasPrecision(18, 2)
                .IsRequired();
-        
+
         builder.Property(x => x.CostPrice)
                .HasPrecision(18, 2)
                .IsRequired();
 
         builder.Property(x => x.Stock)
                .IsRequired();
-        
+
         builder.Property(x => x.Warranty)
                .IsRequired();
-        
+
         builder.Property(x => x.Weight)
                .HasPrecision(10, 3)
                .IsRequired();
-        
+
         builder.Property(x => x.Height)
                .HasPrecision(10, 2)
                .IsRequired();
-        
+
         builder.Property(x => x.Length)
                .HasPrecision(10, 2)
                .IsRequired();
-        
+
         builder.Property(x => x.Width)
                .HasPrecision(10, 2)
                .IsRequired();

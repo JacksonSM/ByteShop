@@ -1,6 +1,6 @@
 ﻿using ByteShop.Domain.Entities;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infrastructure.Context;
+using ByteShop.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
