@@ -1,11 +1,16 @@
 export interface IProductGet {
+  id?: number;
   sku?: string;
   name?: string;
+  price?: number;
   brand?: string;
-  category?: string;
+  mainImageUrl?: string;
+  categoryId?: string;
   actualPage?: number;
   itemsPerPage?: number;
 }
+
+
 
 export interface IImgsJson {
   id?: string;
