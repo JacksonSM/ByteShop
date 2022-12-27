@@ -5,7 +5,10 @@ export interface IProductGet {
   price?: number;
   brand?: string;
   mainImageUrl?: string;
+  secondaryImageUrl?: string;
   categoryId?: string;
+  warranty?: number;
+  stock?: number;
   actualPage?: number;
   itemsPerPage?: number;
 }
