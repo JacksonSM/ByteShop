@@ -162,6 +162,7 @@ const Inventario: React.FC = () => {
             <th className="fs-5 text-start">Nome</th>
             <th className="fs-5 text-start">Preço</th>
             <th className="fs-5 text-start">Categoria</th>
+            <th className="fs-5 text-start">Estoque</th>
             <th className="fs-5 text-start">Ações</th>
           </tr>
         </thead>
@@ -183,6 +184,7 @@ const Inventario: React.FC = () => {
                     <td>{item.name}</td>
                     <td>{Formatter.format(Number(item.price))}</td>
                     <td>{item.categoryId}</td>
+                    <td>{item.stock} un</td>
                     <td>
                       <button className="border border-0 bg-body rounded me-2">
                         <img alt="ícone lixeira" src={takeNoteIcon} />
