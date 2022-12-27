@@ -174,12 +174,14 @@ const Inventario: React.FC = () => {
                     <td className="fs-6">{index}</td>
                     <td>{item.sku}</td>
                     <td>
-                      <Image
-                        alt={`imagem do produto ${index}`}
-                        src={item.mainImageUrl}
-                        thumbnail
-                        style={{ width: "3.75rem", height: "3.75rem" }}
-                      />
+                      {item.mainImageUrl && (
+                        <Image
+                          alt={`imagem do produto ${index}`}
+                          src={item.mainImageUrl}
+                          thumbnail
+                          style={{ width: "3.75rem", height: "3.75rem" }}
+                        />
+                      )}
                     </td>
                     <td>{item.name}</td>
                     <td>{Formatter.format(Number(item.price))}</td>
