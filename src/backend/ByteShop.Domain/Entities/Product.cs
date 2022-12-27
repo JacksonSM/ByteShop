@@ -122,7 +122,7 @@ public class Product : Entity
 
     private void ThereisMainImage()
     {
-        var exists = !string.IsNullOrEmpty(MainImageUrl);
+        var exists = string.IsNullOrEmpty(MainImageUrl);
         DomainExecption.When(exists, ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 }

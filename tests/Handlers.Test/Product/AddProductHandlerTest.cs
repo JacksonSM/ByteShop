@@ -62,8 +62,9 @@ public class AddProductHandlerTest
 
         var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
+        var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
 
-        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object);
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
 
         var response = await handler.Handle(command);
 
@@ -103,8 +104,8 @@ public class AddProductHandlerTest
 
         var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
-
-        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object);
+        var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
 
         var response = await handler.Handle(command);
 
@@ -124,8 +125,9 @@ public class AddProductHandlerTest
 
         var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
+        var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
 
-        return new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService);
+        return new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService, logger);
 
     }
 }

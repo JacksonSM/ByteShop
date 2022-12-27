@@ -23,7 +23,8 @@ public class ImageServiceBuilder
     public ImageServiceBuilder SetupUpload()
     {
         _service.Setup(m => m.UploadBase64ImageAsync(It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(It.IsAny<string>());
+            .ReturnsAsync("http://anylink.com");
+
         return this;
     }
 

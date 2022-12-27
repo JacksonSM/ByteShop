@@ -5,13 +5,13 @@ namespace Utilities.Services;
 public class LoggerBuilder<T>
 {
     private static LoggerBuilder<T>? _instance;
-    private readonly Mock<Logger<T>> _uow;
+    private readonly Mock<ILogger<T>> _logger;
 
     private LoggerBuilder()
     {
-        if (_uow is null)
+        if (_logger is null)
         {
-            _uow = new Mock<Logger<T>>();
+            _logger = new Mock<ILogger<T>>();
         }
     }
 
@@ -21,8 +21,8 @@ public class LoggerBuilder<T>
         return _instance;
     }
 
-    public Logger<T> Build()
+    public ILogger<T> Build()
     {
-        return _uow.Object;
+        return _logger.Object;
     }
 }
