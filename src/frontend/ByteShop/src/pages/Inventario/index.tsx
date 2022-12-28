@@ -213,7 +213,8 @@ const Inventario: React.FC = () => {
               );
             })}
           </tbody>
-      </Table>: null}
+        </Table>
+      ) : null}
       <Paginacao dataSize={data.length} itemsPerPage={selectItemsPerPage} />
     </Container>
   );
