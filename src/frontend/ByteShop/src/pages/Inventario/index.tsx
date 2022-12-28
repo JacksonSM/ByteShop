@@ -152,7 +152,7 @@ const Inventario: React.FC = () => {
         <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
           <Alert.Heading>erro ao listar os produtos!</Alert.Heading>
           <p>
-            Alguma coisa deve ter acontecido durante a buscar dos produtos no
+            Alguma coisa deve ter acontecido durante a busca dos produtos no
             banco de dados.
           </p>
         </Alert>
