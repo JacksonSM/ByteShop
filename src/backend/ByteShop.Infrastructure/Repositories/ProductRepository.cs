@@ -1,6 +1,6 @@
 ﻿using ByteShop.Domain.Entities;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infrastructure.Context;
+using ByteShop.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace ByteShop.Infrastructure.Repositories;
@@ -14,14 +14,20 @@ public class ProductRepository : Repository<Product>, IProductRepository
     }        
 
     public override async Task<Product> GetByIdAsync(int id)=>
-        await _context.Product.FirstOrDefaultAsync(x => x.IsActive == true && x.Id == id);
+        await _context.Product
+            .Include(x => x.Category)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
 
 
     public async Task<(IEnumerable<Product> products, int quantityProduct)> GetAllAsync(
         string sku, string name, string brand, string category, 
         int? actualPage, int? itemsPerPage)
     {
-        var query = _context.Product.AsQueryable().Where(x => x.IsActive);
+        var query = _context.Product
+            .Include(x => x.Category)
+            .AsNoTracking()
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(sku))
             query = query.Where(x => x.SKU.ToLower().Contains(sku.ToLower()));
@@ -33,7 +39,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
             query = query.Where(x => x.Brand.ToLower().Contains(brand.ToLower()));
         
         if (!string.IsNullOrEmpty(category))
-            query = query.Where(x => x.Brand.ToLower().Contains(category.ToLower()));
+            query = query.Where(x => x.Category.Name.ToLower().Contains(category.ToLower()));
 
         if(actualPage.HasValue && itemsPerPage.HasValue)
             query = SetPagination(actualPage.Value, itemsPerPage.Value, query);

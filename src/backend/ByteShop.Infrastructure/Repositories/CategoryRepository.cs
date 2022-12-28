@@ -1,7 +1,8 @@
 ﻿using ByteShop.Domain.Entities;
+using ByteShop.Infrastructure.Contexts;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace ByteShop.Infrastructure.Repositories;
 public class CategoryRepository : Repository<Category>, ICategoryRepository

@@ -1,11 +1,12 @@
 ﻿using ByteShop.Domain.Entities;
+using ByteShop.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
-namespace ByteShop.Infrastructure.Context;
-public class ByteShopDbContext : DbContext
+namespace ByteShop.Infrastructure.Contexts;
+public class ByteShopDbContext : IdentityDbContext<ApplicationUser>
 {
-    public ByteShopDbContext(DbContextOptions<ByteShopDbContext> options) : base(options){}
+    public ByteShopDbContext(DbContextOptions<ByteShopDbContext> options) : base(options) { }
 
     public DbSet<Product> Product { get; set; }
     public DbSet<Category> Category { get; set; }

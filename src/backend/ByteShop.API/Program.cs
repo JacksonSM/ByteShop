@@ -38,6 +38,7 @@ builder.Services.AddCors(cfg => {
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
 
 var logger = Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
     .WriteTo.Console()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();
 
@@ -54,7 +55,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseCors(cfg =>
 {
     cfg.AllowAnyOrigin()
