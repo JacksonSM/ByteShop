@@ -146,7 +146,8 @@ const Inventario: React.FC = () => {
         {data.length > 0 ? data.length : 0}{" "}
         {`resultado${pluralForm} encontrado${pluralForm}`}
       </h2>
-      <Table
+      {data.length > 1 ? 
+      < Table
         size="lg"
         className="mt-3 border bg-white shadow-sm"
         bordered={true}
@@ -164,8 +165,7 @@ const Inventario: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0
-            ? data.map((item: IProductGet, index: number) => {
+        {data.map((item: IProductGet, index: number) => {
                 return (
                   <tr  id={String(item.id)} key={index} className="border text-start">
                     <td className="fs-6 fw-bold" style={{float: "left"}}>{index +1}</td>
@@ -194,11 +194,10 @@ const Inventario: React.FC = () => {
                     </td>
                   </tr>
                 );
-              })
-            : null}
+              })}
         </tbody>
-      </Table>
-      <Paginacao />
+      </Table>: null}
+      <Paginacao dataSize={data.length} itemsPerPage={selectItemsPerPage} />
     </Container>
   );
 };
