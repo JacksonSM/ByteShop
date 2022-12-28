@@ -6,7 +6,11 @@ export interface IProductGet {
   brand?: string;
   mainImageUrl?: string;
   secondaryImageUrl?: string;
-  categoryId?: string;
+  category?: {
+    id: number,
+    name: string,
+    parentCategoryId: 0
+  }
   warranty?: number;
   stock?: number;
   actualPage?: number;
