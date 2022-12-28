@@ -165,48 +165,54 @@ const Inventario: React.FC = () => {
         >
           <thead>
             <tr>
-            <th className="fs-5 text-start" style={{float: "left"}}>#</th>
-            <th className="fs-5 text-start" style={{float: "left"}}>SKU</th>
-            <th className="fs-5 text-start" >Imagem</th>
-            <th className="fs-5 text-start">Nome</th>
-            <th className="fs-5 text-start">Preço</th>
-            <th className="fs-5 text-start">Categoria</th>
-            <th className="fs-5 text-start">Estoque</th>
-            <th className="fs-5 text-start">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-        {data.map((item: IProductGet, index: number) => {
-                return (
-                  <tr  id={String(item.id)} key={index} className="border text-start">
-                    <td className="fs-6 fw-bold" style={{float: "left"}}>{index +1}</td>
-                    <td style={{float: "left"}}>{item.sku}</td>
-                    <td>
-                      {item.mainImageUrl && (
-                        <Image
-                          alt={`imagem do produto ${index}`}
-                          src={item.mainImageUrl}
-                          thumbnail
-                          style={{ width: "3.75rem", height: "3.75rem" }}
-                        />
-                      )}
-                    </td>
-                    <td  style={{float: "left"}}>{item.name}</td>
-                    <td >{Formatter.format(Number(item.price))}</td>
-                    <td>{item.categoryId}</td>
-                    <td>{item.stock} un</td>
-                    <td>
-                      <button className="border border-0 bg-body rounded me-2 my-auto">
-                        <img alt="ícone lixeira" src={takeNoteIcon} />
-                      </button>
-                      <button className="border border-0 rounded bg-body my-auto">
-                        <img alt="ícone papel e lápis" src={trashIcon} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-        </tbody>
+              <th className="fs-5  text-start">#</th>
+              <th className="fs-5 text-start" >SKU</th>
+              <th className="fs-5 text-start" >Imagem</th>
+              <th className="fs-5 text-start">Nome</th>
+              <th className="fs-5 text-start">Preço</th>
+              <th className="fs-5 text-start">Categoria</th>
+              <th className="fs-5 text-start">Estoque</th>
+              <th className="fs-5 text-start">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item: IProductGet, index: number) => {
+              return (
+                <tr
+                  id={String(item.id)}
+                  key={index}
+                  className="border text-start"
+                >
+                  <td className="fs-6 fw-bold" >
+                    {index + 1}
+                  </td>
+                  <td >{item.sku}</td>
+                  <td>
+                    {item.mainImageUrl && (
+                      <Image
+                        alt={`imagem do produto ${index}`}
+                        src={item.mainImageUrl}
+                        thumbnail
+                        style={{ width: "3.75rem", height: "3.75rem" }}
+                      />
+                    )}
+                  </td>
+                  <td >{item.name}</td>
+                  <td>{Formatter.format(Number(item.price))}</td>
+                  <td>{item.category?.name}</td>
+                  <td>{item.stock} un</td>
+                  <td>
+                    <button className="border border-0 bg-body rounded me-2 my-auto">
+                      <img alt="ícone lixeira" src={takeNoteIcon} />
+                    </button>
+                    <button className="border border-0 rounded bg-body my-auto">
+                      <img alt="ícone papel e lápis" src={trashIcon} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
       </Table>: null}
       <Paginacao dataSize={data.length} itemsPerPage={selectItemsPerPage} />
     </Container>
