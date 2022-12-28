@@ -126,6 +126,15 @@
   <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 50 caracteres.</value>
   </data>
+  <data name="EMPTY_CPF" xml:space="preserve">
+    <value>O campo CPF é obrigatorio.</value>
+  </data>
+  <data name="EMPTY_EMAIL" xml:space="preserve">
+    <value>O campo email está vazio.</value>
+  </data>
+  <data name="EMPTY_USERNAME" xml:space="preserve">
+    <value>O Campo usuario é obrigatorio.</value>
+  </data>
   <data name="IMAGE_EXTENSION" xml:space="preserve">
     <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
   </data>
@@ -134,6 +143,12 @@
   </data>
   <data name="INVALID_BASE64" xml:space="preserve">
     <value>Esta solicitação contém base64 inválida.</value>
+  </data>
+  <data name="INVALID_CPF" xml:space="preserve">
+    <value>O CPF informado não é valido.</value>
+  </data>
+  <data name="INVALID_EMAIL" xml:space="preserve">
+    <value>O campo email está invalido.</value>
   </data>
   <data name="MAXIMUM_AMOUNT_OF_IMAGES" xml:space="preserve">
     <value>É permitido apenas 5 imagens.</value>

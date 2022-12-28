@@ -88,6 +88,33 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo CPF é obrigatorio..
+        /// </summary>
+        public static string EMPTY_CPF {
+            get {
+                return ResourceManager.GetString("EMPTY_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo email está vazio..
+        /// </summary>
+        public static string EMPTY_EMAIL {
+            get {
+                return ResourceManager.GetString("EMPTY_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O Campo usuario é obrigatorio..
+        /// </summary>
+        public static string EMPTY_USERNAME {
+            get {
+                return ResourceManager.GetString("EMPTY_USERNAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg..
         /// </summary>
         public static string IMAGE_EXTENSION {
@@ -111,6 +138,24 @@ namespace ByteShop.Exceptions {
         public static string INVALID_BASE64 {
             get {
                 return ResourceManager.GetString("INVALID_BASE64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O CPF informado não é valido..
+        /// </summary>
+        public static string INVALID_CPF {
+            get {
+                return ResourceManager.GetString("INVALID_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo email está invalido..
+        /// </summary>
+        public static string INVALID_EMAIL {
+            get {
+                return ResourceManager.GetString("INVALID_EMAIL", resourceCulture);
             }
         }
         
