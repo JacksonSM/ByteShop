@@ -18,6 +18,7 @@ import { Product } from "../../services/api/Product";
 import { IProductGet } from "services/api/Product/types";
 
 const Inventario: React.FC = () => {
+  const [showAlert, setShowAlert] = useState(false);
   const [data, setData] = useState<any>([]);
 
   const skuRef = useRef<HTMLInputElement>(null);
@@ -35,6 +36,7 @@ const Inventario: React.FC = () => {
 
   async function getData(parameters: any) {
     const value = await Product.get(parameters);
+    if (value instanceof Error) setShowAlert(true);
     setData(value);
     return;
   }
@@ -146,14 +148,23 @@ const Inventario: React.FC = () => {
         {data.length > 0 ? data.length : 0}{" "}
         {`resultado${pluralForm} encontrado${pluralForm}`}
       </h2>
-      {data.length > 1 ? 
-      < Table
-        size="lg"
-        className="mt-3 border bg-white shadow-sm"
-        bordered={true}
-      >
-        <thead>
-          <tr>
+      {showAlert ? (
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          <Alert.Heading>erro ao listar os produtos!</Alert.Heading>
+          <p>
+            Alguma coisa deve ter acontecido durante a buscar dos produtos no
+            banco de dados.
+          </p>
+        </Alert>
+      ) : null}
+      {data.length > 1 ? (
+        <Table
+          size="lg"
+          className="mt-3 border bg-white shadow-sm"
+          bordered={true}
+        >
+          <thead>
+            <tr>
             <th className="fs-5 text-start" style={{float: "left"}}>#</th>
             <th className="fs-5 text-start" style={{float: "left"}}>SKU</th>
             <th className="fs-5 text-start" >Imagem</th>
