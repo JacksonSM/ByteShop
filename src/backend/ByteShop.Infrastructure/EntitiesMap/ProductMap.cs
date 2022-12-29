@@ -24,12 +24,12 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .IsRequired();
 
         builder.Property(x => x.Price)
-               .HasPrecision(18, 2)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnType("decimal(18,2)");
 
         builder.Property(x => x.CostPrice)
-               .HasPrecision(18, 2)
-               .IsRequired();
+               .IsRequired()
+                .HasColumnType("decimal(18,2)");
 
         builder.Property(x => x.Stock)
                .IsRequired();
@@ -38,20 +38,20 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .IsRequired();
 
         builder.Property(x => x.Weight)
-               .HasPrecision(10, 3)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnType("float(10,3)");
 
         builder.Property(x => x.Height)
-               .HasPrecision(10, 2)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnType("float(10,2)");
 
         builder.Property(x => x.Length)
-               .HasPrecision(10, 2)
-               .IsRequired();
+               .IsRequired()
+                .HasColumnType("float(10,2)");
 
         builder.Property(x => x.Width)
-               .HasPrecision(10, 2)
-               .IsRequired();
+               .IsRequired()
+               .HasColumnType("float(10,2)");
 
         builder.HasOne(r => r.Category)
                .WithMany(r => r.Products)

@@ -25,7 +25,6 @@ public class Category : Entity
         ValidateLevel(parentCategory);
         Name = name;
         ParentCategoryId = parentCategory.Id;
-        ParentCategory = parentCategory;
     }
 
     public void AddChild(Category category)

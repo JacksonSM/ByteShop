@@ -15,6 +15,8 @@ public class ByteShopDbContext : IdentityDbContext<ApplicationUser>
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ByteShopDbContext).Assembly);
 
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+
         base.OnModelCreating(modelBuilder);
     }
 }

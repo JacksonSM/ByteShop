@@ -33,7 +33,7 @@ public class AddProductHandlerTest
         productResponse.Height.Should().Be(command.Height);
         productResponse.Width.Should().Be(command.Width);
         productResponse.Weight.Should().Be(command.Weight);
-        productResponse.CategoryId.Should().Be(command.CategoryId);
+        productResponse.Category.Id.Should().Be(command.CategoryId);
     }
 
     [Fact]

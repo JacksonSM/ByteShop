@@ -29,7 +29,7 @@ public static class Bootstrapper
     {
         var connectionString = configuration.GetConnectionString("BusinessDb");
         services.AddDbContext<ByteShopDbContext>(options =>
-            options.UseSqlite(connectionString));
+            options.UseSqlServer(connectionString));
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ByteShopDbContext>()
@@ -47,5 +47,6 @@ public static class Bootstrapper
     {
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
     }
 }

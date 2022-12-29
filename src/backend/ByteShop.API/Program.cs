@@ -1,5 +1,6 @@
 using ByteShop.API.Filters;
 using ByteShop.Application;
+using ByteShop.Domain.Account;
 using ByteShop.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -58,6 +59,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+SeedUserRoles(app);
+
 app.UseCors(cfg =>
 {
     cfg.AllowAnyOrigin()
@@ -68,3 +71,13 @@ app.UseCors(cfg =>
 app.MapControllers();
 
 app.Run();
+async void SeedUserRoles(IApplicationBuilder app)
+{
+    using (var serviceScope = app.ApplicationServices.CreateScope())
+    {
+        var seed = serviceScope.ServiceProvider
+                               .GetService<ISeedUserRoleInitial>();
+        await seed.SeedRoles();
+        await seed.SeedUsers();
+    }
+}

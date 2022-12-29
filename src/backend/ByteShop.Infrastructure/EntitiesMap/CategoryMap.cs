@@ -15,7 +15,8 @@ public class CategoryMap
 
         builder.HasOne(r => r.ParentCategory)
                .WithMany(r => r.ChildCategories)
-               .HasForeignKey(f => f.ParentCategoryId);
+               .HasForeignKey(f => f.ParentCategoryId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
 
 
     }
