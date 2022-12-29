@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import trashIcon from "./assets/img/trash-icon.svg";
 import takeNoteIcon from "./assets/img/takeNote-icon.svg";
 import {
+  Alert,
   Breadcrumb,
   BreadcrumbItem,
   Button,
@@ -11,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Image,
   Table,
 } from "react-bootstrap";
@@ -18,6 +20,8 @@ import { Product } from "../../services/api/Product";
 import { IProductGet } from "services/api/Product/types";
 
 const Inventario: React.FC = () => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
   const [data, setData] = useState<any>([]);
 
   const skuRef = useRef<HTMLInputElement>(null);
@@ -35,12 +39,30 @@ const Inventario: React.FC = () => {
 
   async function getData(parameters: any) {
     const value = await Product.get(parameters);
-    setData(value);
+
+    if (value instanceof Error) {
+      setShowAlert(true);
+      setData(false);
+    } else {
+      setData(value);
+      setShowAlert(false);
+    }
+    return;
+  }
+
+  async function getActiveCategories() {
+    let set: any = new Set();
+    const value: IProductGet[] | Error = await Product.get("");
+    value instanceof Error
+      ? setShowAlert(true)
+      : value.map((item: IProductGet) => set.add(item.category?.name));
+    setActiveCategories(["", ...set]);
     return;
   }
 
   useEffect(() => {
     getData("");
+    getActiveCategories();
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +71,10 @@ const Inventario: React.FC = () => {
     getData({
       sku: { sku: String(skuRef.current?.value) },
       name: { name: String(nameRef.current?.value) },
+
+
       brand: { brand: String(brandRef.current?.value) },
+      category: { category: String(categRef.current?.value) },
     });
   }
 
@@ -57,6 +82,7 @@ const Inventario: React.FC = () => {
     skuRef.current!.value = "";
     nameRef.current!.value = "";
     brandRef.current!.value = "";
+    categRef.current!.value= ""
     getData("");
   }
 
@@ -109,16 +135,26 @@ const Inventario: React.FC = () => {
             placeholder="Kingston"
           ></FormControl>
         </FormGroup>
-        <FormGroup className="m-1" style={{ width: "fit-content" }}>
+        <FormGroup
+          className="my-auto ms-4"
+          style={{ width: "fit-content", height: "fit-content" }}
+        >
           <FormLabel htmlFor="categoria" className="m-1">
             Categoria
           </FormLabel>
-          <FormControl
-            type="text"
+          <FormSelect
+            ref={categRef}
             id="categoria"
-            style={{ maxWidth: "19.625rem" }}
-            placeholder="SSD"
-          ></FormControl>
+            onInput={() => console.log(categRef.current?.value)}
+            size="sm"
+            title="escolha a quantidade de itens por página"
+          >
+            {activeCategories.length > 0
+              ? activeCategories.map((item: string, index: number) => (
+                  <option key={index + 1}>{item}</option>
+                ))
+              : null}
+          </FormSelect>
         </FormGroup>
         <FormGroup
           className="align-self-end my-1 ms-1 w-auto"
@@ -146,59 +182,70 @@ const Inventario: React.FC = () => {
         {data.length > 0 ? data.length : 0}{" "}
         {`resultado${pluralForm} encontrado${pluralForm}`}
       </h2>
-      <Table
-        size="lg"
-        className="mt-3 border bg-white shadow-sm"
-        bordered={true}
-      >
-        <thead>
-          <tr>
-            <th className="fs-5 text-start" style={{float: "left"}}>#</th>
-            <th className="fs-5 text-start" style={{float: "left"}}>SKU</th>
-            <th className="fs-5 text-start" >Imagem</th>
-            <th className="fs-5 text-start">Nome</th>
-            <th className="fs-5 text-start">Preço</th>
-            <th className="fs-5 text-start">Categoria</th>
-            <th className="fs-5 text-start">Estoque</th>
-            <th className="fs-5 text-start">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0
-            ? data.map((item: IProductGet, index: number) => {
-                return (
-                  <tr  id={String(item.id)} key={index} className="border text-start">
-                    <td className="fs-6 fw-bold" style={{float: "left"}}>{index +1}</td>
-                    <td style={{float: "left"}}>{item.sku}</td>
-                    <td>
-                      {item.mainImageUrl && (
-                        <Image
-                          alt={`imagem do produto ${index}`}
-                          src={item.mainImageUrl}
-                          thumbnail
-                          style={{ width: "3.75rem", height: "3.75rem" }}
-                        />
-                      )}
-                    </td>
-                    <td  style={{float: "left"}}>{item.name}</td>
-                    <td >{Formatter.format(Number(item.price))}</td>
-                    <td>{item.categoryId}</td>
-                    <td>{item.stock} un</td>
-                    <td>
-                      <button className="border border-0 bg-body rounded me-2 my-auto">
-                        <img alt="ícone lixeira" src={takeNoteIcon} />
-                      </button>
-                      <button className="border border-0 rounded bg-body my-auto">
-                        <img alt="ícone papel e lápis" src={trashIcon} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
-            : null}
-        </tbody>
-      </Table>
-      <Paginacao />
+      {showAlert ? (
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          <Alert.Heading>erro ao listar os produtos!</Alert.Heading>
+          <p className="mt-1">O produto não foi encontrado.</p>
+        </Alert>
+      ) : null}
+      {data ? (
+        <Table
+          size="lg"
+          className="mt-3 border bg-white shadow-sm"
+          bordered={true}
+        >
+          <thead>
+            <tr>
+              <th className="fs-5  text-start">#</th>
+              <th className="fs-5 text-start">SKU</th>
+              <th className="fs-5 text-start">Imagem</th>
+              <th className="fs-5 text-start">Nome</th>
+              <th className="fs-5 text-start">Preço</th>
+              <th className="fs-5 text-start">Categoria</th>
+              <th className="fs-5 text-start">Estoque</th>
+              <th className="fs-5 text-start">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item: IProductGet, index: number) => {
+              return (
+                <tr
+                  id={String(item.id)}
+                  key={index}
+                  className="border text-start"
+                >
+                  <td className="fs-6 fw-bold">{index + 1}</td>
+                  <td>{item.sku}</td>
+                  <td>
+                    {item.mainImageUrl && (
+                      <Image
+                        alt={`imagem do produto ${index}`}
+                        src={item.mainImageUrl}
+                        thumbnail
+                        style={{ width: "3.75rem", height: "3.75rem" }}
+                      />
+                    )}
+                  </td>
+                  <td>{item.name}</td>
+
+                  <td>{Formatter.format(Number(item.price))}</td>
+                  <td>{item.category?.name}</td>
+                  <td>{item.stock} un</td>
+                  <td>
+                    <button className="border border-0 bg-body rounded me-2 my-auto">
+                      <img alt="ícone lixeira" src={takeNoteIcon} />
+                    </button>
+                    <button className="border border-0 rounded bg-body my-auto">
+                      <img alt="ícone papel e lápis" src={trashIcon} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      ) : null}
+      <Paginacao dataSize={data.length} itemsPerPage={selectItemsPerPage} />
     </Container>
   );
 };
