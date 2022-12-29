@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import trashIcon from "./assets/img/trash-icon.svg";
 import takeNoteIcon from "./assets/img/takeNote-icon.svg";
 import {
+  Alert,
   Breadcrumb,
   BreadcrumbItem,
   Button,
@@ -11,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Image,
   Table,
 } from "react-bootstrap";
@@ -37,8 +39,14 @@ const Inventario: React.FC = () => {
 
   async function getData(parameters: any) {
     const value = await Product.get(parameters);
-    if (value instanceof Error) setShowAlert(true);
-    setData(value);
+
+    if (value instanceof Error) {
+      setShowAlert(true);
+      setData(false);
+    } else {
+      setData(value);
+      setShowAlert(false);
+    }
     return;
   }
 
@@ -176,13 +184,10 @@ const Inventario: React.FC = () => {
       {showAlert ? (
         <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
           <Alert.Heading>erro ao listar os produtos!</Alert.Heading>
-          <p>
-            Alguma coisa deve ter acontecido durante a busca dos produtos no
-            banco de dados.
-          </p>
+          <p className="mt-1">O produto não foi encontrado.</p>
         </Alert>
       ) : null}
-      {data.length > 1 ? (
+      {data ? (
         <Table
           size="lg"
           className="mt-3 border bg-white shadow-sm"
@@ -191,8 +196,8 @@ const Inventario: React.FC = () => {
           <thead>
             <tr>
               <th className="fs-5  text-start">#</th>
-              <th className="fs-5 text-start" >SKU</th>
-              <th className="fs-5 text-start" >Imagem</th>
+              <th className="fs-5 text-start">SKU</th>
+              <th className="fs-5 text-start">Imagem</th>
               <th className="fs-5 text-start">Nome</th>
               <th className="fs-5 text-start">Preço</th>
               <th className="fs-5 text-start">Categoria</th>
@@ -208,10 +213,8 @@ const Inventario: React.FC = () => {
                   key={index}
                   className="border text-start"
                 >
-                  <td className="fs-6 fw-bold" >
-                    {index + 1}
-                  </td>
-                  <td >{item.sku}</td>
+                  <td className="fs-6 fw-bold">{index + 1}</td>
+                  <td>{item.sku}</td>
                   <td>
                     {item.mainImageUrl && (
                       <Image
@@ -222,7 +225,8 @@ const Inventario: React.FC = () => {
                       />
                     )}
                   </td>
-                  <td >{item.name}</td>
+                  <td>{item.name}</td>
+
                   <td>{Formatter.format(Number(item.price))}</td>
                   <td>{item.category?.name}</td>
                   <td>{item.stock} un</td>
