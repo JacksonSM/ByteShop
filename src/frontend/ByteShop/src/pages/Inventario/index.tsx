@@ -82,6 +82,7 @@ const Inventario: React.FC = () => {
     skuRef.current!.value = "";
     nameRef.current!.value = "";
     brandRef.current!.value = "";
+    categRef.current!.value= ""
     getData("");
   }
 
