@@ -19,6 +19,7 @@ import { IProductGet } from "services/api/Product/types";
 
 const Inventario: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
+  const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
   const [data, setData] = useState<any>([]);
 
   const skuRef = useRef<HTMLInputElement>(null);
@@ -41,8 +42,19 @@ const Inventario: React.FC = () => {
     return;
   }
 
+  async function getActiveCategories() {
+    let set: any = new Set();
+    const value: IProductGet[] | Error = await Product.get("");
+    value instanceof Error
+      ? setShowAlert(true)
+      : value.map((item: IProductGet) => set.add(item.category?.name));
+    setActiveCategories(["", ...set]);
+    return;
+  }
+
   useEffect(() => {
     getData("");
+    getActiveCategories();
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -51,7 +63,10 @@ const Inventario: React.FC = () => {
     getData({
       sku: { sku: String(skuRef.current?.value) },
       name: { name: String(nameRef.current?.value) },
+
+
       brand: { brand: String(brandRef.current?.value) },
+      category: { category: String(categRef.current?.value) },
     });
   }
 
@@ -111,16 +126,26 @@ const Inventario: React.FC = () => {
             placeholder="Kingston"
           ></FormControl>
         </FormGroup>
-        <FormGroup className="m-1" style={{ width: "fit-content" }}>
+        <FormGroup
+          className="my-auto ms-4"
+          style={{ width: "fit-content", height: "fit-content" }}
+        >
           <FormLabel htmlFor="categoria" className="m-1">
             Categoria
           </FormLabel>
-          <FormControl
-            type="text"
+          <FormSelect
+            ref={categRef}
             id="categoria"
-            style={{ maxWidth: "19.625rem" }}
-            placeholder="SSD"
-          ></FormControl>
+            onInput={() => console.log(categRef.current?.value)}
+            size="sm"
+            title="escolha a quantidade de itens por página"
+          >
+            {activeCategories.length > 0
+              ? activeCategories.map((item: string, index: number) => (
+                  <option key={index + 1}>{item}</option>
+                ))
+              : null}
+          </FormSelect>
         </FormGroup>
         <FormGroup
           className="align-self-end my-1 ms-1 w-auto"
