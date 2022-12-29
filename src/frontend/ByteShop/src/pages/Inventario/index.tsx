@@ -216,7 +216,7 @@ const Inventario: React.FC = () => {
                 >
                   <td className="fs-6 fw-bold text-center align-middle">{index + 1}</td>
                   <td className="text-center align-middle">{item.sku}</td>
-                  <td>
+                  <td className="text-center align-middle">
                     {item.mainImageUrl && (
                       <Image
                         alt={`imagem do produto ${index}`}
