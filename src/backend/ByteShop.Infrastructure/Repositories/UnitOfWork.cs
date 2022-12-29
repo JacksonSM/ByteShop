@@ -1,5 +1,5 @@
 ﻿using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infrastructure.Contexts;
+using ByteShop.Infrastructure.Context;
 
 namespace ByteShop.Infrastructure.Repositories;
 internal class UnitOfWork : IUnitOfWork

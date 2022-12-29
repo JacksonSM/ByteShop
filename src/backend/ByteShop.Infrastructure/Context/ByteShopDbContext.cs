@@ -3,7 +3,7 @@ using ByteShop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ByteShop.Infrastructure.Contexts;
+namespace ByteShop.Infrastructure.Context;
 public class ByteShopDbContext : IdentityDbContext<ApplicationUser>
 {
     public ByteShopDbContext(DbContextOptions<ByteShopDbContext> options) : base(options) { }

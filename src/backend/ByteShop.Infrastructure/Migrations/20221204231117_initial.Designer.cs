@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using ByteShop.Infrastructure.Contexts;
+using ByteShop.Infrastructure.Context;
 
 #nullable disable
 

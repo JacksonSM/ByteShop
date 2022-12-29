@@ -1,9 +1,8 @@
 ﻿using ByteShop.Domain.Account;
-using ByteShop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace CleanArchMvc.Infra.Data.Identity;
+namespace ByteShop.Infrastructure.Identity;
 
 public class AccountService : IAccountService
 {
