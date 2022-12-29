@@ -196,14 +196,14 @@ const Inventario: React.FC = () => {
         >
           <thead>
             <tr>
-              <th className="fs-5  text-center align-middle">#</th>
-              <th className="fs-5 text-center align-middle">SKU</th>
-              <th className="fs-5 text-center align-middle">Imagem</th>
-              <th className="fs-5 text-center align-middle">Nome</th>
-              <th className="fs-5 text-center align-middle">Preço</th>
-              <th className="fs-5 text-center align-middle">Categoria</th>
-              <th className="fs-5 text-center align-middle">Estoque</th>
-              <th className="fs-5 text-center align-middle">Ações</th>
+              <th className="fs-5  text-center align-middle border">#</th>
+              <th className="fs-5 text-center align-middle border">SKU</th>
+              <th className="fs-5 text-center align-middle border">Imagem</th>
+              <th className="fs-5 text-center align-middle border">Nome</th>
+              <th className="fs-5 text-center align-middle border">Preço</th>
+              <th className="fs-5 text-center align-middle border">Categoria</th>
+              <th className="fs-5 text-center align-middle border">Estoque</th>
+              <th className="fs-5 text-center align-middle border">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -214,7 +214,7 @@ const Inventario: React.FC = () => {
                   key={index}
                   className="border text-start"
                 >
-                  <td className="fs-6 fw-bold text-center align-middle">{index + 1}</td>
+                  <td className="fs-6 fw-bold text-center align-middle border">{index + 1}</td>
                   <td className="text-center align-middle">{item.sku}</td>
                   <td className="text-center align-middle">
                     {item.mainImageUrl && (
@@ -231,7 +231,7 @@ const Inventario: React.FC = () => {
                   <td className="text-center align-middle">{Formatter.format(Number(item.price))}</td>
                   <td className="text-center align-middle">{item.category?.name}</td>
                   <td className="text-center align-middle">{item.stock} un</td>
-                  <td className="text-center align-middle">
+                  <td className="text-center align-middle border">
                     <button className="border border-0 bg-body rounded me-2 my-auto">
                       <img alt="ícone lixeira" src={takeNoteIcon} />
                     </button>
