@@ -26,7 +26,7 @@ import { ContextProductID, useData } from "./context";
 
 const CadastroProduto: React.FC = () => {
   // hooks
-  const [validated, setValidated] = useState(false);
+  const [showValidation, setShowValidation] = useState(false);
   const [categoryCurrentID, setCategoryCurrentID] = useState(0);
   const { id, setID } = useData();
 
@@ -53,6 +53,7 @@ const CadastroProduto: React.FC = () => {
   // handlers
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setShowValidation(true);
 
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
@@ -73,39 +74,37 @@ const CadastroProduto: React.FC = () => {
         extension: imgSrc[i].extension.replace(/^\w*[/]/, "."),
       });
     }
-
+     
     const replacingComma = (value: string) => value.replaceAll(",", ".");
-
-    Product.post({
-      sku: String(skuRef.current?.value),
-      name: String(nameRef.current?.value),
-      brand: String(brandRef.current?.value),
-      categoryId: Number(categoryCurrentID),
-      warranty: Number(warrantyRef.current?.value),
-      description: String(descriptionRef.current?.value),
-      length: Number(lengthRef.current!.value),
-      width: Number(widthRef.current!.value),
-      height: Number(heightRef.current!.value),
-      weight: Number(weightRef.current?.value),
-      costPrice: Number(replacingComma(costPriceRef.current!.value)),
-      price: Number(replacingComma(priceRef.current!.value)),
-      stock: Number(stockRef.current?.value),
-      mainImageBase64,
-      secondaryImagesBase64,
-    }).then((response) => {
-      if (response instanceof Error) {
-        alert(response.stack);
-        rota("/fail-submit");
-      } else {
-        <ContextProductID.Provider
+    
+      Product.post({
+        sku: String(skuRef.current?.value),
+        name: String(nameRef.current?.value),
+        brand: String(brandRef.current?.value),
+        categoryId: Number(categoryCurrentID),
+        warranty: Number(warrantyRef.current?.value),
+        description: String(descriptionRef.current?.value),
+        length: Number(lengthRef.current!.value),
+        width: Number(widthRef.current!.value),
+        height: Number(heightRef.current!.value),
+        weight: Number(weightRef.current?.value),
+        costPrice: Number(replacingComma(costPriceRef.current!.value)),
+        price: Number(replacingComma(priceRef.current!.value)),
+        stock: Number(stockRef.current?.value),
+        mainImageBase64,
+        secondaryImagesBase64,
+      }).then((response) => {
+        if (response instanceof Error) {
+          alert(response.stack);
+          rota("/fail-submit");
+        } else {
+          <ContextProductID.Provider
           value={{ id, setID }}
-        ></ContextProductID.Provider>;
-        setID(Number(response.data.data.id));
-        rota("/sucess-submit");
-      }
-    });
-
-    setValidated(true);
+          ></ContextProductID.Provider>;
+          setID(Number(response.data.data.id));
+          rota("/sucess-submit");
+        }
+      });
     return;
   }
 
@@ -168,17 +167,19 @@ const CadastroProduto: React.FC = () => {
         <Form
           noValidate
           className="w-75 d-flex p-5 align-self-center form-cadastro-produto"
-          validated={validated}
+          validated={showValidation}
           onSubmit={(e) => handleSubmit(e)}
         >
           <Col>
             <Row className="mb-4 p-1 border border-light">
               {/* sku */}
-              <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
+              <FormGroup  className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="sku">SKU</FormLabel>
                 <FormControl
+                  
                   type="text"
                   ref={skuRef}
+                  required
                   placeholder="SKU"
                   title="insira aqui o SKU do produto"
                   id="sku"
@@ -210,6 +211,7 @@ const CadastroProduto: React.FC = () => {
               <FormGroup className="me-5 mb-3" style={{ width: "19.56rem" }}>
                 <FormLabel htmlFor="brand">Marca</FormLabel>
                 <FormControl
+                required
                   type="text"
                   ref={brandRef}
                   maxLength={30}
@@ -242,6 +244,7 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel htmlFor="description">Descrição</FormLabel>
                 <FormControl
                   as="textarea"
+                  required
                   style={{ width: "50vw", height: "25rem" }}
                   ref={descriptionRef}
                   maxLength={3000}
@@ -259,6 +262,7 @@ const CadastroProduto: React.FC = () => {
                 <FormLabel>Imagens do Produto</FormLabel>
                 <Form.Control
                   type="file"
+                  required
                   isInvalid={imagesIsInvalid}
                   accept="image/jpeg, image/jpg, image/webp,  image/jpe"
                   ref={refImages}
@@ -328,6 +332,7 @@ const CadastroProduto: React.FC = () => {
 
                   <FormControl
                     type="text"
+                    required
                     aria-label="valor em reais"
                     ref={priceRef}
                     pattern="[0-9]+([,][0-9]+)?"
@@ -344,6 +349,7 @@ const CadastroProduto: React.FC = () => {
                   <InputGroup.Text>R$</InputGroup.Text>
                   <FormControl
                     type="text"
+                    required
                     aria-label="valor em reais"
                     ref={costPriceRef}
                     pattern="[0-9]+([,][0-9]+)?"
@@ -364,6 +370,7 @@ const CadastroProduto: React.FC = () => {
                       <InputGroup>
                         <FormControl
                           type="number"
+                          required
                           step={0.01}
                           ref={lengthRef}
                           aria-label="valor em centímetro"
@@ -379,6 +386,7 @@ const CadastroProduto: React.FC = () => {
                       <InputGroup>
                         <FormControl
                           type="number"
+                          required
                           step={0.01}
                           ref={widthRef}
                           aria-label="valor em centímetro"
@@ -396,6 +404,7 @@ const CadastroProduto: React.FC = () => {
                       <InputGroup>
                         <FormControl
                           type="number"
+                          required
                           step={0.01}
                           ref={heightRef}
                           aria-label="valor em centímetro"
@@ -411,6 +420,7 @@ const CadastroProduto: React.FC = () => {
                       <InputGroup>
                         <FormControl
                           type="number"
+                          required
                           step={0.01}
                           ref={weightRef}
                           aria-label="valor em gramas"
@@ -430,6 +440,7 @@ const CadastroProduto: React.FC = () => {
                     <FormLabel htmlFor="warranty">Garantia</FormLabel>
                     <FormControl
                       type="number"
+                      required
                       step={1}
                       ref={warrantyRef}
                       placeholder="0 dias"
@@ -444,6 +455,7 @@ const CadastroProduto: React.FC = () => {
                     <FormLabel htmlFor="stock">Estoque</FormLabel>
                     <FormControl
                       type="number"
+                      required
                       ref={stockRef}
                       step={1}
                       placeholder="0 unidades"
