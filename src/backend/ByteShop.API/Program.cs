@@ -25,17 +25,6 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddCors(cfg => {
-    cfg.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .SetIsOriginAllowedToAllowWildcardSubdomains()
-              .AllowAnyHeader();
-    });
-});
-
-
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionsFilter)));
 
 var logger = Log.Logger = new LoggerConfiguration()
@@ -59,14 +48,15 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedUserRoles(app);
+//SeedUserRoles(app);
 
 app.UseCors(cfg =>
 {
     cfg.AllowAnyOrigin()
         .AllowAnyMethod()
         .SetIsOriginAllowedToAllowWildcardSubdomains()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .WithExposedHeaders("X-Pagination");
 });
 app.MapControllers();
 
