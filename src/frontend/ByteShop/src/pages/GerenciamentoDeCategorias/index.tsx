@@ -1,16 +1,72 @@
 import { useEffect, useState } from "react";
-import { ListGroup, Badge, Nav, Container, Form, Modal } from "react-bootstrap";
+import {
+  ListGroup,
+  Badge,
+  Nav,
+  Container,
+  Form,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
 
+interface IModalProps {
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  modalInfo: Icategory;
+  allCategories: Icategory[];
+}
+
+const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
+  showModal,
+  setShowModal,
+  modalInfo,
+  allCategories,
+}: IModalProps) => {
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
+  return (
+    <Modal
+      show={showModal}
+      onHide={handleClose}
+      backdrop="static"
+      keyboard={false}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title className="fs-3 fw-bold">{modalInfo.name}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          {modalInfo.parentCategoryId
+            ? `Categoria segundária, abaixo de "${
+                allCategories.find(
+                  (item) => item.id === modalInfo.parentCategoryId
+                )?.name
+              }"`
+            : "Categoria principal"}
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="warning">Alterar</Button>
+        <Button variant="danger">Deletar</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
 const GerenciamentoDeCategorias: React.FC = () => {
-  const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-    console.log(e.currentTarget.id);
+  //states
   const [data, setData] = useState<Icategory[]>([]);
   const [main, setMain] = useState<Icategory[]>([]);
   const [sub1, setSub1] = useState<Icategory[]>([]);
   const [sub2, setSub2] = useState<Icategory[]>([]);
+  // modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalInfo, SetmodalInfo] = useState<Icategory>({} as Icategory);
 
+  // functions
   function setCategories() {
     setMain(data.filter((item) => !item.parentCategoryId));
 
@@ -26,6 +82,12 @@ const GerenciamentoDeCategorias: React.FC = () => {
     );
   }
 
+  const handleClick = ({ ...values }: Icategory) => {
+    setShowModal(true);
+    SetmodalInfo(values);
+  };
+
+  // useEffects
   useEffect(() => {
     Category.getAll().then((result) => {
       if (result instanceof Error) {
@@ -42,6 +104,10 @@ const GerenciamentoDeCategorias: React.FC = () => {
   useEffect(() => {
     data && setCategories();
   }, [data]);
+
+  useEffect(() => {
+    console.log(modalInfo);
+  }, [modalInfo]);
 
   const renderSubCategories = (
     parentId: number,
@@ -67,7 +133,7 @@ const GerenciamentoDeCategorias: React.FC = () => {
                 bg="secondary"
                 id={String(subCategoryItem.id)}
                 className="category opacity-75-hover fs-5"
-                onClick={(e) => handleClick(e)}
+                onClick={() => handleClick(subCategoryItem)}
               >
                 {`${prefix} ${subCategoryItem.name}`}
               </Badge>
@@ -90,6 +156,14 @@ const GerenciamentoDeCategorias: React.FC = () => {
         placeholder="Digite uma Categoria.."
         style={{ maxWidth: "20rem" }}
       />
+      {showModal && (
+        <ModalAlteracaoCategoria
+          showModal={showModal}
+          setShowModal={setShowModal}
+          modalInfo={modalInfo}
+          allCategories={data}
+        />
+      )}
       <Nav className="border w-75 h-75 mx-auto p-3 overflow-auto shadow">
         {main
           ? main.map((mainCategoryItem: any, index): JSX.Element => {
@@ -98,13 +172,13 @@ const GerenciamentoDeCategorias: React.FC = () => {
                   <ListGroup.Item
                     as="li"
                     key={index}
-                    className="border-0 d-flex flex-column"
+                    className="border-01 d-flex flex-column"
                   >
                     <Badge
                       bg="dark"
                       id={String(mainCategoryItem.id)}
                       className="category fs-5"
-                      onClick={(e) => handleClick(e)}
+                      onClick={() => handleClick(mainCategoryItem)}
                     >
                       {"- " + mainCategoryItem.name}
                     </Badge>
