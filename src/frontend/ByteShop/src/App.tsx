@@ -8,6 +8,7 @@ import SucessSubmit from "./pages/SucessSubmit";
 import { ContextProductID} from "./pages/CadastroProduto/context";
 import { useState } from "react";
 import FailSubmit from "./pages/FailSubmit";
+import GerenciamentoDeCategorias from "./pages/GerenciamentoDeCategorias";
 
 function App() {
   const [id, setID] = useState(12);
@@ -18,6 +19,10 @@ function App() {
           <SideMenu />
           <Routes>
             <Route path={"/"} element={<Inventario />} />
+            <Route
+              path={"/gerenciamento-de-categorias"}
+              element={<GerenciamentoDeCategorias />}
+            />
             <Route
               path={"/cadastro-de-produtos"}
               element={<CadastroProduto />}
