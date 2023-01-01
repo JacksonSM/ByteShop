@@ -61,12 +61,12 @@ const GerenciamentoDeCategorias: React.FC = () => {
             <ListGroup.Item
               as="li"
               key={index}
-              className="border-0 d-flex flex-column"
+              className="border-0 d-flex flex-column shadow my-1 opacity-hover:.75"
             >
               <Badge
                 bg="secondary"
                 id={String(subCategoryItem.id)}
-                className="fs-5"
+                className="category opacity-75-hover fs-5"
                 onClick={(e) => handleClick(e)}
               >
                 {`${prefix} ${subCategoryItem.name}`}
@@ -103,7 +103,7 @@ const GerenciamentoDeCategorias: React.FC = () => {
                     <Badge
                       bg="dark"
                       id={String(mainCategoryItem.id)}
-                      className="fs-5"
+                      className="category fs-5"
                       onClick={(e) => handleClick(e)}
                     >
                       {"- " + mainCategoryItem.name}
