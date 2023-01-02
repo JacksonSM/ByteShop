@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ListGroup,
   Badge,
@@ -26,6 +26,58 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
 }: IModalProps) => {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+  const [categoryChange, setCategoryChange] = useState(false);
+
+  const categNameRef = useRef<HTMLInputElement>(null);
+  const categParentNameRef = useRef<HTMLSelectElement>(null);
+
+  const parent = allCategories.find(
+    (item) => item.id === modalInfo.parentCategoryId
+  );
+
+  const firstLevel = allCategories.filter((categ) => !categ.parentCategoryId);
+  const validParentCategs = allCategories.filter(
+    (categ) =>
+      firstLevel.find((item) => item.id === categ.parentCategoryId) ||
+      !categ.parentCategoryId
+  );
+
+  function checkLevelCategory() {
+    return !parent
+      ? "first"
+      : allCategories.find(
+          (item) => item.id === parent.id && !parent.parentCategoryId
+        )
+      ? "second"
+      : "third";
+  }
+
+
+
+  function handleSubmitChanges(e: React.FormEvent<HTMLFormElement>) {
+    // e.preventDefault();
+
+    if (categNameRef.current?.value === "") {
+      alert("O nome da categoria não pode estar vazio!");
+      return null;
+    }
+    if (
+      allCategories.some((categ) => categ.name === categNameRef.current?.value)
+    ) {
+      alert("Esta categoria Já existe!");
+      return null;
+    }
+
+   Category.put({
+      id: modalInfo.id,
+      name: String(categNameRef.current?.value),
+      parentCategoryId:
+        Number(categParentNameRef.current &&
+        (categParentNameRef.current.value
+          ? categParentNameRef.current.value
+          : 0)),
+    }).then(status => status !== 200 && alert("Erro ao atulizar o produto!")) 
+  }
 
   return (
     <Modal
@@ -40,18 +92,89 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
       <Modal.Body>
         <p>
           {modalInfo.parentCategoryId
-            ? `Categoria segundária, abaixo de "${
-                allCategories.find(
-                  (item) => item.id === modalInfo.parentCategoryId
-                )?.name
-              }"`
+            ? `Categoria segundária, abaixo de "${parent?.name}"`
             : "Categoria principal"}
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning">Alterar</Button>
+        <Button
+          variant="warning"
+          onClick={() => {
+            console.log({
+              classId: modalInfo.id,
+              classeName: modalInfo.name,
+              level: checkLevelCategory(),
+              parentId: parent?.id ?? null,
+              parentName: parent?.name ?? null,
+            });
+            setCategoryChange(true);
+          }}
+        >
+          Alterar
+        </Button>
         <Button variant="danger">Deletar</Button>
       </Modal.Footer>
+      {categoryChange ? (
+        <Form
+          className=" w-75 h-75 border mx-auto"
+          onSubmit={(e) => handleSubmitChanges(e)}
+        >
+          <Form.Group className="p-1">
+            <Form.Label className="text-center" htmlFor="category">
+              Nome da Categoria
+            </Form.Label>
+            <Form.Control
+              className="w-75"
+              id="category"
+              autoFocus={true}
+              ref={categNameRef}
+              onClick={() =>
+                categNameRef.current &&
+                categNameRef.current.value === "" &&
+                (categNameRef.current.value = modalInfo.name)
+              }
+              type="text"
+              placeholder="Categoria"
+            />
+          </Form.Group>
+          <Form.Group className="p-1">
+            <Form.Label className="text-center" htmlFor="Parentcategory">
+              Categoria mãe?
+            </Form.Label>
+            <Form.Select className="w-75" size="sm" ref={categParentNameRef}>
+              <option
+                key={0}
+                className="parent-class-item parent-class-item--empty "
+              ></option>
+              {validParentCategs.map(
+                (item, index) =>
+                  item.id != modalInfo.id && (
+                    <option
+                      id={`categ${item.id}`}
+                      value={item.id}
+                      key={index + 1}
+                      className="parent-class-item"
+                    >
+                      {item.name}
+                    </option>
+                  )
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="p-1">
+            <Button className="w-25 me-1" variant="primary" type="submit">
+              Salvar
+            </Button>
+            <Button
+              className="w-25 ms-2"
+              variant="danger"
+              onClick={() => setCategoryChange(false)}
+            >
+              Cancelar
+            </Button>
+          </Form.Group>
+        </Form>
+      ) : null}
     </Modal>
   );
 };
