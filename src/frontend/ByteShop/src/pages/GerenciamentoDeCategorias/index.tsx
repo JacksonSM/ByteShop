@@ -52,31 +52,28 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
       : "third";
   }
 
-
-
   function handleSubmitChanges(e: React.FormEvent<HTMLFormElement>) {
-    // e.preventDefault();
+    e.preventDefault();
 
     if (categNameRef.current?.value === "") {
       alert("O nome da categoria não pode estar vazio!");
       return null;
     }
-    if (
-      allCategories.some((categ) => categ.name === categNameRef.current?.value)
-    ) {
-      alert("Esta categoria Já existe!");
-      return null;
-    }
 
-   Category.put({
+    Category.put({
       id: modalInfo.id,
       name: String(categNameRef.current?.value),
-      parentCategoryId:
-        Number(categParentNameRef.current &&
-        (categParentNameRef.current.value
-          ? categParentNameRef.current.value
-          : 0)),
-    }).then(status => status !== 200 && alert("Erro ao atulizar o produto!")) 
+      parentCategoryId: Number(
+        categParentNameRef.current &&
+          (categParentNameRef.current.value
+            ? categParentNameRef.current.value
+            : 0)
+      ),
+    }).then(
+      (status) =>
+        (status !== 200 && alert("Erro ao atulizar o produto!")) ||
+        location.reload()
+    );
   }
 
   return (
