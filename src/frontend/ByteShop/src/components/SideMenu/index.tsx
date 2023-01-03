@@ -54,10 +54,18 @@ const SideMenu: React.FC = () => {
                       </NavItem>
                       <NavItem>
                         <NavLink
-                          eventKey="Iventário"
+                          eventKey="Iventario"
                           onClick={() => navigate("/")}
                         >
                           Inventário
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          eventKey="categorias"
+                          onClick={() => navigate("/gerenciamento-de-categorias")}
+                        >
+                          Categorias
                         </NavLink>
                       </NavItem>
                     </Nav>
