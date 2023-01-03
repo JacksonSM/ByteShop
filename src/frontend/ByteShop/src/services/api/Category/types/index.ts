@@ -4,8 +4,8 @@ export interface Icategory {
   parentCategoryId: number;
 }
 
-export interface IcategoryPut {
-  id?: number; 
+export interface IcategoryPutAndpost {
+  id?: number;
   name: string;
   parentCategoryId: number;
 }

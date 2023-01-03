@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ListGroup,
   Badge,
@@ -11,19 +11,141 @@ import {
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
 
-interface IModalProps {
+// funções para os modais
+// retorna uma array com todas as categorias principais
+const firstLevel = (arr: Icategory[]) =>
+  arr.filter((categ) => !categ.parentCategoryId);
+
+// retorna uma array com todas as categorias mães disponíveis
+const validParentCategs = (arr: Icategory[]) =>
+  arr.filter(
+    (categ) =>
+      firstLevel(arr).find((item) => item.id === categ.parentCategoryId) ||
+      !categ.parentCategoryId
+  );
+
+interface IModalChangeProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  modalInfo: Icategory;
+  data: Icategory;
   allCategories: Icategory[];
 }
+interface IModalAddProps {
+  allCategories: Icategory[];
+  showModalAddCateg: boolean;
+  setShowModalAddCateg: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
+//modal para Criar as categorias
+const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
+  showModalAddCateg,
+  setShowModalAddCateg,
+  allCategories,
+}: IModalAddProps) => {
+  const categNameRef = useRef<HTMLInputElement>(null);
+  const parentCategoryId = useRef<HTMLSelectElement>(null);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (categNameRef.current?.value === "") {
+      alert("O nome da categoria não pode estar vazio!");
+      return null;
+    }
+
+    Category.post({
+      name: String(categNameRef.current?.value),
+      parentCategoryId: Number(
+        parentCategoryId.current &&
+          (parentCategoryId.current.value ? parentCategoryId.current.value : 0)
+      ),
+    }).then(
+      (status) =>
+        (status !== 201 && alert("Erro ao atulizar o produto!")) ||
+        location.reload()
+    );
+  }
+
+  return (
+    <>
+      <Modal show={showModalAddCateg}>
+        <Modal.Header>
+          <Modal.Title className="fs-4 fw-bold">
+            Cadastre uma nova Categoria
+          </Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={(e) => handleSubmit(e)}>
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label className="ms-3" htmlFor="newCategInptName">
+                Nome
+              </Form.Label>
+              <Form.Control
+                className="new-categ-inpt-name ms-3"
+                type="text"
+                ref={categNameRef}
+                autoFocus={true}
+                maxLength={60}
+                id="newCategInptName"
+                placeholder="Digite o nome da nova categoria"
+                style={{ maxWidth: "20rem" }}
+              />
+            </Form.Group>
+            {/* <Form.Select className="w-75" size="sm" ref={categParentNameRef}> */}
+            <Form.Group
+              className="my-3"
+              title="se não for selecinado nada a categoria será considerada principal"
+            >
+              <Form.Label className="ms-3" htmlFor="newCategParentcateg">
+                Categoria Mãe
+              </Form.Label>
+              <Form.Select
+                className="w-50  ms-3"
+                ref={parentCategoryId}
+                id="newCategParentcateg"
+                size="sm"
+              >
+                <option
+                  key={0}
+                  className="parent-class-item parent-class-item--empty "
+                ></option>
+                {validParentCategs(allCategories).map((item, index) => (
+                  <option
+                    id={`categ${item.id}`}
+                    value={item.id}
+                    key={index + 1}
+                    className="parent-class-item"
+                  >
+                    {item.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit">
+              Criar
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => setShowModalAddCateg(false)}
+            >
+              Cancelar
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+    </>
+  );
+};
+
+//modal para aterar as categorias
+const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
   showModal,
   setShowModal,
-  modalInfo,
+  data: modalInfo,
   allCategories,
-}: IModalProps) => {
+}: IModalChangeProps) => {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   const [categoryChange, setCategoryChange] = useState(false);
@@ -33,13 +155,6 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
 
   const parent = allCategories.find(
     (item) => item.id === modalInfo.parentCategoryId
-  );
-
-  const firstLevel = allCategories.filter((categ) => !categ.parentCategoryId);
-  const validParentCategs = allCategories.filter(
-    (categ) =>
-      firstLevel.find((item) => item.id === categ.parentCategoryId) ||
-      !categ.parentCategoryId
   );
 
   function handleSubmitChanges(e: React.FormEvent<HTMLFormElement>) {
@@ -84,10 +199,7 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="warning"
-          onClick={() => setCategoryChange(true)}
-        >
+        <Button variant="warning" onClick={() => setCategoryChange(true)}>
           Alterar
         </Button>
         <Button variant="danger">Deletar</Button>
@@ -106,6 +218,7 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
               id="category"
               autoFocus={true}
               ref={categNameRef}
+              maxLength={60}
               onClick={() =>
                 categNameRef.current &&
                 categNameRef.current.value === "" &&
@@ -124,7 +237,7 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
                 key={0}
                 className="parent-class-item parent-class-item--empty "
               ></option>
-              {validParentCategs.map(
+              {validParentCategs(allCategories).map(
                 (item, index) =>
                   item.id != modalInfo.id && (
                     <option
@@ -164,7 +277,8 @@ const GerenciamentoDeCategorias: React.FC = () => {
   const [sub1, setSub1] = useState<Icategory[]>([]);
   const [sub2, setSub2] = useState<Icategory[]>([]);
   // modal
-  const [showModal, setShowModal] = useState(false);
+  const [showModalChanges, setShowModalChanges] = useState(false);
+  const [showModalAddCateg, setShowModalAddCateg] = useState(false);
   const [modalInfo, SetmodalInfo] = useState<Icategory>({} as Icategory);
 
   // functions
@@ -184,7 +298,7 @@ const GerenciamentoDeCategorias: React.FC = () => {
   }
 
   const handleClick = ({ ...values }: Icategory) => {
-    setShowModal(true);
+    setShowModalChanges(true);
     SetmodalInfo(values);
   };
 
@@ -205,7 +319,6 @@ const GerenciamentoDeCategorias: React.FC = () => {
   useEffect(() => {
     data && setCategories();
   }, [data]);
-
 
   const renderSubCategories = (
     parentId: number,
@@ -248,17 +361,33 @@ const GerenciamentoDeCategorias: React.FC = () => {
   return (
     <>
       <h2 className="text-left fs-2 ms-2">Gereciamento de Categorias</h2>
-      <Form.Control
-        className="search-categ m-3"
-        type="text"
-        placeholder="Digite uma Categoria.."
-        style={{ maxWidth: "20rem" }}
-      />
-      {showModal && (
+      <Form.Group className="d-flex align-items-center">
+        <Form.Control
+          className="search-categ m-3"
+          type="text"
+          placeholder="Digite uma Categoria.."
+          style={{ maxWidth: "20rem" }}
+        />
+        <Button
+          style={{ height: "fit-content" }}
+          onClick={() => setShowModalAddCateg(true)}
+        >
+          {" "}
+          Novas categorias
+        </Button>
+        {showModalAddCateg && (
+          <ModalCriacaoCategoria
+            showModalAddCateg={showModalAddCateg}
+            setShowModalAddCateg={setShowModalAddCateg}
+            allCategories={data}
+          />
+        )}
+      </Form.Group>
+      {showModalChanges && (
         <ModalAlteracaoCategoria
-          showModal={showModal}
-          setShowModal={setShowModal}
-          modalInfo={modalInfo}
+          showModal={showModalChanges}
+          setShowModal={setShowModalChanges}
+          data={modalInfo}
           allCategories={data}
         />
       )}
