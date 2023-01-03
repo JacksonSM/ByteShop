@@ -42,16 +42,6 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
       !categ.parentCategoryId
   );
 
-  function checkLevelCategory() {
-    return !parent
-      ? "first"
-      : allCategories.find(
-          (item) => item.id === parent.id && !parent.parentCategoryId
-        )
-      ? "second"
-      : "third";
-  }
-
   function handleSubmitChanges(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -96,16 +86,7 @@ const ModalAlteracaoCategoria: React.FC<IModalProps> = ({
       <Modal.Footer>
         <Button
           variant="warning"
-          onClick={() => {
-            console.log({
-              classId: modalInfo.id,
-              classeName: modalInfo.name,
-              level: checkLevelCategory(),
-              parentId: parent?.id ?? null,
-              parentName: parent?.name ?? null,
-            });
-            setCategoryChange(true);
-          }}
+          onClick={() => setCategoryChange(true)}
         >
           Alterar
         </Button>
@@ -225,9 +206,6 @@ const GerenciamentoDeCategorias: React.FC = () => {
     data && setCategories();
   }, [data]);
 
-  useEffect(() => {
-    console.log(modalInfo);
-  }, [modalInfo]);
 
   const renderSubCategories = (
     parentId: number,
