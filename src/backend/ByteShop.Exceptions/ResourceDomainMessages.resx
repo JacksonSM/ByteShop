@@ -123,4 +123,7 @@
   <data name="MUST_HAVE_A_MAIN_IMAGE" xml:space="preserve">
     <value>É necessario ter uma imagem principal, para adicionar uma imagem segundaria.</value>
   </data>
+  <data name="UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL" xml:space="preserve">
+    <value>Você não pode alterar a categoria pai para uma categoria pai de um nível diferente. Por favor, escolha uma categoria pai com o mesmo nível ou altere o nível da categoria selecionada.</value>
+  </data>
 </root>

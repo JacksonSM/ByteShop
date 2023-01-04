@@ -77,5 +77,14 @@ namespace ByteShop.Exceptions {
                 return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Você não pode alterar a categoria pai para uma categoria pai de um nível diferente. Por favor, escolha uma categoria pai com o mesmo nível ou altere o nível da categoria selecionada..
+        /// </summary>
+        public static string UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL {
+            get {
+                return ResourceManager.GetString("UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL", resourceCulture);
+            }
+        }
     }
 }
