@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ByteShop.Domain\ByteShop.Domain.csproj" />
     <ProjectReference Include="..\ByteShop.Exceptions\ByteShop.Exceptions.csproj" />
+    <ProjectReference Include="..\ByteShop.Infra.CrossCutting.Bus\ByteShop.Infra.CrossCutting.Bus.csproj" />
   </ItemGroup>
 
 </Project>
