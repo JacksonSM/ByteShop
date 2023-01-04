@@ -56,5 +56,7 @@ public class ProductMap : IEntityTypeConfiguration<Product>
         builder.HasOne(r => r.Category)
                .WithMany(r => r.Products)
                .HasForeignKey(f => f.CategoryId);
+
+        builder.Ignore(c => c.ValidationResult);
     }
 }

@@ -1,6 +1,6 @@
-﻿using ByteShop.Application.Services;
-using ByteShop.Domain.Account;
+﻿using ByteShop.Domain.Account;
 using ByteShop.Domain.Interfaces.Repositories;
+using ByteShop.Domain.Interfaces.Services;
 using ByteShop.Infrastructure.Context;
 using ByteShop.Infrastructure.Identity;
 using ByteShop.Infrastructure.Options;
