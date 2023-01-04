@@ -71,7 +71,7 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
             onChange={(e) => setValue(e.target.value)}
             value={value}
           />
-          <ul className="list-unstyled">
+          <ul className="list-unstyled overflow-auto"  style={{height:" 18.75rem"}}>
             {React.Children.toArray(props.children).filter(
               (child: any) =>
                 !value || child.props.children.toLowerCase().startsWith(value)
