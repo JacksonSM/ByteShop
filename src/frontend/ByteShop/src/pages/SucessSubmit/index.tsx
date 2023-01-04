@@ -10,15 +10,15 @@ import {
   Container,
   Row,
 } from "react-bootstrap";
-import { IpropsSucessSubmit } from "./types";
-import { useData } from "../../pages/CadastroProduto/context";
+import { useDataProductID } from "../../components/context";
+import { IProductGet } from "../../services/api/Product/types";
 
 const SucessSubmit = () => {
-  const { id } = useData();
+  const { id } = useDataProductID();
   console.log(id);
-  const [data, setdata] = useState<IpropsSucessSubmit>({});
+  const [data, setdata] = useState<IProductGet>({});
   useEffect(() => {
-    Product.getById(id).then((response) => setdata(response));
+    Product.getById(id).then((response) => response && setdata(response));
   }, []);
 
   const { ...props } = data;
@@ -77,7 +77,7 @@ const SucessSubmit = () => {
           <Col>
             <article className="my-4">
               <h2 className="fs-4 ms-3 mb-2">Categoria</h2>
-              <p className="text-primary ms-3 fs-5 mb-2">{props.categoryId}</p>
+              <p className="text-primary ms-3 fs-5 mb-2">{props.category?.id}</p>
             </article>
             <article className="my-4">
               <h2 className="fs-4 ms-3 mb-2">Marca</h2>
@@ -111,12 +111,15 @@ const SucessSubmit = () => {
             </article>
           </Col>
         </Col>
-          <article className="my-4 ">
-            <h2 className="fs-4 ms-3 mb-2">descrição</h2>
-            <p className="text-primary text-truncate col-1  ms-3 fs-5 mb-2 shadow" style={{width:"700px"}}>
-              {props.description}
-            </p>
-          </article>
+        <article className="my-4 ">
+          <h2 className="fs-4 ms-3 mb-2">descrição</h2>
+          <p
+            className="text-primary text-truncate col-1  ms-3 fs-5 mb-2 shadow"
+            style={{ width: "700px" }}
+          >
+            {props.description}
+          </p>
+        </article>
         <Row className="d-flex w-100 justify-content-between p-1">
           <Button
             variant="primary"

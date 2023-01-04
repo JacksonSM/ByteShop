@@ -19,7 +19,7 @@ async function get(
     queryString = queryString.slice(0, -1); // remove o último "&"
 
     const { data } = await api.get(`product?${queryString}`);
-
+    
     if (data) {
       return data.data;
     }
@@ -29,7 +29,7 @@ async function get(
   }
 }
 
-async function getById(id: number): Promise<IProductGet[] | Error> {
+async function getById(id: number): Promise<IProductGet | Error> {
   try {
     const { data } = await api.get(`product/${id}`);
 
