@@ -1,5 +1,6 @@
 ﻿using ByteShop.Application.Commands.Category;
 using ByteShop.Domain.Interfaces.Repositories;
+using ByteShop.Exceptions;
 using FluentValidation.Results;
 using MediatR;
 
@@ -20,13 +21,20 @@ public class AddCategoryHandler : IRequestHandler<AddCategoryCommand, Validation
     public async Task<ValidationResult> Handle(AddCategoryCommand command, CancellationToken cancellationToken)
     {
         Domain.Entities.Category parentCategory = null;
+                Domain.Entities.Category newCategory;
 
         if (command.ParentCategoryId != 0)
+        {
             parentCategory = await _categoryRepo
                 .GetByIdWithAssociationAsync(command.ParentCategoryId);
+            if(parentCategory == null)
+            command.AddValidationError
+                ("ParentCategoryId", ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST);
+        }
 
+        if(!command.IsValid())
+            return command.ValidationResult;
 
-        Domain.Entities.Category newCategory;
         if (parentCategory != null)
         {
             newCategory = new Domain.Entities.Category(command.Name, parentCategory);

@@ -5,4 +5,9 @@ public class AddCategoryCommand : Command
 {
     public string Name { get; set; }
     public int ParentCategoryId { get; set; }
+
+    public override bool IsValid()
+    {
+        return ValidationResult.IsValid;
+    }
 }

@@ -18,7 +18,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             if (!IsThereCategory)
                 context.AddFailure("CategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
         });
-
+        
         RuleFor(x => x.SetMainImageBase64).SetValidator(new ImageBase64Validation());
         RuleForEach(x => x.AddSecondaryImageBase64).SetValidator(new ImageBase64Validation());
 
@@ -26,7 +26,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         {
             RuleFor(x => x).Custom((command, context) =>
             {
-                if (string.IsNullOrEmpty(product.MainImageUrl)
+                if (string.IsNullOrEmpty(product?.MainImageUrl)
                     && command.SetMainImageBase64 is null)
                     context.AddFailure(ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE);
 
@@ -40,6 +40,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 
     private static int GetTotalAmountOfImages(Domain.Entities.Product product, UpdateProductCommand command)
     {
+        if(product == null) return 0;
         var afterRemoved = product.GetImagesTotal() - command.GetTotalImagesToRemove();
         var final = afterRemoved + command.GetTotalImagesToAdd();
         return final;

@@ -21,12 +21,16 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Vali
     public async Task<ValidationResult> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
         var category = await _categoryRepo.GetByIdWithAssociationAsync(command.Id);
+        if (category is null)
+            command.AddValidationError("ID", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
 
+        if (!command.IsValid())
+            return command.ValidationResult;
 
         Domain.Entities.Category newParentCategory = null;
         if (command.ParentCategoryId != 0)
         {
-            newParentCategory = await _categoryRepo.GetByIdWithAssociationAsync(command.ParentCategoryId);
+            newParentCategory = await _categoryRepo.GetByIdAsync(command.ParentCategoryId);
 
             if (newParentCategory is null)
                 category.AddValidationError("ParentCategory", ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST);

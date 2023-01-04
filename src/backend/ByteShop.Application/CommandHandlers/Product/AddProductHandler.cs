@@ -69,7 +69,7 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, ValidationRe
             newProduct.SetMainImage(mainImageUrl);
         }
 
-        if (command.SecondaryImagesBase64.Length > 0)
+        if (command.SecondaryImagesBase64?.Length > 0)
         {
             foreach (var imageBase64 in command.SecondaryImagesBase64)
             {

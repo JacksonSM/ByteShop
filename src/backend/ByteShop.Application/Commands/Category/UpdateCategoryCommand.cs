@@ -11,4 +11,9 @@ public class UpdateCategoryCommand : Command
     {
         Id = id;
     }
+
+    public override bool IsValid()
+    {
+        return ValidationResult.IsValid;
+    }
 }

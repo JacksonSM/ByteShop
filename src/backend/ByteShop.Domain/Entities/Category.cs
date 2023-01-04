@@ -2,6 +2,7 @@
 using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
 using ByteShop.Exceptions;
+using System.Reflection.Emit;
 
 namespace ByteShop.Domain.Entities;
 public class Category : Entity, IAggregateRoot
@@ -30,6 +31,7 @@ public class Category : Entity, IAggregateRoot
         if (parentCategory is not null)
         {
             Name = name;
+            ParentCategory = parentCategory;
             ParentCategoryId = parentCategory.Id;
             CategoryLevel = parentCategory.CategoryLevel + 1;
         }
@@ -45,10 +47,16 @@ public class Category : Entity, IAggregateRoot
 
         if (newParentCategory is not null)
         {
-            var IsDifferent = ParentCategory.CategoryLevel != newParentCategory.CategoryLevel;
+            if (ParentCategory is null)
+            {
+                AddValidationError("CategoryLevel", ResourceDomainMessages.ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY);
+                return;
+            }
+
+            bool IsDifferent = ParentCategory.CategoryLevel != newParentCategory.CategoryLevel;
             if (IsDifferent)
             {
-                AddValidationError("CategoryLevel", ResourceDomainMessages.MAXIMUM_CATEGORY_LEVEL);
+                AddValidationError("CategoryLevel", ResourceDomainMessages.UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL);
                 return;
             }
 

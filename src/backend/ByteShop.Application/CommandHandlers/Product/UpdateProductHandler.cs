@@ -90,7 +90,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
             product.SetMainImage(mainImageUrl);
         }
 
-        if (command.AddSecondaryImageBase64.Length > 0)
+        if (command.AddSecondaryImageBase64?.Length > 0)
         {
             foreach (var imageBase64 in command.AddSecondaryImageBase64)
             {

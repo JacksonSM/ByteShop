@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY" xml:space="preserve">
+    <value>Não é possível adicionar uma categoria pai em uma categoria de nível 1.</value>
+  </data>
   <data name="MAXIMUM_CATEGORY_LEVEL" xml:space="preserve">
     <value>Apenas 3 niveis de categoria são permitida.</value>
   </data>

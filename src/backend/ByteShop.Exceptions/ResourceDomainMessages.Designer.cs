@@ -61,6 +61,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Não é possível adicionar uma categoria pai em uma categoria de nível 1..
+        /// </summary>
+        public static string ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY {
+            get {
+                return ResourceManager.GetString("ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apenas 3 niveis de categoria são permitida..
         /// </summary>
         public static string MAXIMUM_CATEGORY_LEVEL {
