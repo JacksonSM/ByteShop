@@ -20,21 +20,14 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
          await _context.Category
             .AsNoTracking()
             .Include(x => x.ParentCategory)
-            .Include(x => x.ParentCategory.ParentCategory)
             .Include(x => x.ChildCategories)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-    public async Task<List<Category>> GetAllWithAssociationAsync() =>
+    public async Task<Category> GetByIdWithChildCategoriesAndProductsAsync(int id) =>
         await _context.Category
             .AsNoTracking()
-            .Include(x => x.ParentCategory)
-            .Include(x => x.ParentCategory.ParentCategory)
-            .Include(x => x.ChildCategories)
-            .ToListAsync();
-
-    public async Task<Category> GetByIdWithProductsAsync(int id) =>
-        await _context.Category
             .Include(x => x.Products)
+            .Include(x => x.ChildCategories)
             .FirstOrDefaultAsync(x => x.Id == id);
 
 }

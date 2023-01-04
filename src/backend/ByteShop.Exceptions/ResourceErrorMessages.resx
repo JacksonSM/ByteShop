@@ -195,7 +195,4 @@
   <data name="PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
     <value>O campo largura deve ser maior que zero.</value>
   </data>
-  <data name="THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY" xml:space="preserve">
-    <value>Existe produtos associado a categoria.</value>
-  </data>
 </root>

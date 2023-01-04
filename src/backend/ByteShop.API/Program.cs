@@ -1,7 +1,10 @@
 using ByteShop.API.Filters;
 using ByteShop.Application;
 using ByteShop.Domain.Account;
+using ByteShop.Infra.CrossCutting;
+using ByteShop.Infra.CrossCutting.Bus;
 using ByteShop.Infrastructure;
+using MediatR;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
@@ -11,6 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting(option => option.LowercaseUrls = true);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddCommandHandlers();
+builder.Services.AddMediatorServices();
+
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

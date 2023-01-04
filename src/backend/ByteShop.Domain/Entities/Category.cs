@@ -15,7 +15,8 @@ public class Category : Entity, IAggregateRoot
     public List<Product> Products { get; private set; }
 
     //For EF
-    public Category() { }
+    public Category() {
+    }
 
     public Category(string name)
     {
@@ -26,7 +27,7 @@ public class Category : Entity, IAggregateRoot
 
     public Category(string name, Category parentCategory)
     {
-        if(parentCategory is not null)
+        if (parentCategory is not null)
         {
             Name = name;
             ParentCategoryId = parentCategory.Id;
@@ -36,7 +37,6 @@ public class Category : Entity, IAggregateRoot
         {
             AddValidationError("ParentCategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
         }
-
     }
 
     public void Update(string name, Category newParentCategory)
@@ -57,10 +57,24 @@ public class Category : Entity, IAggregateRoot
         }
     }
 
+    public bool CanItBeDeleted()
+    {
+        if (Products.Any())
+            AddValidationError("Products",
+                ResourceDomainMessages.THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY);
+
+        if (ChildCategories.Any())
+            AddValidationError("ChildCategories",
+                ResourceDomainMessages.THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY);
+
+        return IsValid();
+    }
+
     public override bool IsValid()
     {
         var validator = new CategoryValidation();
-        ValidationResult = validator.Validate(this);
+        var result = validator.Validate(this);
+        ValidationResult.Errors.AddRange(result.Errors);
         return ValidationResult.IsValid;
     }
 }

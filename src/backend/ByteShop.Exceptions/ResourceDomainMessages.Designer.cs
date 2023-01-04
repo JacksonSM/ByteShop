@@ -79,6 +79,24 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Existe produtos associado a categoria..
+        /// </summary>
+        public static string THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY {
+            get {
+                return ResourceManager.GetString("THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Não é possível excluir esta categoria porque ela tem categorias filhas vinculadas.
+        /// </summary>
+        public static string THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY {
+            get {
+                return ResourceManager.GetString("THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Você não pode alterar a categoria pai para uma categoria pai de um nível diferente. Por favor, escolha uma categoria pai com o mesmo nível ou altere o nível da categoria selecionada..
         /// </summary>
         public static string UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL {
