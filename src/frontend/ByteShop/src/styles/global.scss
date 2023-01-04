@@ -195,3 +195,13 @@ a {
   background: $container-bg;
   border-radius: 10px;
 }
+
+.category:hover{
+  transform: scaleX(0.95);
+  --#{$prefix}badge-color: #{#38E54D};
+  cursor: pointer;
+}
+
+.category:active{
+  --#{$prefix}badge-color: #{$Primary};
+}

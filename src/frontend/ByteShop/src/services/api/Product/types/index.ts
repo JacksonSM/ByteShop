@@ -2,10 +2,16 @@ export interface IProductGet {
   id?: number;
   sku?: string;
   name?: string;
+  description?: string;
   price?: number;
+  costPrice?: number;
   brand?: string;
+  weight?:  number,
+  height?:  number,
+  length?:  number,
+  width?: number,
   mainImageUrl?: string;
-  secondaryImageUrl?: string;
+  secondaryImageUrl?: Array<string>;
   category?: {
     id: number,
     name: string,
