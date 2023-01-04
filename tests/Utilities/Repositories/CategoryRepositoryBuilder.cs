@@ -5,7 +5,7 @@ using Moq;
 namespace Utilities.Repositories;
 public class CategoryRepositoryBuilder
 {
-    private static CategoryRepositoryBuilder _instance;
+    private static CategoryRepositoryBuilder? _instance;
     private readonly Mock<ICategoryRepository> _repository;
 
     private CategoryRepositoryBuilder()
