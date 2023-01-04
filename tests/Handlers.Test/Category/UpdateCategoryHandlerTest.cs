@@ -1,12 +1,10 @@
-﻿using ByteShop.Application.UseCases.Commands.Category;
-using ByteShop.Application.UseCases.Handlers.Category;
-using ByteShop.Exceptions.Exceptions;
+﻿using ByteShop.Application.CommandHandlers.Category;
+using ByteShop.Application.Commands.Category;
 using ByteShop.Exceptions;
 using FluentAssertions;
-using Utilities.Mapper;
+using Utilities.Entities;
 using Utilities.Repositories;
 using Xunit;
-using Utilities.Services;
 
 namespace Handlers.Test.Category;
 
@@ -15,36 +13,37 @@ public class UpdateCategoryHandlerTest
     [Fact]
     public async void Sucesso()
     {
-        var category = new ByteShop.Domain.Entities.Category("CPU");
-        category.Id = 36;
-        var command = new UpdateCategoryCommand { Name = "Processador", ParentCategoryId = 23 };
-        command.SetId(36);
+        var parentCategory = CategoryBuilder.BuildCategoryWithoutLevel();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel(parentCategory);
 
-        var handler = CreateUpdateCategoryHandler(category, command.ParentCategoryId);
+        var command = new UpdateCategoryCommand { Name = "Processador", ParentCategoryId = parentCategory.ParentCategoryId.Value };
+        command.SetId(category.Id);
 
-        var response = await handler.Handle(command);
+        var handler = CreateUpdateCategoryHandler(category, parentCategory);
 
-        response.StatusCode.Should().Be(200);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.Data.Name.Should().Be(command.Name);
-        response.Data.ParentCategoryId.Should().Be(command.ParentCategoryId);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
     public async void AtualizarComIdInexistente()
     {
-        var category = new ByteShop.Domain.Entities.Category("Placa mae");
-        category.Id = 36;
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
+
         var command = new UpdateCategoryCommand { Name = "Placa Mãe", ParentCategoryId = 67 };
-        command.SetId(65);
+        command.SetId(category.Id + 23);
 
-        var handler = CreateUpdateCategoryHandler(category, command.ParentCategoryId);
+        var handler = CreateUpdateCategoryHandler(category);
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
+
+        response.IsValid.Should().BeFalse();
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+            .Should().BeTrue();
     }
 
     [Fact]
@@ -57,26 +56,25 @@ public class UpdateCategoryHandlerTest
 
         var handler = CreateUpdateCategoryHandler(category);
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token); 
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST));
+        response.IsValid.Should().BeFalse();
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST))
+            .Should().BeTrue();
     }
 
     private static UpdateCategoryHandler CreateUpdateCategoryHandler(
         ByteShop.Domain.Entities.Category category = null,
-        int categoryParentId = 0)
+        ByteShop.Domain.Entities.Category categoryParent = null)
     {
         var categoryRepo = CategoryRepositoryBuilder
             .Instance()
-            .SetupExistById(categoryParentId)
-            .SetupGetByIdAsync(category)
+            .SetupGetById(categoryParent)
+            .SetupGetByIdWithAssociationAsync(category)
             .Build();
-        var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
-        var logger = LoggerBuilder<AddCategoryHandler>.Instance().Build();
 
-        return new UpdateCategoryHandler(categoryRepo, uow, mapper,logger);
+        return new UpdateCategoryHandler(categoryRepo, uow);
     }
 }

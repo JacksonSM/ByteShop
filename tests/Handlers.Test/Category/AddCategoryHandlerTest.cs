@@ -1,6 +1,5 @@
-﻿using ByteShop.Application.UseCases.Handlers.Category;
+﻿using ByteShop.Application.CommandHandlers.Category;
 using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Entities;
@@ -20,11 +19,10 @@ public class AddCategoryHandlerTest
 
         var handler = CreateAddCategoryHandler();
 
-        var response = await handler.Handle(command);
-
-        response.StatusCode.Should().Be(201);
-        response.Data.Name.Should().Be(command.Name);
-        response.Data.ParentCategoryId.Should().BeNull();
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
+        
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -36,11 +34,10 @@ public class AddCategoryHandlerTest
 
         var handler = CreateAddCategoryHandler(categoryParent);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(201);
-        response.Data.Name.Should().Be(command.Name);
-        response.Data.ParentCategoryId.Should().Be(command.ParentCategoryId);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -53,11 +50,12 @@ public class AddCategoryHandlerTest
 
         var handler = CreateAddCategoryHandler(categoryParent);
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
+        response.IsValid.Should().BeFalse();
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST))
+            .Should().BeTrue();
     }
 
     private static AddCategoryHandler CreateAddCategoryHandler(ByteShop.Domain.Entities.Category category = null)
@@ -70,6 +68,6 @@ public class AddCategoryHandlerTest
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<AddCategoryHandler>.Instance().Build();
 
-        return new AddCategoryHandler(categoryRepo, uow, mapper,logger);
+        return new AddCategoryHandler(categoryRepo, uow);
     }
 }

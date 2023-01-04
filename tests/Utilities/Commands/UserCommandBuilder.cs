@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using ByteShop.Application.UseCases.Commands.User;
+using ByteShop.Application.Commands.User;
 
 namespace Utilities.Commands;
 public class UserCommandBuilder

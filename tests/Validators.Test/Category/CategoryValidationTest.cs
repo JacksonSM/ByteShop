@@ -1,30 +1,31 @@
-﻿using ByteShop.Application.UseCases.Validations.Category;
+﻿using ByteShop.Domain.Entities;
+using ByteShop.Domain.Entities.Validations;
 using ByteShop.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;
+using Utilities.Entities;
 using Xunit;
 
 namespace Validators.Test.Category;
-public class AddCategoryValidationTest
+public class CategoryValidationTest
 {
     [Fact]
     public void Sucesso()
     {
-        var validator = new AddCategoryValidation();
-        var command = CategoryCommandBuilder.AddCategoryCommandBuild();
+        var validator = new CategoryValidation();
+        var category = CategoryBuilder.BuildCategoryWithTwoLevels();
 
-        var result = validator.Validate(command);
+        var result = validator.Validate(category);
 
         result.IsValid.Should().BeTrue();
     }
     [Fact]
     public void ValidarErroNomeVazio()
     {
-        var validator = new AddCategoryValidation();
-        var command = CategoryCommandBuilder.AddCategoryCommandBuild();
-        command.Name = string.Empty;
+        var validator = new CategoryValidation();
+        var category = new ByteShop.Domain.Entities.Category(string.Empty);    
 
-        var result = validator.Validate(command);
+        var result = validator.Validate(category);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
@@ -33,11 +34,10 @@ public class AddCategoryValidationTest
     [Fact]
     public void ValidarErroNomeMaiorQue50Caracteres()
     {
-        var validator = new AddCategoryValidation();
-        var command = CategoryCommandBuilder.AddCategoryCommandBuild();
-        command.Name = string.Join("", Enumerable.Repeat("x", 62));
+        var validator = new CategoryValidation();
+        var category = new ByteShop.Domain.Entities.Category(string.Join("", Enumerable.Repeat("x", 62)));
 
-        var result = validator.Validate(command);
+        var result = validator.Validate(category);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And

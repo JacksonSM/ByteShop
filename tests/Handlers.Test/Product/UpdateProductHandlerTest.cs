@@ -1,6 +1,5 @@
-﻿using ByteShop.Application.UseCases.Handlers.Product;
+﻿using ByteShop.Application.CommandHandlers.Product;
 using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Entities;
@@ -20,23 +19,10 @@ public class UpdateProductHandlerTest
         command.SetId(productToUpdate.Id);
         var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(200);
-        var productResponse = response.Data;
-
-        productResponse.Name.Should().Be(command.Name);
-        productResponse.Description.Should().Be(command.Description);
-        productResponse.Brand.Should().Be(command.Brand);
-        productResponse.SKU.Should().Be(command.SKU);
-        productResponse.Price.Should().Be(command.Price);
-        productResponse.CostPrice.Should().Be(command.CostPrice);
-        productResponse.Warranty.Should().Be(command.Warranty);
-        productResponse.Length.Should().Be(command.Length);
-        productResponse.Height.Should().Be(command.Height);
-        productResponse.Width.Should().Be(command.Width);
-        productResponse.Weight.Should().Be(command.Weight);
-        productResponse.Category.Id.Should().Be(command.CategoryId);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -47,12 +33,13 @@ public class UpdateProductHandlerTest
         command.SetId(productToUpdate.Id);
         command.CategoryId = 0;
         var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        CancellationTokenSource cts = new CancellationTokenSource();
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        var response = await handler.Handle(command, cts.Token);
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
+        response.IsValid.Should().BeFalse();
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+            .Should().BeTrue();
     }
 
     [Fact]
@@ -71,11 +58,13 @@ public class UpdateProductHandlerTest
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<UpdateProductHandler>.Instance().Build();
 
-        var handler = new UpdateProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
+        var handler = new UpdateProductHandler(productRepo, categoryRepo, uow, imageService.Object);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(200);
+        response.IsValid.Should().BeTrue();
+
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.SetMainImageBase64.Base64,
                 command.SetMainImageBase64.Extension));
@@ -88,7 +77,7 @@ public class UpdateProductHandlerTest
         }
     }
     [Fact]
-    public async void ProdutoComNenhumaImagem()
+    public async void OperacaoOKProdutoComNenhumaImagem()
     {
         var productToUpdate = ProductBuilder.ProductBuild();
         var command = ProductCommandBuilder.UpdateProductCommandBuild(
@@ -98,9 +87,10 @@ public class UpdateProductHandlerTest
         command.SetId(productToUpdate.Id);
         var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(200);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -109,6 +99,7 @@ public class UpdateProductHandlerTest
         var productToUpdate = ProductBuilder.ProductBuild();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         command.SetId(productToUpdate.Id);
+        command.AddSecondaryImageBase64 = null;
         var productRepo = ProductRepositoryBuilder.Instance().SetupGetById(productToUpdate).Build();
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
         var imageService = ImageServiceBuilder.Instance()
@@ -119,11 +110,11 @@ public class UpdateProductHandlerTest
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<UpdateProductHandler>.Instance().Build();
 
-        var handler = new UpdateProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
+        var handler = new UpdateProductHandler(productRepo, categoryRepo, uow, imageService.Object);
 
-        var response = await handler.Handle(command);
-
-        response.StatusCode.Should().Be(200);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
+        response.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.SetMainImageBase64.Base64,
                 command.SetMainImageBase64.Extension), Moq.Times.Once);
@@ -137,10 +128,11 @@ public class UpdateProductHandlerTest
         productToUpdate.Id = 3;
         command.SetId(5);
         var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        CancellationTokenSource cts = new CancellationTokenSource();
 
-        var response = await handler.Handle(command);
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(404);
+        response.IsValid.Should().BeFalse();
     }
 
     private static UpdateProductHandler CreateUpdateProductHandler(int categoryId,
@@ -152,10 +144,8 @@ public class UpdateProductHandlerTest
             .SetupUpload()
             .Build();
 
-        var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
-        var logger = LoggerBuilder<UpdateProductHandler>.Instance().Build();
 
-        return new UpdateProductHandler(productRepo, categoryRepo, uow, mapper, imageService, logger);
+        return new UpdateProductHandler(productRepo, categoryRepo, uow, imageService);
     }
 }
