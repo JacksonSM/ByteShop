@@ -1,4 +1,4 @@
-﻿using ByteShop.Application.UseCases.Handlers.Product;
+﻿using ByteShop.Application.CommandHandlers.Product;
 using ByteShop.Exceptions;
 using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
@@ -17,23 +17,10 @@ public class AddProductHandlerTest
         var command = ProductCommandBuilder.AddProductCommandBuild();
         var handler = CreateAddProductHandler(command.CategoryId);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(201);
-        var productResponse = response.Data;
-
-        productResponse.Name.Should().Be(command.Name);
-        productResponse.Description.Should().Be(command.Description);
-        productResponse.Brand.Should().Be(command.Brand);
-        productResponse.SKU.Should().Be(command.SKU);
-        productResponse.Price.Should().Be(command.Price);
-        productResponse.CostPrice.Should().Be(command.CostPrice);
-        productResponse.Warranty.Should().Be(command.Warranty);
-        productResponse.Length.Should().Be(command.Length);
-        productResponse.Height.Should().Be(command.Height);
-        productResponse.Width.Should().Be(command.Width);
-        productResponse.Weight.Should().Be(command.Weight);
-        productResponse.Category.Id.Should().Be(command.CategoryId);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -42,12 +29,13 @@ public class AddProductHandlerTest
         var command = ProductCommandBuilder.AddProductCommandBuild();
         command.CategoryId = 0;
         var handler = CreateAddProductHandler(command.CategoryId);
+        CancellationTokenSource cts = new CancellationTokenSource();
 
-        Func<Task> action = async () => { await handler.Handle(command); };
+        var response = await handler.Handle(command, cts.Token);
 
-        await action.Should().ThrowAsync<ValidationErrorsException>()
-            .Where(exception => exception.ErrorMessages.Count == 1 &&
-            exception.ErrorMessages.Contains(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST));
+        response.IsValid.Should().BeFalse();
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+            .Should().BeTrue();
     }
 
     [Fact]
@@ -64,11 +52,12 @@ public class AddProductHandlerTest
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
 
-        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, imageService.Object);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(201);
+        response.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension));
@@ -87,13 +76,14 @@ public class AddProductHandlerTest
         command.MainImageBase64 = null;
         var handler = CreateAddProductHandler(command.CategoryId);
 
-        var response = await handler.Handle(command);
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await handler.Handle(command, cts.Token);
 
-        response.StatusCode.Should().Be(201);
+        response.IsValid.Should().BeTrue();
     }
 
     [Fact]
-    public async void ProdutoApenasComAImagemPrincipal()
+    public async void AdicionarProdutoApenasComAImagemPrincipal()
     {
         var command = ProductCommandBuilder.AddProductCommandBuild();
         var productRepo = ProductRepositoryBuilder.Instance().Build();
@@ -102,14 +92,17 @@ public class AddProductHandlerTest
             .SetupUpload()
             .GetMock();
 
-        var mapper = MapperBuilder.Instance();
+        command.SecondaryImagesBase64 = null;
+
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
-        var handler = new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService.Object, logger);
 
-        var response = await handler.Handle(command);
+        var handler = new AddProductHandler(productRepo, categoryRepo, uow, imageService.Object);
+        CancellationTokenSource cts = new CancellationTokenSource();
 
-        response.StatusCode.Should().Be(201);
+        var response = await handler.Handle(command, cts.Token);
+
+        response.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension),Moq.Times.Once);
@@ -123,11 +116,10 @@ public class AddProductHandlerTest
             .SetupUpload()
             .Build();
 
-        var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
         var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
 
-        return new AddProductHandler(productRepo, categoryRepo, uow, mapper, imageService, logger);
+        return new AddProductHandler(productRepo, categoryRepo, uow, imageService);
 
     }
 }

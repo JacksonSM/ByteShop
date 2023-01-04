@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY" xml:space="preserve">
+    <value>Não é possível adicionar uma categoria pai em uma categoria de nível 1.</value>
+  </data>
   <data name="MAXIMUM_CATEGORY_LEVEL" xml:space="preserve">
     <value>Apenas 3 niveis de categoria são permitida.</value>
   </data>
   <data name="MUST_HAVE_A_MAIN_IMAGE" xml:space="preserve">
     <value>É necessario ter uma imagem principal, para adicionar uma imagem segundaria.</value>
+  </data>
+  <data name="THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY" xml:space="preserve">
+    <value>Não é possível excluir esta categoria porque ela tem categorias filhas vinculadas</value>
+  </data>
+  <data name="THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY" xml:space="preserve">
+    <value>Existe produtos associado a categoria.</value>
+  </data>
+  <data name="UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL" xml:space="preserve">
+    <value>Você não pode alterar a categoria pai para uma categoria pai de um nível diferente. Por favor, escolha uma categoria pai com o mesmo nível ou altere o nível da categoria selecionada.</value>
   </data>
 </root>

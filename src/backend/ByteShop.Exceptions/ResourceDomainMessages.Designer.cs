@@ -61,6 +61,15 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Não é possível adicionar uma categoria pai em uma categoria de nível 1..
+        /// </summary>
+        public static string ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY {
+            get {
+                return ResourceManager.GetString("ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apenas 3 niveis de categoria são permitida..
         /// </summary>
         public static string MAXIMUM_CATEGORY_LEVEL {
@@ -75,6 +84,33 @@ namespace ByteShop.Exceptions {
         public static string MUST_HAVE_A_MAIN_IMAGE {
             get {
                 return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existe produtos associado a categoria..
+        /// </summary>
+        public static string THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY {
+            get {
+                return ResourceManager.GetString("THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Não é possível excluir esta categoria porque ela tem categorias filhas vinculadas.
+        /// </summary>
+        public static string THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY {
+            get {
+                return ResourceManager.GetString("THERE_IS_AN_ASSOCIATED_CHILD_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Você não pode alterar a categoria pai para uma categoria pai de um nível diferente. Por favor, escolha uma categoria pai com o mesmo nível ou altere o nível da categoria selecionada..
+        /// </summary>
+        public static string UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL {
+            get {
+                return ResourceManager.GetString("UPDATE_PARENT_CATEGORY_BY_DIFFERENT_LEVEL", resourceCulture);
             }
         }
     }

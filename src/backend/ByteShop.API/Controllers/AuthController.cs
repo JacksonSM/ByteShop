@@ -1,7 +1,6 @@
-﻿using ByteShop.API.Tools;
-using ByteShop.Application.UseCases.Commands.User;
-using ByteShop.Application.UseCases.Handlers.User;
-using ByteShop.Application.UseCases.Results;
+﻿using ByteShop.Application.Commands.User;
+using ByteShop.Application.Services.Contracts;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ByteShop.API.Controllers;
@@ -9,6 +8,13 @@ namespace ByteShop.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    private readonly IUserAppService _userAppService;
+
+    public AuthController(IUserAppService userAppService)
+    {
+        _userAppService = userAppService;
+    }
+
     /// <summary>
     /// Registra um usuario no sistema.
     /// </summary>
@@ -16,11 +22,10 @@ public class AuthController : ControllerBase
     /// <response code="400">Provavelmente os campos estão inválidos, Verifique a mensagem de erro.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RequestResult<string[]>))]
-    public async Task<ActionResult> Add(
-    [FromBody] RegisterCustomerCommand command,
-    [FromServices] RegisterCustomerHandler handler)
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
+    public async Task<ActionResult> Add([FromBody] RegisterCustomerCommand command)
     {
-        return new ParseRequestResult<object>().ParseToActionResult(await handler.Handle(command));
+        var response = await _userAppService.RegisterCustomer(command);
+        return response.IsValid ? Created(string.Empty, response) : BadRequest(response);
     }
 }

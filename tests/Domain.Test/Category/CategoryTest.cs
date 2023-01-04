@@ -1,5 +1,4 @@
 ﻿using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
 using Utilities.Entities;
 using Xunit;
@@ -12,25 +11,27 @@ public class CategoryTest
     {
         var categoryParent = CategoryBuilder.BuildCategoryWithThreeLevels();
 
-        var action = () =>
-        {
-            var newCategory = new ByteShop.Domain.Entities.Category("Memoria Ram", categoryParent);
-        };
+        var newCategory = new ByteShop.Domain.Entities.Category("Memoria Ram", categoryParent);
+  
 
-        action.Should().Throw<DomainExecption>()
-            .Where(exception =>
-            exception.Message.Contains(ResourceDomainMessages.MAXIMUM_CATEGORY_LEVEL));
+        newCategory.IsValid().Should().BeFalse();
+        newCategory.ValidationResult.Errors.Any(error => error.ErrorMessage.Equals(ResourceDomainMessages.MAXIMUM_CATEGORY_LEVEL))
+            .Should().BeTrue();
     }
 
     [Fact]
     public void AtualizarComCategoriaPai()
     {
-        var category = new ByteShop.Domain.Entities.Category("Fonte");
+        var oldFatherCategory = CategoryBuilder.BuildCategoryWithoutLevel();
 
-        category.Update("Fonte Real", 36);
+        var category = new ByteShop.Domain.Entities.Category("Fonte", oldFatherCategory);
+
+        var newParentCategory = CategoryBuilder.BuildCategoryWithoutLevel();
+
+        category.Update("Fonte Real", newParentCategory);
 
         category.Name.Should().Be("Fonte Real");
-        category.ParentCategoryId.Should().Be(36);
+        category.ParentCategoryId.Should().Be(newParentCategory.Id);
     }
 
     [Fact]
@@ -40,7 +41,7 @@ public class CategoryTest
         categoryParent.Id = 93;
         var category = new ByteShop.Domain.Entities.Category("Fonte", categoryParent);
 
-        category.Update("Fonte Real", 0);
+        category.Update("Fonte Real", null);
 
         category.Name.Should().Be("Fonte Real");
         category.ParentCategoryId.Should().Be(93);

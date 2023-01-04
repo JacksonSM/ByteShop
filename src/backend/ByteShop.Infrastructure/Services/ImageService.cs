@@ -1,9 +1,6 @@
 ﻿using Azure.Storage.Blobs;
-using ByteShop.Application.Services;
-using ByteShop.Application.UseCases.Commands.Product;
-using ByteShop.Exceptions;
+using ByteShop.Domain.Interfaces.Services;
 using ByteShop.Infrastructure.Options;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 

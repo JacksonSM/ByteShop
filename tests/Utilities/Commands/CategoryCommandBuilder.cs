@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using ByteShop.Application.UseCases.Commands.Category;
+using ByteShop.Application.Commands.Category;
 
 namespace Utilities.Commands;
 public class CategoryCommandBuilder

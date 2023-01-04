@@ -41,10 +41,11 @@ public class ProductRepository : Repository<Product>, IProductRepository
         if (!string.IsNullOrEmpty(category))
             query = query.Where(x => x.Category.Name.ToLower().Contains(category.ToLower()));
 
-        if(actualPage.HasValue && itemsPerPage.HasValue)
+        int itemsTotal = await query.AsNoTracking().CountAsync();
+
+        if (actualPage.HasValue && itemsPerPage.HasValue)
             query = SetPagination(actualPage.Value, itemsPerPage.Value, query);
 
-        int itemsTotal = await query.AsNoTracking().CountAsync();
         var products = await query.AsNoTracking().ToListAsync();
 
         return (products, itemsTotal);

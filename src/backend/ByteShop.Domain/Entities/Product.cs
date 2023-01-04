@@ -1,8 +1,10 @@
 ﻿using ByteShop.Exceptions.Exceptions;
 using ByteShop.Exceptions;
+using ByteShop.Domain.Interfaces.Mediator;
+using ByteShop.Domain.Entities.Validations;
 
 namespace ByteShop.Domain.Entities;
-public class Product : Entity
+public class Product : Entity, IAggregateRoot
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
@@ -22,12 +24,12 @@ public class Product : Entity
     public Category Category { get; private set; }
     public bool IsActive { get; private set; }
 
-    public Product(){}
+    public Product() { }
 
     public Product(
         string name, string description, string sku,
         decimal price, decimal costPrice, int stock,
-        int warranty, string brand, float weight, 
+        int warranty, string brand, float weight,
         float height, float length, float width, int categoryId)
     {
         Name = name;
@@ -63,9 +65,9 @@ public class Product : Entity
         Weight = weight;
         Height = height;
         Length = length;
-        Width= width;
+        Width = width;
 
-        if(categoryId != 0)
+        if (categoryId != 0)
             CategoryId = categoryId;
     }
 
@@ -82,7 +84,7 @@ public class Product : Entity
 
     public string[] GetSecondaryImageUrl()
     {
-        if(SecondaryImageUrl is not null)
+        if (SecondaryImageUrl is not null)
         {
             string[] urls = SecondaryImageUrl
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -124,5 +126,12 @@ public class Product : Entity
     {
         var exists = string.IsNullOrEmpty(MainImageUrl);
         DomainExecption.When(exists, ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+    }
+
+    public override bool IsValid()
+    {
+        var validator = new ProductValidation();
+        ValidationResult = validator.Validate(this);
+        return ValidationResult.IsValid;
     }
 }

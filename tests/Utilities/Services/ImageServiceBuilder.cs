@@ -1,4 +1,5 @@
 ﻿using ByteShop.Application.Services;
+using ByteShop.Domain.Interfaces.Services;
 using Moq;
 
 namespace Utilities.Services;

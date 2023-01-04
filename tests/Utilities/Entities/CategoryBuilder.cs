@@ -9,8 +9,7 @@ public class CategoryBuilder
     {
         var categoryLevelOne = BuildCategoryWithoutLevel();
         var categoryLevelTwo = BuildCategoryWithoutLevel(categoryLevelOne);
-        categoryLevelOne.AddChild(categoryLevelTwo);
-        return categoryLevelOne;
+        return categoryLevelTwo;
     }
 
     public static Category BuildCategoryWithThreeLevels()
@@ -26,6 +25,7 @@ public class CategoryBuilder
         return new Faker<Category>()
             .RuleFor(c => c.Id, f => f.Random.Number(0, 500))
             .RuleFor(c => c.Name, f => f.Commerce.Department())
+            .RuleFor(c => c.CategoryLevel, category?.CategoryLevel + 1 ?? ByteShop.Domain.Emuns.CategoryLevel.LevelOne)
             .RuleFor(c => c.ParentCategory, category)
             .RuleFor(c => c.ParentCategoryId,  category?.Id ?? 0);
     }

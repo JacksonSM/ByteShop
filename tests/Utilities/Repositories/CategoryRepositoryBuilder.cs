@@ -27,17 +27,17 @@ public class CategoryRepositoryBuilder
 
         return this;
     }
+    public CategoryRepositoryBuilder SetupGetById(Category category)
+    {
+        if (category != null)
+            _repository.Setup(i => i.GetByIdAsync(category.Id)).ReturnsAsync(category);
+
+        return this;
+    }
     public CategoryRepositoryBuilder SetupGetByIdWithAssociationAsync(Category category)
     {
         if (category is not null)
             _repository.Setup(i => i.GetByIdWithAssociationAsync(category.Id)).ReturnsAsync(category);
-
-        return this;
-    }
-    public CategoryRepositoryBuilder SetupGetByIdAsync(Category category)
-    {
-        if (category is not null)
-            _repository.Setup(i => i.GetByIdAsync(category.Id)).ReturnsAsync(category);
 
         return this;
     }

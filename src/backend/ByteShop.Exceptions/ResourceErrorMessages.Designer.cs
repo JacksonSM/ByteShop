@@ -293,14 +293,5 @@ namespace ByteShop.Exceptions {
                 return ResourceManager.GetString("PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Existe produtos associado a categoria..
-        /// </summary>
-        public static string THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY {
-            get {
-                return ResourceManager.GetString("THERE_IS_A_PRODUCT_ASSOCIATED_WITH_THE_CATEGORY", resourceCulture);
-            }
-        }
     }
 }
