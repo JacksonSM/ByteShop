@@ -50,7 +50,7 @@ async function getAll(): Promise<Icategory[] | Error> {
     const { data } = await api.get("category");
 
     if (data) {
-      return data.data;
+      return data;
     }
     return new Error("Erro ao listar os as categorias!");
   } catch (error) {
