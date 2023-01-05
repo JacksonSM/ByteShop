@@ -1,4 +1,4 @@
-﻿using ByteShop.Application.Commands.User;
+﻿using ByteShop.Application.User.RegisterUser;
 using FluentValidation.Results;
 
 namespace ByteShop.Application.Services.Contracts;

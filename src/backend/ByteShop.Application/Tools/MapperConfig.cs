@@ -12,11 +12,11 @@ public class MapperConfig : Profile
 
     private void EntityForDTO()
     {
-        CreateMap<Product, ProductDTO>()
+        CreateMap<Domain.Entities.Product, ProductDTO>()
             .ForMember(x => x.SecondaryImageUrl,
             x => x.MapFrom(x => x.GetSecondaryImageUrl()));
 
-        CreateMap<Category, CategoryDTO>();
-        CreateMap<Category, CategoryWithAssociationDTO>();
+        CreateMap<Domain.Entities.Category, CategoryDTO>();
+        CreateMap<Domain.Entities.Category, CategoryWithAssociationDTO>();
     }
 }

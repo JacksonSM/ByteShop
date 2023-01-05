@@ -1,5 +1,5 @@
-﻿using ByteShop.Application.Commands.User;
-using ByteShop.Application.Services.Contracts;
+﻿using ByteShop.Application.Services.Contracts;
+using ByteShop.Application.User.RegisterUser;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 

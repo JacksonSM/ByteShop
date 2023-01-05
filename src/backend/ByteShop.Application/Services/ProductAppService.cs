@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
-using ByteShop.Application.Commands.Product;
 using ByteShop.Application.DTOs;
-using ByteShop.Application.Queries;
-using ByteShop.Application.Reponses;
+using ByteShop.Application.Product.AddProduct;
+using ByteShop.Application.Product.GetAllProducts;
+using ByteShop.Application.Product.RemoveProduct;
+using ByteShop.Application.Product.UpdateProduct;
 using ByteShop.Application.Services.Contracts;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infra.CrossCutting.Bus;
 using FluentValidation.Results;
-using Newtonsoft.Json;
+using MediatR;
 
 namespace ByteShop.Application.Services;
 public class ProductAppService : IProductAppService
 {
     private readonly IProductRepository _productRepo;
-    private readonly IMediatorHandler _mediator;
+    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
     public ProductAppService(
         IProductRepository repoProduct, 
-        IMediatorHandler mediator,
+        IMediator mediator,
         IMapper mapper)
     {
         _productRepo = repoProduct;
@@ -26,27 +26,27 @@ public class ProductAppService : IProductAppService
         _mapper = mapper;
     }
 
-    public async Task<ValidationResult> Add(AddProductCommand command)
+    public async Task<AddProductResponse> Add(AddProductCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
     public async Task<ValidationResult> Update(UpdateProductCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
 
     public async Task<ValidationResult> Delete(DeleteProductCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
 
 
     public async Task<GetAllProductsResponse> GetAll(GetAllProductsQuery query)
     {
-        var result = await _mediator.SendQuery(query);
+        var result = await _mediator.Send(query);
         return result;
     }
 

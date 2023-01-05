@@ -1,21 +1,21 @@
-﻿using ByteShop.Application.Commands.User;
-using ByteShop.Application.Services.Contracts;
-using ByteShop.Infra.CrossCutting.Bus;
+﻿using ByteShop.Application.Services.Contracts;
+using ByteShop.Application.User.RegisterUser;
 using FluentValidation.Results;
+using MediatR;
 
 namespace ByteShop.Application.Services;
 public class UserAppService : IUserAppService
 {
-    private readonly IMediatorHandler _mediator;
+    private readonly IMediator _mediator;
 
-    public UserAppService(IMediatorHandler mediator)
+    public UserAppService(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public async Task<ValidationResult> RegisterCustomer(RegisterCustomerCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
 }

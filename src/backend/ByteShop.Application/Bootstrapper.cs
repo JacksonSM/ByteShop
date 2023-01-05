@@ -1,10 +1,10 @@
-﻿using ByteShop.Application.CommandHandlers.Category;
-using ByteShop.Application.CommandHandlers.Product;
-using ByteShop.Application.Commands.Category;
-using ByteShop.Application.Commands.Product;
-using ByteShop.Application.Queries;
-using ByteShop.Application.QueryHandlers.Product;
-using ByteShop.Application.Reponses;
+﻿using ByteShop.Application.Category.AddCategory;
+using ByteShop.Application.Category.RemoveCategory;
+using ByteShop.Application.Category.UpdateCategory;
+using ByteShop.Application.Product.AddProduct;
+using ByteShop.Application.Product.GetAllProducts;
+using ByteShop.Application.Product.RemoveProduct;
+using ByteShop.Application.Product.UpdateProduct;
 using ByteShop.Application.Services;
 using ByteShop.Application.Services.Contracts;
 using ByteShop.Application.Tools;
@@ -35,7 +35,7 @@ public static class Bootstrapper
     }
     public static void AddCommandHandlers(this IServiceCollection services)
     {
-        services.AddScoped<IRequestHandler<AddProductCommand, ValidationResult>, AddProductHandler>();
+        services.AddScoped<IRequestHandler<AddProductCommand, AddProductResponse>, AddProductHandler>();
         services.AddScoped<IRequestHandler<UpdateProductCommand, ValidationResult>, UpdateProductHandler>();
         services.AddScoped<IRequestHandler<DeleteProductCommand, ValidationResult>, DeleteProductHandler>();
 

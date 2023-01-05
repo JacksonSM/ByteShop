@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ByteShop.Application\ByteShop.Application.csproj" />
-    <ProjectReference Include="..\ByteShop.Infra.CrossCutting.Bus\ByteShop.Infra.CrossCutting.Bus.csproj" />
-    <ProjectReference Include="..\ByteShop.Infra.CrossCutting\ByteShop.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\ByteShop.Infrastructure\ByteShop.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -1,20 +1,22 @@
 ﻿using AutoMapper;
-using ByteShop.Application.Commands.Category;
+using ByteShop.Application.Category.AddCategory;
+using ByteShop.Application.Category.RemoveCategory;
+using ByteShop.Application.Category.UpdateCategory;
 using ByteShop.Application.DTOs;
 using ByteShop.Application.Services.Contracts;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Infra.CrossCutting.Bus;
 using FluentValidation.Results;
+using MediatR;
 
 namespace ByteShop.Application.Services;
 
 public class CategoryAppService : ICategoryAppService
 {
     private readonly ICategoryRepository _repo;
-    private readonly IMediatorHandler _mediator;
+    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public CategoryAppService(ICategoryRepository repo, IMediatorHandler mediator, IMapper mapper)
+    public CategoryAppService(ICategoryRepository repo, IMediator mediator, IMapper mapper)
     {
         _repo = repo;
         _mediator = mediator;
@@ -23,18 +25,18 @@ public class CategoryAppService : ICategoryAppService
 
     public async Task<ValidationResult> Add(AddCategoryCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
     public async Task<ValidationResult> Update(UpdateCategoryCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
 
     public  async Task<ValidationResult> Delete(DeleteCategoryCommand command)
     {
-        var result = await _mediator.SendCommand(command);
+        var result = await _mediator.Send(command);
         return result;
     }
 

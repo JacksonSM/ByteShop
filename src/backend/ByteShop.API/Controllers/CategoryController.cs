@@ -1,4 +1,6 @@
-﻿using ByteShop.Application.Commands.Category;
+﻿using ByteShop.Application.Category.AddCategory;
+using ByteShop.Application.Category.RemoveCategory;
+using ByteShop.Application.Category.UpdateCategory;
 using ByteShop.Application.DTOs;
 using ByteShop.Application.Services.Contracts;
 using FluentValidation.Results;

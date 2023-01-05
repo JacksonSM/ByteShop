@@ -1,7 +1,8 @@
-﻿using ByteShop.Application.Commands.Product;
-using ByteShop.Application.DTOs;
-using ByteShop.Application.Queries;
-using ByteShop.Application.Reponses;
+﻿using ByteShop.Application.DTOs;
+using ByteShop.Application.Product.AddProduct;
+using ByteShop.Application.Product.GetAllProducts;
+using ByteShop.Application.Product.RemoveProduct;
+using ByteShop.Application.Product.UpdateProduct;
 using ByteShop.Application.Services.Contracts;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,12 @@ public class ProductController : ControllerBase
     /// <response code="201">Retorna o produto adicionado.</response>
     /// <response code="400">Provavelmente as propriedades estão inválido, Verifique a mensagem de erro.</response>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ValidationResult))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResult))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddProductResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(AddProductResponse))]
     public async Task<ActionResult> Add([FromBody] AddProductCommand command)
     {
         var response = await _productAppService.Add(command);
-        return response.IsValid ? Created(string.Empty, response) : BadRequest(response);
+        return response.ValidationResult.IsValid ? Created(string.Empty, response) : BadRequest(response);
     }
 
     /// <summary>
