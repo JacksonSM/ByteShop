@@ -58,4 +58,17 @@ async function getAll(): Promise<Icategory[] | Error> {
   }
 }
 
-export const Category = { getAll, put, post };
+async function getById(id: number): Promise<any |Error> {
+  try {
+    const { status } = await api.delete(`category/${id}`);
+
+    if (status) {
+      return status;
+    }
+    return new Error("Erro ao deletar a categoria!");
+  } catch (error) {
+    return error as AxiosError;
+  }
+}
+
+export const Category = { getAll, getById, put, post };
