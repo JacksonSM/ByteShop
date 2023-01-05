@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { api } from "../../axios-config";
-import { IProductGet, IProductPost } from "./types";
+import { IProductGet, IProductPost, IDataProductList } from "./types";
 
 type IParameters = {
   [key: string]: IProductGet;
@@ -9,7 +9,7 @@ type IParameters = {
 
 async function get(
   parameters: IParameters | ""
-): Promise<IProductGet[] | Error> {
+): Promise<IDataProductList | Error> {
   try {
     let queryString = "";
 
@@ -21,7 +21,7 @@ async function get(
     const { data } = await api.get(`product?${queryString}`);
     
     if (data) {
-      return data.data;
+      return data;
     }
     return new Error("Erro ao listar os as categorias!");
   } catch (error) {
@@ -29,12 +29,12 @@ async function get(
   }
 }
 
-async function getById(id: number): Promise<IProductGet | Error> {
+async function getById(id: number): Promise<IProductGet |Error> {
   try {
     const { data } = await api.get(`product/${id}`);
 
     if (data) {
-      return data.data;
+      return data;
     }
     return new Error("Erro ao listar os as categorias!");
   } catch (error) {
