@@ -45,6 +45,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
   const categNameRef = useRef<HTMLInputElement>(null);
   const parentCategoryId = useRef<HTMLSelectElement>(null);
 
+  // função para adicionar a categoria
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -68,6 +69,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
 
   return (
     <>
+      {/* Modal para adicionar as categorias */}
       <Modal show={showModalAddCateg}>
         <Modal.Header>
           <Modal.Title className="fs-4 fw-bold">
@@ -91,7 +93,6 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
                 style={{ maxWidth: "20rem" }}
               />
             </Form.Group>
-            {/* <Form.Select className="w-75" size="sm" ref={categParentNameRef}> */}
             <Form.Group
               className="my-3"
               title="se não for selecinado nada a categoria será considerada principal"
@@ -139,7 +140,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
   );
 };
 
-//modal para aterar as categorias
+//modal para alterar as categorias
 const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
   showModal,
   setShowModal,
@@ -181,92 +182,103 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
     );
   }
 
+  // função para deletar a categoria
+  const handleDelete = (id: number) => {
+    Category.getById(id).then((status) =>
+      status !== 202 ? alert("Erro ao deletar a categoria") : location.reload()
+    );
+  };
+
   return (
-    <Modal
-      show={showModal}
-      onHide={handleClose}
-      backdrop="static"
-      keyboard={false}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title className="fs-3 fw-bold">{modalInfo.name}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>
-          {modalInfo.parentCategoryId
-            ? `Categoria segundária, abaixo de "${parent?.name}"`
-            : "Categoria principal"}
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="warning" onClick={() => setCategoryChange(true)}>
-          Alterar
-        </Button>
-        <Button variant="danger">Deletar</Button>
-      </Modal.Footer>
-      {categoryChange ? (
-        <Form
-          className=" w-75 h-75 border mx-auto"
-          onSubmit={(e) => handleSubmitChanges(e)}
-        >
-          <Form.Group className="p-1">
-            <Form.Label className="text-center" htmlFor="category">
-              Nome da Categoria
-            </Form.Label>
-            <Form.Control
-              className="w-75"
-              id="category"
-              autoFocus={true}
-              ref={categNameRef}
-              maxLength={60}
-              onClick={() =>
-                categNameRef.current &&
-                categNameRef.current.value === "" &&
-                (categNameRef.current.value = modalInfo.name)
-              }
-              type="text"
-              placeholder="Categoria"
-            />
-          </Form.Group>
-          <Form.Group className="p-1">
-            <Form.Label className="text-center" htmlFor="Parentcategory">
-              Categoria mãe?
-            </Form.Label>
-            <Form.Select className="w-75" size="sm" ref={categParentNameRef}>
-              <option
-                key={0}
-                className="parent-class-item parent-class-item--empty "
-              ></option>
-              {validParentCategs(allCategories).map(
-                (item, index) =>
-                  item.id != modalInfo.id && (
-                    <option
-                      id={`categ${item.id}`}
-                      value={item.id}
-                      key={index + 1}
-                      className="parent-class-item"
-                    >
-                      {item.name}
-                    </option>
-                  )
-              )}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className="p-1">
-            <Button className="w-25 me-1" variant="primary" type="submit">
-              Salvar
-            </Button>
-            <Button
-              className="w-25 ms-2"
-              variant="danger"
-              onClick={() => setCategoryChange(false)}
-            >
-              Cancelar
-            </Button>
-          </Form.Group>
-        </Form>
-      ) : null}
-    </Modal>
+    <>
+      <Modal
+        show={showModal}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="fs-3 fw-bold">{modalInfo.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            {modalInfo.parentCategoryId
+              ? `Categoria segundária, abaixo de "${parent?.name}"`
+              : "Categoria principal"}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="warning" onClick={() => setCategoryChange(true)}>
+            Alterar
+          </Button>
+          <Button variant="danger" onClick={() => handleDelete(modalInfo.id)}>
+            Deletar
+          </Button>
+        </Modal.Footer>
+        {categoryChange ? (
+          <Form
+            className=" w-75 h-75 border mx-auto"
+            onSubmit={(e) => handleSubmitChanges(e)}
+          >
+            <Form.Group className="p-1">
+              <Form.Label className="text-center" htmlFor="category">
+                Nome da Categoria
+              </Form.Label>
+              <Form.Control
+                className="w-75"
+                id="category"
+                autoFocus={true}
+                ref={categNameRef}
+                maxLength={60}
+                onClick={() =>
+                  categNameRef.current &&
+                  categNameRef.current.value === "" &&
+                  (categNameRef.current.value = modalInfo.name)
+                }
+                type="text"
+                placeholder="Categoria"
+              />
+            </Form.Group>
+            <Form.Group className="p-1">
+              <Form.Label className="text-center" htmlFor="Parentcategory">
+                Categoria mãe?
+              </Form.Label>
+              <Form.Select className="w-75" size="sm" ref={categParentNameRef}>
+                <option
+                  key={0}
+                  className="parent-class-item parent-class-item--empty "
+                ></option>
+                {validParentCategs(allCategories).map(
+                  (item, index) =>
+                    item.id != modalInfo.id && (
+                      <option
+                        id={`categ${item.id}`}
+                        value={item.id}
+                        key={index + 1}
+                        className="parent-class-item"
+                      >
+                        {item.name}
+                      </option>
+                    )
+                )}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="p-1">
+              <Button className="w-25 me-1" variant="primary" type="submit">
+                Salvar
+              </Button>
+              <Button
+                className="w-25 ms-2"
+                variant="danger"
+                onClick={() => setCategoryChange(false)}
+              >
+                Cancelar
+              </Button>
+            </Form.Group>
+          </Form>
+        ) : null}
+      </Modal>
+    </>
   );
 };
 

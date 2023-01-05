@@ -15,12 +15,31 @@ export interface IProductGet {
   category?: {
     id: number,
     name: string,
-    parentCategoryId: 0
+    parentCategoryId?: number;
   }
+  pagination?: {
+    actualPage: number,
+    itemsPerPage: number,
+    itemsTotal: number,
+    totalPage: number
+  }
+
   warranty?: number;
   stock?: number;
   actualPage?: number;
   itemsPerPage?: number;
+  createdOn?: Date;
+}
+
+
+export interface IDataProductList {
+  content: IProductGet[];
+  pagination?: {
+    actualPage: number,
+    itemsPerPage: number,
+    itemsTotal: number,
+    totalPage: number,
+  }
 }
 
 
