@@ -17,16 +17,24 @@ import {
   Table,
 } from "react-bootstrap";
 import { Product } from "../../services/api/Product";
-import { IProductGet } from "services/api/Product/types";
+import { IProductGet, IDataProductList } from "services/api/Product/types";
+import { useNavigate } from "react-router-dom";
+import { useDataProductID } from "../../components/context";
 
 const Inventario: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
+  const [activeItem, setActiveItem] = useState(1);
   const [data, setData] = useState<any>([]);
+  const { id, setID } = useDataProductID();
 
+  const numberOfItemsRef = useRef<HTMLSelectElement>(null);
   const skuRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const brandRef = useRef<HTMLInputElement>(null);
+  const categRef = useRef<HTMLSelectElement>(null);
+
+  const rota = useNavigate();
 
   /* função para formatar o valor do preço para reais*/
   const Formatter = new Intl.NumberFormat("pt-br", {
@@ -44,7 +52,7 @@ const Inventario: React.FC = () => {
       setShowAlert(true);
       setData(false);
     } else {
-      setData(value);
+      setData(value.content);
       setShowAlert(false);
     }
     return;
@@ -52,10 +60,10 @@ const Inventario: React.FC = () => {
 
   async function getActiveCategories() {
     let set: any = new Set();
-    const value: IProductGet[] | Error = await Product.get("");
+    const value: IDataProductList | Error = await Product.get("");
     value instanceof Error
       ? setShowAlert(true)
-      : value.map((item: IProductGet) => set.add(item.category?.name));
+      : value.content.map((item: IProductGet) => set.add(item.category?.name));
     setActiveCategories(["", ...set]);
     return;
   }
@@ -65,14 +73,28 @@ const Inventario: React.FC = () => {
     getActiveCategories();
   }, []);
 
+  useEffect(() => {
+    getData({
+      itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
+      actualPage: { actualPage: Number(activeItem) },
+    });
+  }, [activeItem]);
+
+  function handleInputNumberOfItems() {}
+
+  function handleClickProductChange(id: number) {
+    setID(id);
+    rota("/ateracao-de-produtos");
+  }
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    setActiveItem(1);
     getData({
+      itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
+      actualPage: { actualPage: 1 },
       sku: { sku: String(skuRef.current?.value) },
       name: { name: String(nameRef.current?.value) },
-
-
       brand: { brand: String(brandRef.current?.value) },
       category: { category: String(categRef.current?.value) },
     });
@@ -82,7 +104,7 @@ const Inventario: React.FC = () => {
     skuRef.current!.value = "";
     nameRef.current!.value = "";
     brandRef.current!.value = "";
-    categRef.current!.value= ""
+    categRef.current!.value = "";
     getData("");
   }
 
@@ -145,7 +167,7 @@ const Inventario: React.FC = () => {
           <FormSelect
             ref={categRef}
             id="categoria"
-            onInput={() => console.log(categRef.current?.value)}
+            // onInput={() => console.log(categRef.current?.value)}
             size="sm"
             title="escolha a quantidade de itens por página"
           >
@@ -154,6 +176,26 @@ const Inventario: React.FC = () => {
                   <option key={index + 1}>{item}</option>
                 ))
               : null}
+          </FormSelect>
+        </FormGroup>
+        <FormGroup
+          className="my-auto ms-3 me-5"
+          style={{ width: "fit-content", height: "fit-content" }}
+        >
+          <FormLabel htmlFor="numeroItemExibicao" className="m-1">
+            Exibir
+          </FormLabel>
+          <FormSelect
+            ref={numberOfItemsRef}
+            id="numeroItemExibicao"
+            onInput={handleInputNumberOfItems}
+            size="sm"
+            title="escolha a quantidade de itens por página"
+          >
+            <option>1</option>
+            <option>3</option>
+            <option>25</option>
+            <option>50</option>
           </FormSelect>
         </FormGroup>
         <FormGroup
@@ -201,7 +243,9 @@ const Inventario: React.FC = () => {
               <th className="fs-5 text-center align-middle border">Imagem</th>
               <th className="fs-5 text-center align-middle border">Nome</th>
               <th className="fs-5 text-center align-middle border">Preço</th>
-              <th className="fs-5 text-center align-middle border">Categoria</th>
+              <th className="fs-5 text-center align-middle border">
+                Categoria
+              </th>
               <th className="fs-5 text-center align-middle border">Estoque</th>
               <th className="fs-5 text-center align-middle border">Ações</th>
             </tr>
@@ -214,7 +258,9 @@ const Inventario: React.FC = () => {
                   key={index}
                   className="border text-start"
                 >
-                  <td className="fs-6 fw-bold text-center align-middle border">{index + 1}</td>
+                  <td className="fs-6 fw-bold text-center align-middle border">
+                    {index + 1}
+                  </td>
                   <td className="text-center align-middle">{item.sku}</td>
                   <td className="text-center align-middle">
                     {item.mainImageUrl && (
@@ -228,11 +274,20 @@ const Inventario: React.FC = () => {
                   </td>
                   <td className="text-center align-middle">{item.name}</td>
 
-                  <td className="text-center align-middle">{Formatter.format(Number(item.price))}</td>
-                  <td className="text-center align-middle">{item.category?.name}</td>
+                  <td className="text-center align-middle">
+                    {Formatter.format(Number(item.price))}
+                  </td>
+                  <td className="text-center align-middle">
+                    {item.category?.name}
+                  </td>
                   <td className="text-center align-middle">{item.stock} un</td>
                   <td className="text-center align-middle border">
-                    <button className="border border-0 bg-body rounded me-2 my-auto">
+                    <button
+                      className="border border-0 bg-body rounded me-2 my-auto"
+                      onClick={() =>
+                        handleClickProductChange(item.id ? item.id : 0)
+                      }
+                    >
                       <img alt="ícone lixeira" src={takeNoteIcon} />
                     </button>
                     <button className="border border-0 rounded bg-body my-auto">
@@ -245,7 +300,12 @@ const Inventario: React.FC = () => {
           </tbody>
         </Table>
       ) : null}
-      <Paginacao dataSize={data.length} itemsPerPage={selectItemsPerPage} />
+      <Paginacao
+        dataSize={2}
+        itemsPerPage={Number(numberOfItemsRef.current?.value)}
+        activeItem={activeItem}
+        setActiveItem={setActiveItem}
+      />
     </Container>
   );
 };

@@ -10,9 +10,9 @@ export const ContextProductID = React.createContext<IDataContext>({
   setID: () => {},
 });
 
-const useData = () => {
+const useDataProductID = () => {
   const context = useContext(ContextProductID);
 
   return context;
 };
-export { useData };
+export { useDataProductID };

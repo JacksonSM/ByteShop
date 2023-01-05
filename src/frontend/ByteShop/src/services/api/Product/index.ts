@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { api } from "../../axios-config";
 import { IProductGet, IProductPost, IDataProductList } from "./types";
 
