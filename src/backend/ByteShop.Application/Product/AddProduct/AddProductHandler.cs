@@ -53,7 +53,7 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
             await _productRepo.AddAsync(newProduct);
             await _uow.CommitAsync();
         }
-        return new AddProductResponse(newProduct.Id, commandValidationResult);
+        return new AddProductResponse(newProduct.Id, newProduct.ValidationResult);
     }
 
     private async Task UploadImages(AddProductCommand command, Domain.Entities.Product newProduct)

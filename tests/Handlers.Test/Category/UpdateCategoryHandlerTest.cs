@@ -1,5 +1,4 @@
-﻿using ByteShop.Application.CommandHandlers.Category;
-using ByteShop.Application.Commands.Category;
+﻿using ByteShop.Application.Category.UpdateCategory;
 using ByteShop.Exceptions;
 using FluentAssertions;
 using Utilities.Entities;

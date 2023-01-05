@@ -1,4 +1,4 @@
-﻿using ByteShop.Application.CommandHandlers.Category;
+﻿using ByteShop.Application.Category.AddCategory;
 using ByteShop.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;

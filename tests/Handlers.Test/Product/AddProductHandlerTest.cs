@@ -1,6 +1,5 @@
-﻿using ByteShop.Application.CommandHandlers.Product;
+﻿using ByteShop.Application.Product.AddProduct;
 using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Mapper;
@@ -20,7 +19,7 @@ public class AddProductHandlerTest
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
 
-        response.IsValid.Should().BeTrue();
+        response.ValidationResult.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -33,8 +32,8 @@ public class AddProductHandlerTest
 
         var response = await handler.Handle(command, cts.Token);
 
-        response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+        response.ValidationResult.IsValid.Should().BeFalse();
+        response.ValidationResult.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 
@@ -57,7 +56,7 @@ public class AddProductHandlerTest
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
 
-        response.IsValid.Should().BeTrue();
+        response.ValidationResult.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension));
@@ -79,7 +78,7 @@ public class AddProductHandlerTest
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
 
-        response.IsValid.Should().BeTrue();
+        response.ValidationResult.IsValid.Should().BeTrue();
     }
 
     [Fact]
@@ -102,7 +101,7 @@ public class AddProductHandlerTest
 
         var response = await handler.Handle(command, cts.Token);
 
-        response.IsValid.Should().BeTrue();
+        response.ValidationResult.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension),Moq.Times.Once);

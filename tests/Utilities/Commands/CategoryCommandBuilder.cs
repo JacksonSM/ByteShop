@@ -1,5 +1,6 @@
 ﻿using Bogus;
-using ByteShop.Application.Commands.Category;
+using ByteShop.Application.Category.AddCategory;
+using ByteShop.Application.Category.UpdateCategory;
 
 namespace Utilities.Commands;
 public class CategoryCommandBuilder

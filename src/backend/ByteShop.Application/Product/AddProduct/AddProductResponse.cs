@@ -12,7 +12,7 @@ public class AddProductResponse
     }
     public AddProductResponse(int? productId, ValidationResult validationResult)
     {
-        productId = productId == 0 ? null : productId;
+        ProductId = productId == 0 ? null : productId;
         ValidationResult = validationResult;
     }
 }

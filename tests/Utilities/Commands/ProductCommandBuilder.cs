@@ -1,5 +1,6 @@
 ﻿using Bogus;
-using ByteShop.Application.Commands.Product;
+using ByteShop.Application.Product.AddProduct;
+using ByteShop.Application.Product.UpdateProduct;
 
 namespace Utilities.Commands;
 public class ProductCommandBuilder

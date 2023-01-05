@@ -1,4 +1,4 @@
-﻿using ByteShop.Application.Commands.Validations.User;
+﻿using ByteShop.Application.User.RegisterUser;
 using ByteShop.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;

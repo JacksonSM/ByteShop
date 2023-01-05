@@ -1,4 +1,4 @@
-﻿using ByteShop.Application.CommandHandlers.Product;
+﻿using ByteShop.Application.Product.UpdateProduct;
 using ByteShop.Exceptions;
 using FluentAssertions;
 using Utilities.Commands;
