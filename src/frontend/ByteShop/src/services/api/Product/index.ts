@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../axios-config";
-import { IProductGet, IProductPost, IDataProductList } from "./types";
+import { IProductGet, IProductPost, IResponseProduct } from "./types";
 
 type IParameters = {
   [key: string]: IProductGet;
@@ -9,7 +9,7 @@ type IParameters = {
 
 async function get(
   parameters: IParameters | ""
-): Promise<IDataProductList | Error> {
+): Promise<IResponseProduct | Error> {
   try {
     let queryString = "";
 
@@ -19,7 +19,7 @@ async function get(
     queryString = queryString.slice(0, -1); // remove o último "&"
 
     const { data } = await api.get(`product?${queryString}`);
-    
+
     if (data) {
       return data;
     }
@@ -29,7 +29,7 @@ async function get(
   }
 }
 
-async function getById(id: number): Promise<IProductGet |Error> {
+async function getById(id: number): Promise<IProductGet | Error> {
   try {
     const { data } = await api.get(`product/${id}`);
 
@@ -42,28 +42,11 @@ async function getById(id: number): Promise<IProductGet |Error> {
   }
 }
 
-async function post({ ...attribute }: IProductPost): Promise<any | Error> {
-  const values: IProductPost | any = {
-    name: attribute.name,
-    description: attribute.description,
-    sku: attribute.sku,
-    price: attribute.price,
-    costPrice: attribute.costPrice,
-    stock: attribute.stock,
-    warranty: attribute.warranty,
-    brand: attribute.brand,
-    weight: attribute.weight,
-    height: attribute.weight,
-    length: attribute.length,
-    width: attribute.width,
-    categoryId: attribute.categoryId,
-    mainImageBase64: attribute.mainImageBase64,
-    secondaryImagesBase64: attribute.secondaryImagesBase64,
-  };
+async function post(parameters: IProductPost): Promise<IResponseProduct | Error> {
   try {
-    const { data } = await api.post("product", values);
+    const { data } = await api.post("product", parameters);
     if (data) {
-      return { data };
+      return data;
     }
     return new Error("Erro ao cadastrar o produto");
   } catch (error) {

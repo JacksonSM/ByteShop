@@ -211,7 +211,10 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
           <Button variant="warning" onClick={() => setCategoryChange(true)}>
             Alterar
           </Button>
-          <Button variant="danger" onClick={() => handleDelete(modalInfo.id)}>
+          <Button
+            variant="danger"
+            onClick={() => handleDelete(Number(modalInfo.id))}
+          >
             Deletar
           </Button>
         </Modal.Footer>

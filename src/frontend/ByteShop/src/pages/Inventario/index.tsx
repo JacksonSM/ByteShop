@@ -17,7 +17,7 @@ import {
   Table,
 } from "react-bootstrap";
 import { Product } from "../../services/api/Product";
-import { IProductGet, IDataProductList } from "services/api/Product/types";
+import { IProductGet, IResponseProduct } from "services/api/Product/types";
 import { useNavigate } from "react-router-dom";
 import { useDataProductID } from "../../components/context";
 
@@ -60,7 +60,7 @@ const Inventario: React.FC = () => {
 
   async function getActiveCategories() {
     let set: any = new Set();
-    const value: IDataProductList | Error = await Product.get("");
+    const value: IResponseProduct | Error = await Product.get("");
     value instanceof Error
       ? setShowAlert(true)
       : value.content.map((item: IProductGet) => set.add(item.category?.name));
