@@ -33,9 +33,9 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
         total += AddSecondaryImageBase64?.Length ?? 0;
         return total;
     }
-    public bool IsValid(Domain.Entities.Product product, bool IsThereCategory)
+    public bool IsValid(Domain.Entities.Product product, Domain.Entities.Category category)
     {
-        var validator = new UpdateProductCommandValidation(IsThereCategory, product);
+        var validator = new UpdateProductCommandValidation(category, product);
         ValidationResult = validator.Validate(this);
         return ValidationResult.IsValid;
     }
