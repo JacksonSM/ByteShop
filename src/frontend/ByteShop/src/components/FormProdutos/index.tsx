@@ -67,7 +67,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
   }, []);
 
   useEffect(() => {
-    if (changeData !== null) {
+    if ((changeData !== null) && (location.pathname == "/alteracao-de-produtos")) {
       skuRef.current!.value = String(changeData.sku);
       nameRef.current!.value = String(changeData.name);
       brandRef.current!.value = String(changeData.brand);
@@ -99,7 +99,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       costPriceRef.current!.value = "";
       priceRef.current!.value = "";
       stockRef.current!.value = "";
-      location.pathname === "/ateracao-de-produtos" && rota("/");
+      location.pathname === "/alteracao-de-produtos" && rota("/");
     }
   }, [changeData]);
 

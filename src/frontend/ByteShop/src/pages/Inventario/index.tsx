@@ -84,7 +84,7 @@ const Inventario: React.FC = () => {
 
   function handleClickProductChange(id: number) {
     setID(id);
-    rota("/ateracao-de-produtos");
+    rota("/alteracao-de-produtos");
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
