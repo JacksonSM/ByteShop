@@ -109,7 +109,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
                 <option
                   key={0}
                   className="parent-class-item parent-class-item--empty "
-                ></option>
+                >Categoria Principal</option>
                 {validParentCategs(allCategories).map((item, index) => (
                   <option
                     id={`categ${item.id}`}
