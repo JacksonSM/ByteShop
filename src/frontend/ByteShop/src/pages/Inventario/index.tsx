@@ -105,7 +105,11 @@ const Inventario: React.FC = () => {
     nameRef.current!.value = "";
     brandRef.current!.value = "";
     categRef.current!.value = "";
-    getData("");
+    getData({
+      itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
+      actualPage: { actualPage: Number(activeItem) },
+    });
+    getActiveCategories();
   }
 
   return (
