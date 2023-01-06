@@ -1,4 +1,4 @@
-export interface IProductGet {
+interface IProduct {
   id?: number;
   sku?: string;
   name?: string;
@@ -6,43 +6,41 @@ export interface IProductGet {
   price?: number;
   costPrice?: number;
   brand?: string;
-  weight?:  number,
-  height?:  number,
-  length?:  number,
-  width?: number,
-  mainImageUrl?: string;
-  secondaryImageUrl?: Array<string>;
-  category?: {
-    id: number,
-    name: string,
-    parentCategoryId?: number;
-  }
-  pagination?: {
-    actualPage: number,
-    itemsPerPage: number,
-    itemsTotal: number,
-    totalPage: number
-  }
-
+  weight?: number;
+  height?: number;
+  length?: number;
+  width?: number;
   warranty?: number;
   stock?: number;
-  actualPage?: number;
-  itemsPerPage?: number;
+}
+
+export interface IProductGet extends IProduct {
+  mainImageUrl?: string;
+  secondaryImageUrl?: Array<string> | null;
+  category?: {
+    id: number;
+    name: string;
+    parentCategoryId?: number;
+  };
+  pagination?: {
+    actualPage: number;
+    itemsPerPage: number;
+    itemsTotal: number;
+    totalPage: number;
+  } | null;
   createdOn?: Date;
 }
 
-
-export interface IDataProductList {
+export interface IResponseProduct {
   content: IProductGet[];
+  productId?: number;
   pagination?: {
-    actualPage: number,
-    itemsPerPage: number,
-    itemsTotal: number,
-    totalPage: number,
-  }
+    actualPage: number;
+    itemsPerPage: number;
+    itemsTotal: number;
+    totalPage: number;
+  };
 }
-
-
 
 export interface IImgsJson {
   id?: string;
@@ -50,19 +48,7 @@ export interface IImgsJson {
   extension: string;
 }
 
-export interface IProductPost {
-  name: string;
-  description: string;
-  sku: string;
-  price: number;
-  costPrice: number;
-  stock: number;
-  warranty: number;
-  brand: string;
-  weight: number;
-  height: number;
-  length: number;
-  width: number;
+export interface IProductPost extends IProduct {
   categoryId: number;
   mainImageBase64: IImgsJson;
   secondaryImagesBase64: IImgsJson[];

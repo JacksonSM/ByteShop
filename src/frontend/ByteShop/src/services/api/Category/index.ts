@@ -1,18 +1,13 @@
 import { api } from "../../axios-config";
-import { Icategory, IcategoryPutAndpost } from "./types";
+import { Icategory } from "./types";
 import { AxiosError } from "axios";
 
-async function post({
-  name,
-  parentCategoryId,
-}: IcategoryPutAndpost): Promise<IcategoryPutAndpost | Error | number> {
-  const parameters: IcategoryPutAndpost = {
-    name: name,
-    parentCategoryId: parentCategoryId,
-  };
-
+async function post(
+  parameters: Icategory
+): Promise<Icategory | Error | number> {
+  const { name, parentCategoryId } = parameters;
   try {
-    const { status } = await api.post("category", parameters);
+    const { status } = await api.post("category", { name, parentCategoryId });
 
     if (status) {
       return status;
@@ -23,15 +18,10 @@ async function post({
   }
 }
 
-async function put({
-  id,
-  name,
-  parentCategoryId,
-}: Icategory): Promise<Icategory[] | Error | number> {
-  const parameters: IcategoryPutAndpost = {
-    name: name,
-    parentCategoryId: parentCategoryId,
-  };
+async function put(
+  parameters: Icategory
+): Promise<Icategory[] | Error | number> {
+  const { id } = parameters;
 
   try {
     const { status } = await api.put(`category/${id}`, parameters);
@@ -58,7 +48,7 @@ async function getAll(): Promise<Icategory[] | Error> {
   }
 }
 
-async function getById(id: number): Promise<any |Error> {
+async function getById(id: number): Promise<any | Error> {
   try {
     const { status } = await api.delete(`category/${id}`);
 

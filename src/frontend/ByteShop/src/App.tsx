@@ -30,7 +30,7 @@ function App() {
               element={<CadastroProduto />}
             />
             <Route
-              path={"/ateracao-de-produtos"}
+              path={"/alteracao-de-produtos"}
               element={<AlteracaoProduto />}
             />
             <Route path={"/sucess-submit"} element={<SucessSubmit />} />
