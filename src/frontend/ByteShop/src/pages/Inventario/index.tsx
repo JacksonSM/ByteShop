@@ -26,6 +26,7 @@ const Inventario: React.FC = () => {
   const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
   const [activeItem, setActiveItem] = useState(1);
   const [data, setData] = useState<any>([]);
+  const [itemsTotal,setItemsTotal] = useState(0);
   const { id, setID } = useDataProductID();
 
   const numberOfItemsRef = useRef<HTMLSelectElement>(null);
@@ -52,6 +53,7 @@ const Inventario: React.FC = () => {
       setShowAlert(true);
       setData(false);
     } else {
+      value.pagination && setItemsTotal(value.pagination.itemsTotal)
       setData(value.content);
       setShowAlert(false);
     }
@@ -68,16 +70,14 @@ const Inventario: React.FC = () => {
     return;
   }
 
-  useEffect(() => {
-    getData("");
-    getActiveCategories();
-  }, []);
 
+  
   useEffect(() => {
     getData({
       itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
       actualPage: { actualPage: Number(activeItem) },
     });
+    getActiveCategories();
   }, [activeItem]);
 
   function handleInputNumberOfItems() {}
@@ -192,8 +192,7 @@ const Inventario: React.FC = () => {
             size="sm"
             title="escolha a quantidade de itens por página"
           >
-            <option>1</option>
-            <option>3</option>
+            <option>10</option>
             <option>25</option>
             <option>50</option>
           </FormSelect>
@@ -301,7 +300,7 @@ const Inventario: React.FC = () => {
         </Table>
       ) : null}
       <Paginacao
-        dataSize={2}
+        dataSize={itemsTotal}
         itemsPerPage={Number(numberOfItemsRef.current?.value)}
         activeItem={activeItem}
         setActiveItem={setActiveItem}
