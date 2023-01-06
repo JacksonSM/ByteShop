@@ -24,7 +24,7 @@ public class CategoryTest
     {
         var oldFatherCategory = CategoryBuilder.BuildCategoryWithoutLevel();
 
-        var category = new ByteShop.Domain.Entities.Category("Fonte", oldFatherCategory);
+        var category = CategoryBuilder.BuildCategoryWithoutLevel(oldFatherCategory);
 
         var newParentCategory = CategoryBuilder.BuildCategoryWithoutLevel();
 

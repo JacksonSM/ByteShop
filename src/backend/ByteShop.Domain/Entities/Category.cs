@@ -31,7 +31,6 @@ public class Category : Entity, IAggregateRoot
         if (parentCategory is not null)
         {
             Name = name;
-            ParentCategory = parentCategory;
             ParentCategoryId = parentCategory.Id;
             CategoryLevel = parentCategory.CategoryLevel + 1;
         }
@@ -47,7 +46,7 @@ public class Category : Entity, IAggregateRoot
 
         if (newParentCategory is not null)
         {
-            if (ParentCategory is null)
+            if (ParentCategoryId is null || ParentCategoryId == 0)
             {
                 AddValidationError("CategoryLevel", ResourceDomainMessages.ADD_PARENT_CATEGORY_IN_LEVEL_1_CATEGORY);
                 return;
