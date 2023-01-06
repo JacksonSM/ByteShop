@@ -26,9 +26,9 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
     public async Task<ValidationResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
         var product = await _productRepo.GetByIdAsync(command.Id);
-        var IsThereCategory = await _categoryRepo.ExistsById(command.CategoryId);
+        var category = await _categoryRepo.GetByIdAsync(command.CategoryId);
 
-        if (!command.IsValid(product, IsThereCategory))
+        if (!command.IsValid(product, category))
             return command.ValidationResult;
 
         product.Update
@@ -45,7 +45,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
                 height: command.Height,
                 length: command.Length,
                 width: command.Width,
-                categoryId: command.CategoryId
+                category: category
             );
 
         if (product.IsValid())

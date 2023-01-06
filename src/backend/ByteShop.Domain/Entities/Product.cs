@@ -52,7 +52,7 @@ public class Product : Entity, IAggregateRoot
     string name, string description, string sku,
     decimal price, decimal costPrice, int stock,
     int warranty, string brand, float weight,
-    float height, float length, float width, int categoryId)
+    float height, float length, float width, Category category)
     {
         Name = name;
         Description = description;
@@ -67,8 +67,12 @@ public class Product : Entity, IAggregateRoot
         Length = length;
         Width = width;
 
-        if (categoryId != 0)
-            CategoryId = categoryId;
+        if (category is not null)
+        {
+            CategoryId = category.Id;
+            Category = category;
+        }
+
     }
 
     public void SetMainImage(string imageUrl)

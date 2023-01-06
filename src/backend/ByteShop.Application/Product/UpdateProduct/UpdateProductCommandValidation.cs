@@ -7,7 +7,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 {
     private const int MAXIMUM_AMOUNT_OF_IMAGES = 5;
 
-    public UpdateProductCommandValidation(bool IsThereCategory, Domain.Entities.Product product)
+    public UpdateProductCommandValidation(Domain.Entities.Category category, Domain.Entities.Product product)
     {
         RuleFor(x => x.SetMainImageBase64)
             .Must(x => x is null)
@@ -25,7 +25,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             if (product == null)
                 context.AddFailure("Id", ResourceErrorMessages.PRODUCT_DOES_NOT_EXIST);
 
-            if (!IsThereCategory)
+            if (category is null)
                 context.AddFailure("CategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
         });
 
