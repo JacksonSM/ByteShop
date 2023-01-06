@@ -9,8 +9,19 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 
     public UpdateProductCommandValidation(bool IsThereCategory, Domain.Entities.Product product)
     {
+        RuleFor(x => x.SetMainImageBase64)
+            .Must(x => x is null)
+            .When(x => !string.IsNullOrEmpty(x.SetMainImageUrl))
+            .WithMessage(ResourceErrorMessages.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+
+        RuleFor(x => x.SetMainImageUrl)
+            .Must(x => string.IsNullOrEmpty(x))
+            .When(x => x.SetMainImageBase64 is null)
+            .WithMessage(ResourceErrorMessages.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+
         RuleFor(x => x).Custom((command, context) =>
         {
+
             if (product == null)
                 context.AddFailure("Id", ResourceErrorMessages.PRODUCT_DOES_NOT_EXIST);
 

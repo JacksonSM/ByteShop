@@ -24,7 +24,7 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Vali
             command.AddValidationError("ID", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
 
         if (!command.IsValid())
-            return command.Errors;
+            return command.ValidationResult;
 
         Domain.Entities.Category newParentCategory = null;
         if (command.ParentCategoryId != 0)

@@ -293,5 +293,14 @@ namespace ByteShop.Exceptions {
                 return ResourceManager.GetString("PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Falha ao envia imagem principal. envie como base64 ou link.
+        /// </summary>
+        public static string UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE", resourceCulture);
+            }
+        }
     }
 }

@@ -12,8 +12,8 @@ public class UpdateCategoryCommand : CommandBase<ValidationResult>
         Id = id;
     }
 
-    public override bool IsValid()
+    public bool IsValid()
     {
-        return Errors.IsValid;
+        return ValidationResult.IsValid;
     }
 }
