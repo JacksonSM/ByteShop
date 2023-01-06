@@ -195,4 +195,7 @@
   <data name="PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
     <value>O campo largura deve ser maior que zero.</value>
   </data>
+  <data name="UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE" xml:space="preserve">
+    <value>Falha ao envia imagem principal. envie como base64 ou link</value>
+  </data>
 </root>

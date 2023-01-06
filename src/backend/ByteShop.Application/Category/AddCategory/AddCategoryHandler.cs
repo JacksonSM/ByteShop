@@ -32,7 +32,7 @@ public class AddCategoryHandler : IRequestHandler<AddCategoryCommand, Validation
         }
 
         if (!command.IsValid())
-            return command.Errors;
+            return command.ValidationResult;
 
         if (parentCategory != null)
         {

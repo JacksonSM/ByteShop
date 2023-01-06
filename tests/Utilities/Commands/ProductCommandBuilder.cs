@@ -70,7 +70,7 @@ public class ProductCommandBuilder
             .RuleFor(c => c.Length, f => f.Random.Float(1))
             .RuleFor(c => c.CategoryId, f => f.Random.Number(500))
             .RuleFor(c => c.AddSecondaryImageBase64, imagesFaker.Generate(numberOfSecondaryImagesToAdd).ToArray())
-            .RuleFor(c => c.RemoveSecondaryImageUrl, f => f.Make(numberOfSecondaryImagesToRemove,
+            .RuleFor(c => c.RemoveImageUrl, f => f.Make(numberOfSecondaryImagesToRemove,
             () => f.Internet.Url()).ToArray());
 
         if (changeMainImage)

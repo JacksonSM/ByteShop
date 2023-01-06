@@ -28,9 +28,8 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
         var product = await _productRepo.GetByIdAsync(command.Id);
         var IsThereCategory = await _categoryRepo.ExistsById(command.CategoryId);
 
-        var commandValidationResult = command.Validate(product, IsThereCategory);
-        if (!commandValidationResult.IsValid)
-            return commandValidationResult;
+        if (!command.IsValid(product, IsThereCategory))
+            return command.ValidationResult;
 
         product.Update
             (
@@ -68,10 +67,10 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
         }
 
 
-        if (command.RemoveSecondaryImageUrl?.Length > 0)
+        if (command.RemoveImageUrl?.Length > 0)
         {
-            await _imageService.DeleteImageAsync(command.RemoveSecondaryImageUrl);
-            foreach (var url in command.RemoveSecondaryImageUrl)
+            await _imageService.DeleteImageAsync(command.RemoveImageUrl);
+            foreach (var url in command.RemoveImageUrl)
             {
                 product.RemoveSecondaryImage(url);
             }
@@ -86,6 +85,9 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
                 command.SetMainImageBase64.Extension);
 
             product.SetMainImage(mainImageUrl);
+        }else if (command.SetMainImageUrl is not null)
+        {
+            product.SetMainImage(command.SetMainImageUrl);
         }
 
         if (command.AddSecondaryImageBase64?.Length > 0)

@@ -5,17 +5,11 @@ using FluentValidation.Results;
 namespace ByteShop.Application.Product.UpdateProduct;
 public class UpdateProductCommand : ProductCommand<ValidationResult>
 {
-    public string[] RemoveSecondaryImageUrl { get; set; }
+    public string[] RemoveImageUrl { get; set; }
 
     public ImageBase64 SetMainImageBase64 { get; set; }
+    public string SetMainImageUrl { get; set; }
     public ImageBase64[] AddSecondaryImageBase64 { get; set; }
-
-    public ValidationResult Validate(Domain.Entities.Product product, bool IsThereCategory)
-    {
-        var validator = new UpdateProductCommandValidation(IsThereCategory, product);
-        return validator.Validate(this);
-    }
-
 
     /// <summary>
     /// Retorna o valor total de imagens para serem removidas, 
@@ -25,7 +19,7 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
     {
         int total = 0;
         if (SetMainImageBase64 is not null) total++;
-        total += RemoveSecondaryImageUrl?.Length ?? 0;
+        total += RemoveImageUrl?.Length ?? 0;
         return total;
     }
     /// <summary>
@@ -38,5 +32,11 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
         if (SetMainImageBase64 != null) total++;
         total += AddSecondaryImageBase64?.Length ?? 0;
         return total;
+    }
+    public bool IsValid(Domain.Entities.Product product, bool IsThereCategory)
+    {
+        var validator = new UpdateProductCommandValidation(IsThereCategory, product);
+        ValidationResult = validator.Validate(this);
+        return ValidationResult.IsValid;
     }
 }
