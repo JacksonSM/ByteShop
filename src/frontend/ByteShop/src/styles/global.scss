@@ -200,13 +200,13 @@ a {
   border-radius: 10px;
 }
 
-.category:hover {
+.main-category:hover,.sub-category:hover {
   transform: scaleX(0.95);
   --#{$prefix}badge-color: #{#38E54D};
   cursor: pointer;
 }
 
-.category:active {
+.main-category:active, .sub-category:active {
   --#{$prefix}badge-color: #{$Primary};
 }
 

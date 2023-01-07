@@ -381,12 +381,14 @@ const GerenciamentoDeCategorias: React.FC = () => {
               as="li"
               key={index}
               className="border-0 d-flex flex-column shadow my-1 opacity-hover:.75"
+              style={{ width: "min-content" }}
             >
               <Badge
                 bg="secondary"
                 id={String(subCategoryItem.id)}
-                className="category opacity-75-hover fs-5"
+                className="sub-category opacity-75-hover fs-5"
                 onClick={() => handleClick(subCategoryItem)}
+                style={{ width: "min-content" }}
               >
                 {`${prefix} ${subCategoryItem.name}`}
               </Badge>
@@ -402,8 +404,13 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-left fs-2 ms-2">Gereciamento de Categorias</h2>
-      <Form.Group className="d-flex align-items-center">
+      <h2 className="text-center fs-2 fw-bold ms-2">
+        Gereciamento de Categorias
+      </h2>
+      <Form.Group
+        className="d-flex mx-auto align-items-center"
+        style={{ width: "500px" }}
+      >
         <Form.Control
           className="search-categ m-3"
           type="text"
@@ -413,12 +420,11 @@ const GerenciamentoDeCategorias: React.FC = () => {
           style={{ maxWidth: "20rem" }}
         />
         <Button
-          className="btn-new-categories"
-          style={{ height: "fit-content" }}
+          className="btn-new-categories text-center p-1"
+          style={{ width: "fit-content", height: "fit-content" }}
           onClick={() => setShowModalAddCateg(true)}
         >
-          {" "}
-          Novas categorias
+          + categorias
         </Button>
         {showModalAddCateg && (
           <ModalCriacaoCategoria
@@ -449,7 +455,8 @@ const GerenciamentoDeCategorias: React.FC = () => {
                     <Badge
                       bg="dark"
                       id={String(mainCategoryItem.id)}
-                      className="category fs-5"
+                      className="main-category text-center fs-5"
+                      style={{ width: "min-content" }}
                       onClick={() => handleClick(mainCategoryItem)}
                     >
                       {"- " + mainCategoryItem.name}
