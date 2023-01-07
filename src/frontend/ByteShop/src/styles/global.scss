@@ -205,3 +205,10 @@ a {
 .category:active{
   --#{$prefix}badge-color: #{$Primary};
 }
+
+.btn-product-change:hover,
+.btn-product-delete:hover {
+  transform: scaleY(0.95);
+
+}
+

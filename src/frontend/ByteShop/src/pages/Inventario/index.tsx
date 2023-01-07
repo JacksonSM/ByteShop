@@ -286,14 +286,14 @@ const Inventario: React.FC = () => {
                   <td className="text-center align-middle">{item.stock} un</td>
                   <td className="text-center align-middle border">
                     <button
-                      className="border border-0 bg-body rounded me-2 my-auto"
+                      className="btn-product-change border border-0 bg-body rounded me-2 my-auto"
                       onClick={() =>
                         handleClickProductChange(item.id ? item.id : 0)
                       }
                     >
                       <img alt="ícone lixeira" src={takeNoteIcon} />
                     </button>
-                    <button className="border border-0 rounded bg-body my-auto">
+                    <button className="btn-product-delete border border-0 rounded bg-body my-auto">
                       <img alt="ícone papel e lápis" src={trashIcon} />
                     </button>
                   </td>
