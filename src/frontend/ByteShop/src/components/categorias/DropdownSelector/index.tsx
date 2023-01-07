@@ -56,6 +56,7 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
   const CustomMenu = React.forwardRef(
     (props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
       const [value, setValue] = useState("");
+      let reg = new RegExp(value, 'i')
 
       return (
         <div
@@ -74,7 +75,7 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
           <ul className="list-unstyled overflow-auto"  style={{height:" 18.75rem"}}>
             {React.Children.toArray(props.children).filter(
               (child: any) =>
-                !value || child.props.children.toLowerCase().startsWith(value)
+                !value || reg.test(child.props.children)
             )}
           </ul>
         </div>
@@ -115,10 +116,10 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
           return (
             <Dropdown.Item
               className="mb-3"
-              id={category.id.toString()}
+              id={category.id && category.id.toString() || ""}
               key={index}
               onClick={onclick}
-              eventKey={category.id.toString()}
+              eventKey={category.id && category.id.toString()}
             >
               {category.name}
             </Dropdown.Item>
