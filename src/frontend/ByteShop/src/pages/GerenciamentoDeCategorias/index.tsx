@@ -7,6 +7,7 @@ import {
   Form,
   Modal,
   Button,
+  FormControlProps,
 } from "react-bootstrap";
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
@@ -109,7 +110,9 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
                 <option
                   key={0}
                   className="parent-class-item parent-class-item--empty "
-                >Categoria Principal</option>
+                >
+                  Categoria Principal
+                </option>
                 {validParentCategs(allCategories).map((item, index) => (
                   <option
                     id={`categ${item.id}`}
@@ -296,6 +299,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
   const [showModalAddCateg, setShowModalAddCateg] = useState(false);
   const [modalInfo, SetmodalInfo] = useState<Icategory>({} as Icategory);
 
+  // ref para campo de pesquisa de categorias
+  const refSearchCateg = useRef<HTMLInputElement>(null);
+
   // functions
   function setCategories() {
     setMain(data.filter((item) => !item.parentCategoryId));
@@ -316,6 +322,27 @@ const GerenciamentoDeCategorias: React.FC = () => {
     setShowModalChanges(true);
     SetmodalInfo(values);
   };
+
+  function handleSearch() {
+    const value = String(refSearchCateg.current?.value);
+    const reg = RegExp(value, "i");
+
+    let search = data.filter((categ) => reg.test(categ.name));
+
+    setTimeout(() => {
+      setMain(search.filter((item) => !item.parentCategoryId));
+      setSub1(
+        data.filter((item) =>
+          main.map((lvl1Item) => lvl1Item.id === item.parentCategoryId)
+        )
+      );
+      setSub2(
+        data.filter((item) =>
+          sub2.map((lvl2Item) => lvl2Item.id === item.parentCategoryId)
+        )
+      );
+    }, 500);
+  }
 
   // useEffects
   useEffect(() => {
@@ -380,7 +407,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
         <Form.Control
           className="search-categ m-3"
           type="text"
-          placeholder="Digite uma Categoria.."
+          ref={refSearchCateg}
+          placeholder="Digite o nome da categoria principal"
+          onInput={() => handleSearch()}
           style={{ maxWidth: "20rem" }}
         />
         <Button
