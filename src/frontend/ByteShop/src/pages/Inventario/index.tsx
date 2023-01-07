@@ -224,7 +224,7 @@ const Inventario: React.FC = () => {
         </FormGroup>
       </Form>
       <h2 className=" m-1 text-end">
-        {data.length > 0 ? data.length : 0}{" "}
+        {itemsTotal > 0 ? itemsTotal : 0}{" "}
         {`resultado${pluralForm} encontrado${pluralForm}`}
       </h2>
       {showAlert ? (
