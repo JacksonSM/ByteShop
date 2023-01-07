@@ -413,6 +413,7 @@ const GerenciamentoDeCategorias: React.FC = () => {
           style={{ maxWidth: "20rem" }}
         />
         <Button
+          className="btn-new-categories"
           style={{ height: "fit-content" }}
           onClick={() => setShowModalAddCateg(true)}
         >
