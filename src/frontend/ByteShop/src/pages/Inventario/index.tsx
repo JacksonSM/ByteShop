@@ -113,7 +113,7 @@ const Inventario: React.FC = () => {
   }
 
   return (
-    <Container fluid className="vw-100">
+    <Container fluid>
       <Breadcrumb className="d-flex justify-content-center">
         <BreadcrumbItem href="/">Início</BreadcrumbItem>
         <BreadcrumbItem href="/inventario" active>
