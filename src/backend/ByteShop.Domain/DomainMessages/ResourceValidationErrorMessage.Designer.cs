@@ -88,6 +88,15 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Valor inválido! Não é permitido um preço de custo menor que zero..
+        /// </summary>
+        public static string COSTPRICE_LESS_THAN_ZERO {
+            get {
+                return ResourceManager.GetString("COSTPRICE_LESS_THAN_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo CPF é obrigatorio..
         /// </summary>
         public static string EMPTY_CPF {
@@ -196,6 +205,15 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Valor inválido! Não é permitido um preço menor que zero..
+        /// </summary>
+        public static string PRICE_LESS_THAN_ZERO {
+            get {
+                return ResourceManager.GetString("PRICE_LESS_THAN_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo marca é obrigatório..
         /// </summary>
         public static string PRODUCT_BRAND_EMPTY {
@@ -205,7 +223,7 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O campo marca suporta apenas 60 caracteres..
+        ///   Looks up a localized string similar to O campo marca suporta apenas 30 caracteres..
         /// </summary>
         public static string PRODUCT_BRAND_MAXIMUMLENGTH {
             get {
@@ -300,6 +318,15 @@ namespace ByteShop.Domain.DomainMessages {
         public static string UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE {
             get {
                 return ResourceManager.GetString("UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valor inválido! Não é permitido que a garantia seja menor que zero..
+        /// </summary>
+        public static string WARRANTY_LESS_THAN_ZERO {
+            get {
+                return ResourceManager.GetString("WARRANTY_LESS_THAN_ZERO", resourceCulture);
             }
         }
     }

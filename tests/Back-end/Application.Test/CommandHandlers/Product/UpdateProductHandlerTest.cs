@@ -15,7 +15,7 @@ public class UpdateProductHandlerTest
     public async void Sucesso()
     {
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
         command.CategoryId = category.Id;
@@ -31,7 +31,7 @@ public class UpdateProductHandlerTest
     public async void CategoriaInexistente()
     {
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
         command.CategoryId = category.Id + 3;
@@ -48,7 +48,7 @@ public class UpdateProductHandlerTest
     [Fact]
     public async void ImageServiceRecebendoDadosCorretos()
     {
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
@@ -84,7 +84,7 @@ public class UpdateProductHandlerTest
     [Fact]
     public async void OperacaoOKProdutoComNenhumaImagem()
     {
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild(
             changeMainImage: false,
@@ -103,7 +103,7 @@ public class UpdateProductHandlerTest
     [Fact]
     public async void ProdutoApenasComAImagemPrincipal()
     {
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         command.SetId(productToUpdate.Id);
@@ -132,7 +132,7 @@ public class UpdateProductHandlerTest
     [Fact]
     public async void ProdutoInexistente()
     {
-        var productToUpdate = ProductBuilder.ProductBuild();
+        var productToUpdate = ProductBuilder.BuildProduct();
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         productToUpdate.Id = 3;

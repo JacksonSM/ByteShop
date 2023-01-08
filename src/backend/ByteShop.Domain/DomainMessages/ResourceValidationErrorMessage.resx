@@ -126,6 +126,9 @@
   <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 50 caracteres.</value>
   </data>
+  <data name="COSTPRICE_LESS_THAN_ZERO" xml:space="preserve">
+    <value>Valor inválido! Não é permitido um preço de custo menor que zero.</value>
+  </data>
   <data name="EMPTY_CPF" xml:space="preserve">
     <value>O campo CPF é obrigatorio.</value>
   </data>
@@ -162,11 +165,14 @@
   <data name="PARENT_CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
     <value>A categoria pai não existe</value>
   </data>
+  <data name="PRICE_LESS_THAN_ZERO" xml:space="preserve">
+    <value>Valor inválido! Não é permitido um preço menor que zero.</value>
+  </data>
   <data name="PRODUCT_BRAND_EMPTY" xml:space="preserve">
     <value>O campo marca é obrigatório.</value>
   </data>
   <data name="PRODUCT_BRAND_MAXIMUMLENGTH" xml:space="preserve">
-    <value>O campo marca suporta apenas 60 caracteres.</value>
+    <value>O campo marca suporta apenas 30 caracteres.</value>
   </data>
   <data name="PRODUCT_DESCRIPTION_EMPTY" xml:space="preserve">
     <value>O campo descrição é obrigatório.</value>
@@ -197,5 +203,8 @@
   </data>
   <data name="UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE" xml:space="preserve">
     <value>Falha ao envia imagem principal. envie como base64 ou link</value>
+  </data>
+  <data name="WARRANTY_LESS_THAN_ZERO" xml:space="preserve">
+    <value>Valor inválido! Não é permitido que a garantia seja menor que zero.</value>
   </data>
 </root>

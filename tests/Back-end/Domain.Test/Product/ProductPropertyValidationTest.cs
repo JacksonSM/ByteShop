@@ -1,15 +1,17 @@
-﻿using ByteShop.Domain.Entities.Validations;
-using ByteShop.Domain.DomainMessages;
+﻿using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
-using Utilities.Commands;
+using Utilities.Entities;
 using Xunit;
 
-namespace Validators.Test.Product;
+namespace Domain.Test.Product;
 public class AddProductValidationTest
 {
+
     [Fact]
-    public void Sucesso()
+    [Trait("Product", "PropertyValidation")]
+    public void ProductValidation_CreateProductWithValidData_ShouldReturnTrue()
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
@@ -27,12 +29,18 @@ public class AddProductValidationTest
                 categoryId: 34
             );
 
-        product.IsValid().Should().BeTrue();
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void ValidarErroNomeVazio()
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyName_EmptyName_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "",
@@ -50,13 +58,20 @@ public class AddProductValidationTest
                 categoryId: 34
             );
 
-        product.IsValid().Should().BeFalse();
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_NAME_EMPTY));
     }
+
     [Fact]
-    public void ValidarErroNomeMaiorQue60Caracteres()
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyName_NameWithMoreThan60Characters_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria rappppppppppppppppppppiiiiiiiiiiiiiiiiiipppuuuuuuuuuuuuuuuuuuuuuuuuum",
@@ -74,19 +89,175 @@ public class AddProductValidationTest
                 categoryId: 34
             );
 
-        product.IsValid().Should().BeFalse();
+        //Act 
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_NAME_MAXIMUMLENGTH));
     }
 
     [Fact]
-    public void ValidarErroMarcaVazio()
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyDescription_EmptyDescription_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria ram",
+                description: "",
+                sku: "RAM-234",
+                price: 342.45m,
+                costPrice: 240.54m,
+                stock: 45,
+                warranty: 90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: 34
+            );
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_DESCRIPTION_EMPTY));
+    }
+
+    [Fact]
+    [Trait("Product", "PropertyValidation")]
+    public void PropertySKU_EmptySKU_ShouldReturnFalseWithErrorMessage()
+    {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
-                sku: "RAM-234",
+                sku: "",
+                price: 342.45m,
+                costPrice: 240.54m,
+                stock: 45,
+                warranty: 90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: 34
+            );
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_SKU_EMPTY));
+    }
+
+    [Fact]
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyPrice_PriceWithNegativeValue_ShouldReturnFalseWithErrorMessage()
+    {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria ram",
+                description: "Memoria da boa!",
+                sku: "Mem-ram",
+                price: -42.45m,
+                costPrice: 440.54m,
+                stock: 45,
+                warranty: 90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: 34
+            );
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRICE_LESS_THAN_ZERO));
+    }
+
+    [Fact]
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyCostPrice_CostPriceWithNegativeValue_ShouldReturnFalseWithErrorMessage()
+    {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria ram",
+                description: "Memoria da boa!",
+                sku: "Mem-ram",
+                price: 342.45m,
+                costPrice: -240.54m,
+                stock: 45,
+                warranty: 90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: 34
+            );
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.COSTPRICE_LESS_THAN_ZERO));
+    }
+
+    [Fact]
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyWarranty_WarrantyWithNegativeValue_ShouldReturnFalseWithErrorMessage()
+    {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria ram",
+                description: "Memoria da boa!",
+                sku: "Mem-ram",
+                price: 342.45m,
+                costPrice: 140.54m,
+                stock: 45,
+                warranty: -90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: 34
+            );
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.WARRANTY_LESS_THAN_ZERO));
+    }
+
+    [Fact]
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyBrand_EmptyBrand_ShouldReturnFalseWithErrorMessage()
+    {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria ram",
+                description: "Memoria da boa!",
+                sku: "ME-RAM-4",
                 price: 342.45m,
                 costPrice: 240.54m,
                 stock: 45,
@@ -98,14 +269,20 @@ public class AddProductValidationTest
                 width: 76,
                 categoryId: 34
             );
+        //Act
+        var result = product.IsValid();
 
-        product.IsValid().Should().BeFalse();
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_BRAND_EMPTY));
     }
+
     [Fact]
-    public void ValidarErroMarcaMaiorQue30Caracteres()
+    [Trait("Product", "PropertyValidation")]
+    public void PropertyBrand_BrandWithMoreThan30Characters_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
@@ -123,62 +300,22 @@ public class AddProductValidationTest
                 categoryId: 34
             );
 
-        product.IsValid().Should().BeFalse();
+        //Act
+        var result = product.IsValid(); 
+
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_BRAND_MAXIMUMLENGTH));
     }
 
-    [Fact]
-    public void ValidarErroDescricaoVazio()
+    [Trait("Product", "PropertyValidation")]
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-3.3f)]
+    public void PropertyWeight_WeightWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
-        var product = new ByteShop.Domain.Entities.Product
-            (
-                name: "Memoria ram",
-                description: "",
-                sku: "RAM-234",
-                price: 342.45m,
-                costPrice: 240.54m,
-                stock: 45,
-                warranty: 90,
-                brand: "GOODRAM",
-                weight: 43.56f,
-                height: 34.54f,
-                length: 65.82f,
-                width: 76,
-                categoryId: 34
-            );
-
-        product.IsValid().Should().BeFalse();
-        product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_DESCRIPTION_EMPTY));
-    }
-    [Fact]
-    public void ValidarErroSKUVazio()
-    {
-        var product = new ByteShop.Domain.Entities.Product
-            (
-                name: "Memoria ram",
-                description: "Memoria da boa!",
-                sku: "",
-                price: 342.45m,
-                costPrice: 240.54m,
-                stock: 45,
-                warranty: 90,
-                brand: "GOODRAM",
-                weight: 43.56f,
-                height: 34.54f,
-                length: 65.82f,
-                width: 76,
-                categoryId: 34
-            );
-
-        product.IsValid().Should().BeFalse();
-        product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_SKU_EMPTY));
-    }
-    [Fact]
-    public void ValidarErroPesoMenorOuIgualZero()
-    {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
@@ -189,20 +326,28 @@ public class AddProductValidationTest
                 stock: 45,
                 warranty: 90,
                 brand: "GOODRAM",
-                weight: 0,
+                weight: value,
                 height: 34.54f,
                 length: 65.82f,
                 width: 76,
                 categoryId: 34
             );
+        //Act
+        var result = product.IsValid();
 
-        product.IsValid().Should().BeFalse();
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO));
     }
-    [Fact]
-    public void ValidarErroAlturaMenorOuIgualZero()
+
+    [Trait("Product", "PropertyValidation")]
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-8.4f)]
+    public void PropertyHeight_HeightWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
@@ -214,17 +359,26 @@ public class AddProductValidationTest
                 warranty: 90,
                 brand: "GOODRAM",
                 weight: 43.56f,
-                height: 0,
+                height: value,
                 length: 65.82f,
                 width: 76,
                 categoryId: 34
             );
-        product.IsValid().Should().BeFalse();
+
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO));
     }
-    [Fact]
-    public void ValidarErroLarguraMenorOuIgualZero()
+
+    [Trait("Product", "PropertyValidation")]
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-56.34f)]
+    public void PropertyWidth_WidthWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
         var product = new ByteShop.Domain.Entities.Product
             (
@@ -239,16 +393,22 @@ public class AddProductValidationTest
                 weight: 43.56f,
                 height: 34.54f,
                 length: 65.82f,
-                width: 0,
+                width: value,
                 categoryId: 34
             );
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO));
     }
-    [Fact]
-    public void ValidarErroComprimentoMenorOuIgualZero()
+
+
+    [Trait("Product", "PropertyValidation")]
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-43.3f)]
+    public void PropertyLength_LengthWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
+        //Arrange
         var product = new ByteShop.Domain.Entities.Product
             (
                 name: "Memoria ram",
@@ -261,14 +421,18 @@ public class AddProductValidationTest
                 brand: "GOODRAM",
                 weight: 43.56f,
                 height: 34.54f,
-                length: 0,
+                length: value,
                 width: 76,
                 categoryId: 34
             );
 
-        product.IsValid().Should().BeFalse();
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
             .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO));
     }
-  
+
 }

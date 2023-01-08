@@ -4,7 +4,7 @@ using ByteShop.Domain.Entities;
 namespace Utilities.Entities;
 public class ProductBuilder
 {
-    public static Product ProductBuild(int numberSecondaryImages = 3)
+    public static Product BuildProduct(int numberSecondaryImages = 3)
     {
         return new Faker<Product>()
             .RuleFor(c => c.Id, f => f.Random.Number(0, 500))

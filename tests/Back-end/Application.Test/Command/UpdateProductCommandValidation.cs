@@ -3,7 +3,7 @@ using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
 
-namespace Validators.Test.Product;
+namespace Application.Test.Command;
 public class UpdateProductCommandValidation
 {
     [Fact]

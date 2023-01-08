@@ -4,7 +4,7 @@ using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
 
-namespace Validators.Test.User;
+namespace Application.Test.Command.User;
 public class RegisterCustomerValidationTest
 {
     [Fact]

@@ -27,10 +27,16 @@ public class ProductValidation : AbstractValidator<Product>
             .WithMessage(ResourceValidationErrorMessage.PRODUCT_SKU_EMPTY);
 
         RuleFor(c => c.Price)
-            .PrecisionScale(18, 2, false);
+            .GreaterThanOrEqualTo(0)
+            .WithMessage(ResourceValidationErrorMessage.PRICE_LESS_THAN_ZERO);
 
         RuleFor(c => c.CostPrice)
-            .PrecisionScale(18, 2, false);
+            .GreaterThanOrEqualTo(0)
+            .WithMessage(ResourceValidationErrorMessage.COSTPRICE_LESS_THAN_ZERO);
+
+        RuleFor(c => c.Warranty)
+            .GreaterThanOrEqualTo(0)
+            .WithMessage(ResourceValidationErrorMessage.WARRANTY_LESS_THAN_ZERO);
 
         RuleFor(c => c.Weight)
             .GreaterThanOrEqualTo(1)
