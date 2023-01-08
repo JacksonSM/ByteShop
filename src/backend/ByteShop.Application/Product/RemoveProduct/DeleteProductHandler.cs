@@ -1,5 +1,5 @@
-﻿using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
+using ByteShop.Domain.Interfaces.Repositories;
 using FluentValidation.Results;
 using MediatR;
 
@@ -20,7 +20,7 @@ public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, Valida
         var product = await _productRepo.GetByIdAsync(command.Id);
 
         if (product is null)
-            product.AddValidationError("Id", ResourceErrorMessages.PRODUCT_DOES_NOT_EXIST);
+            product.AddValidationError("Id", ResourceValidationErrorMessage.PRODUCT_DOES_NOT_EXIST);
 
         if (product.IsValid())
         {

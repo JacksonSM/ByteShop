@@ -1,5 +1,4 @@
-﻿using ByteShop.Exceptions.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
@@ -16,11 +15,6 @@ public class ExceptionsFilter : IExceptionFilter
 
     public void OnException(ExceptionContext context)
     {
-        if (context.Exception is DomainExecption)
-        {
-            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            context.Result = new ObjectResult(new { ErrorMessage = context.Exception.Message });
-        }
         HandleUnknownError(context);
     }
 

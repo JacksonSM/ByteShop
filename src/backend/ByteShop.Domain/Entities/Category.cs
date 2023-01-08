@@ -1,8 +1,7 @@
-﻿using ByteShop.Domain.Emuns;
+﻿using ByteShop.Domain.DomainMessages;
+using ByteShop.Domain.Emuns;
 using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
-using ByteShop.Exceptions;
-using System.Reflection.Emit;
 
 namespace ByteShop.Domain.Entities;
 public class Category : Entity, IAggregateRoot
@@ -36,7 +35,7 @@ public class Category : Entity, IAggregateRoot
         }
         else
         {
-            AddValidationError("ParentCategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
+            AddValidationError("ParentCategoryId", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
         }
     }
 

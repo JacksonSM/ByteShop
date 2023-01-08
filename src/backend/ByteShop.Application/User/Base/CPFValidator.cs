@@ -1,4 +1,4 @@
-﻿using ByteShop.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
 using FluentValidation;
 
 namespace ByteShop.Application.User.Base;
@@ -8,14 +8,14 @@ public class CPFValidator : AbstractValidator<string>
     {
         RuleFor(c => c)
             .NotEmpty()
-            .WithMessage(ResourceErrorMessages.EMPTY_CPF);
+            .WithMessage(ResourceValidationErrorMessage.EMPTY_CPF);
 
         When(c => !string.IsNullOrWhiteSpace(c), () =>
         {
             RuleFor(c => c).Custom((cpf, context) =>
             {
                 if (!IsValidCpf(cpf))
-                    context.AddFailure(ResourceErrorMessages.INVALID_CPF);
+                    context.AddFailure(ResourceValidationErrorMessage.INVALID_CPF);
             });
         });
     }

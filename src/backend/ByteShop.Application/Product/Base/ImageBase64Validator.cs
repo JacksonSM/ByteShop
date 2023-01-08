@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Product.AddProduct;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentValidation;
 using System.Text.RegularExpressions;
 
@@ -22,24 +22,24 @@ public class ImageBase64Validation : AbstractValidator<ImageBase64>
                 }
                 catch
                 {
-                    context.AddFailure(ResourceErrorMessages.INVALID_BASE64);
+                    context.AddFailure(ResourceValidationErrorMessage.INVALID_BASE64);
                 }
                 if (imageBytes.Length > MAXIMUM_IMAGE_SIZE_IN_BYTES)
-                    context.AddFailure(ResourceErrorMessages.MAX_IMAGE_SIZE);
+                    context.AddFailure(ResourceValidationErrorMessage.MAX_IMAGE_SIZE);
             });
 
 
             RuleFor(c => c.Extension).Custom((extension, context) =>
             {
                 if (!ValidateExtension(extension))
-                    context.AddFailure(ResourceErrorMessages.IMAGE_EXTENSION);
+                    context.AddFailure(ResourceValidationErrorMessage.IMAGE_EXTENSION);
             });
         }).Otherwise(() =>
         {
             RuleFor(c => c).Custom((image, context) =>
             {
                 if (string.IsNullOrEmpty(image.Base64) || string.IsNullOrEmpty(image.Base64))
-                    context.AddFailure(ResourceErrorMessages.INCORRECT_IMAGE);
+                    context.AddFailure(ResourceValidationErrorMessage.INCORRECT_IMAGE);
             });
         });
     }

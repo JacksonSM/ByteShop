@@ -1,5 +1,5 @@
 ﻿using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentValidation.Results;
 using MediatR;
 
@@ -21,7 +21,7 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Vali
     {
         var category = await _categoryRepo.GetByIdWithAssociationAsync(command.Id);
         if (category is null)
-            command.AddValidationError("ID", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
+            command.AddValidationError("ID", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
 
         if (!command.IsValid())
             return command.ValidationResult;
@@ -32,7 +32,7 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Vali
             newParentCategory = await _categoryRepo.GetByIdAsync(command.ParentCategoryId);
 
             if (newParentCategory is null)
-                category.AddValidationError("ParentCategory", ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST);
+                category.AddValidationError("ParentCategory", ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST);
         }
 
         category.Update(command.Name, newParentCategory);

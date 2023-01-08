@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Product.Base;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentValidation;
 
 namespace ByteShop.Application.Product.UpdateProduct;
@@ -12,21 +12,21 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         RuleFor(x => x.SetMainImageBase64)
             .Must(x => x is null)
             .When(x => !string.IsNullOrEmpty(x.SetMainImageUrl))
-            .WithMessage(ResourceErrorMessages.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+            .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
         RuleFor(x => x.SetMainImageUrl)
             .Must(x => string.IsNullOrEmpty(x))
             .When(x => x.SetMainImageBase64 is null)
-            .WithMessage(ResourceErrorMessages.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+            .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
         RuleFor(x => x).Custom((command, context) =>
         {
 
             if (product == null)
-                context.AddFailure("Id", ResourceErrorMessages.PRODUCT_DOES_NOT_EXIST);
+                context.AddFailure("Id", ResourceValidationErrorMessage.PRODUCT_DOES_NOT_EXIST);
 
             if (category is null)
-                context.AddFailure("CategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
+                context.AddFailure("CategoryId", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
         });
 
         RuleFor(x => x.SetMainImageBase64).SetValidator(new ImageBase64Validation());
@@ -38,11 +38,11 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             {
                 if (string.IsNullOrEmpty(product?.MainImageUrl)
                     && command.SetMainImageBase64 is null)
-                    context.AddFailure(ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE);
+                    context.AddFailure(ResourceValidationErrorMessage.MUST_HAVE_A_MAIN_IMAGE);
 
                 int total = GetTotalAmountOfImages(product, command);
                 if (total > MAXIMUM_AMOUNT_OF_IMAGES)
-                    context.AddFailure(ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES);
+                    context.AddFailure(ResourceValidationErrorMessage.MAXIMUM_AMOUNT_OF_IMAGES);
 
             });
         });

@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Product.Base;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentValidation;
 
 namespace ByteShop.Application.Product.AddProduct;
@@ -14,7 +14,7 @@ public class AddProductCommandValidation : AbstractValidator<AddProductCommand>
         RuleFor(x => x).Custom((command, context) =>
         {
             if (!IsThereCategory)
-                context.AddFailure("CategoryId", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
+                context.AddFailure("CategoryId", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
         });
 
         RuleFor(c => c.MainImageBase64).SetValidator(new ImageBase64Validation());
@@ -25,12 +25,12 @@ public class AddProductCommandValidation : AbstractValidator<AddProductCommand>
             RuleFor(x => x).Custom((command, context) =>
             {
                 if (command.MainImageBase64 is null)
-                    context.AddFailure(ResourceErrorMessages.MUST_HAVE_A_MAIN_IMAGE);
+                    context.AddFailure(ResourceValidationErrorMessage.MUST_HAVE_A_MAIN_IMAGE);
 
                 int total = GetTotalAmountOfImages(command);
                 if (total > MAXIMUM_AMOUNT_OF_IMAGES)
                 {
-                    context.AddFailure(ResourceErrorMessages.MAXIMUM_AMOUNT_OF_IMAGES);
+                    context.AddFailure(ResourceValidationErrorMessage.MAXIMUM_AMOUNT_OF_IMAGES);
                 }
 
 

@@ -1,5 +1,5 @@
-﻿using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
+using ByteShop.Domain.Interfaces.Repositories;
 using FluentValidation.Results;
 using MediatR;
 
@@ -28,7 +28,7 @@ public class AddCategoryHandler : IRequestHandler<AddCategoryCommand, Validation
                 .GetByIdWithAssociationAsync(command.ParentCategoryId);
             if (parentCategory == null)
                 command.AddValidationError
-                    ("ParentCategoryId", ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST);
+                    ("ParentCategoryId", ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST);
         }
 
         if (!command.IsValid())

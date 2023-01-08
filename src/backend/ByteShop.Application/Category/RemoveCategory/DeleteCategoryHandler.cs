@@ -1,7 +1,5 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.DomainMessages;
 using ByteShop.Domain.Interfaces.Repositories;
-using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
 using FluentValidation.Results;
 using MediatR;
 
@@ -24,7 +22,7 @@ public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, Vali
         var category = await _categoryRepo.GetByIdWithChildCategoriesAndProductsAsync(command.Id);
 
         if (category is null)
-            category.AddValidationError("Id", ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST);
+            category.AddValidationError("Id", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
 
         if (category.CanItBeDeleted())
         {

@@ -1,7 +1,6 @@
-﻿using ByteShop.Exceptions.Exceptions;
-using ByteShop.Exceptions;
-using ByteShop.Domain.Interfaces.Mediator;
+﻿using ByteShop.Domain.DomainMessages;
 using ByteShop.Domain.Entities.Validations;
+using ByteShop.Domain.Interfaces.Mediator;
 
 namespace ByteShop.Domain.Entities;
 public class Product : Entity, IAggregateRoot
@@ -129,7 +128,8 @@ public class Product : Entity, IAggregateRoot
     private void ThereisMainImage()
     {
         var exists = string.IsNullOrEmpty(MainImageUrl);
-        DomainExecption.When(exists, ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+        if (exists)
+            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 
     public override bool IsValid()

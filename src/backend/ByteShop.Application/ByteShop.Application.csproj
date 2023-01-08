@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ByteShop.Domain\ByteShop.Domain.csproj" />
-    <ProjectReference Include="..\ByteShop.Exceptions\ByteShop.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>
