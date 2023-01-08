@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\backend\ByteShop.Application\ByteShop.Application.csproj" />
-    <ProjectReference Include="..\..\src\backend\ByteShop.Domain\ByteShop.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\ByteShop.Application\ByteShop.Application.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 

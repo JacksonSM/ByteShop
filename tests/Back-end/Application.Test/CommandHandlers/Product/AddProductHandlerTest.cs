@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Product.AddProduct;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Mapper;
@@ -7,7 +7,7 @@ using Utilities.Repositories;
 using Utilities.Services;
 using Xunit;
 
-namespace Handlers.Test.Product;
+namespace Application.Test.CommandHandlers.Product;
 public class AddProductHandlerTest
 {
     [Fact]
@@ -33,7 +33,7 @@ public class AddProductHandlerTest
         var response = await handler.Handle(command, cts.Token);
 
         response.ValidationResult.IsValid.Should().BeFalse();
-        response.ValidationResult.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+        response.ValidationResult.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 
@@ -71,7 +71,7 @@ public class AddProductHandlerTest
     [Fact]
     public async void ProdutoComNenhumaImagem()
     {
-        var command = ProductCommandBuilder.AddProductCommandBuild(numberSecondaryImages:0);
+        var command = ProductCommandBuilder.AddProductCommandBuild(numberSecondaryImages: 0);
         command.MainImageBase64 = null;
         var handler = CreateAddProductHandler(command.CategoryId);
 
@@ -104,7 +104,7 @@ public class AddProductHandlerTest
         response.ValidationResult.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
-                command.MainImageBase64.Extension),Moq.Times.Once);
+                command.MainImageBase64.Extension), Moq.Times.Once);
     }
 
     private static AddProductHandler CreateAddProductHandler(int categoryId)

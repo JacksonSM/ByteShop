@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Category.AddCategory;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Entities;
@@ -8,7 +8,7 @@ using Utilities.Repositories;
 using Utilities.Services;
 using Xunit;
 
-namespace Handlers.Test.Category;
+namespace Application.Test.CommandHandlers.Category;
 public class AddCategoryHandlerTest
 {
     [Fact]
@@ -21,7 +21,7 @@ public class AddCategoryHandlerTest
 
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
-        
+
         response.IsValid.Should().BeTrue();
     }
 
@@ -54,7 +54,7 @@ public class AddCategoryHandlerTest
         var response = await handler.Handle(command, cts.Token);
 
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST))
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 

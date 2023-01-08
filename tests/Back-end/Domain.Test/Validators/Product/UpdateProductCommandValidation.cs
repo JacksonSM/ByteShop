@@ -1,4 +1,4 @@
-﻿using ByteShop.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
@@ -12,10 +12,11 @@ public class UpdateProductCommandValidation
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         command.SetMainImageUrl = "https://www.google.com.br/";
 
-        command.IsValid(new ByteShop.Domain.Entities.Product(),true)
+        command.IsValid(new ByteShop.Domain.Entities.Product(),
+            new ByteShop.Domain.Entities.Category())
             .Should().BeFalse();
 
         command.ValidationResult.Errors
-            .Should().ContainSingle(ResourceErrorMessages.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+            .Should().ContainSingle(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
     }
 }

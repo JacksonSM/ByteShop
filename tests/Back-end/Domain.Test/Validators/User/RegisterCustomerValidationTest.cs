@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.User.RegisterUser;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
@@ -29,7 +29,7 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMPTY_USERNAME));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.EMPTY_USERNAME));
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMPTY_EMAIL));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.EMPTY_EMAIL));
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.INVALID_EMAIL));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.INVALID_EMAIL));
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.EMPTY_CPF));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.EMPTY_CPF));
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.INVALID_CPF));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.INVALID_CPF));
     }
     [Fact]
     public void TestarErroCPFInvalido()
@@ -98,6 +98,6 @@ public class RegisterCustomerValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.INVALID_CPF));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.INVALID_CPF));
     }
 }

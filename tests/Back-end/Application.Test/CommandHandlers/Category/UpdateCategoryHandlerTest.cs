@@ -1,11 +1,11 @@
 ﻿using ByteShop.Application.Category.UpdateCategory;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Entities;
 using Utilities.Repositories;
 using Xunit;
 
-namespace Handlers.Test.Category;
+namespace Application.Test.CommandHandlers.Category;
 
 public class UpdateCategoryHandlerTest
 {
@@ -41,7 +41,7 @@ public class UpdateCategoryHandlerTest
 
 
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 
@@ -56,10 +56,10 @@ public class UpdateCategoryHandlerTest
         var handler = CreateUpdateCategoryHandler(category);
 
         CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token); 
+        var response = await handler.Handle(command, cts.Token);
 
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.PARENT_CATEGORY_DOES_NOT_EXIST))
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 

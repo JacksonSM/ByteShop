@@ -1,4 +1,4 @@
-﻿using ByteShop.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Entities;
 using Xunit;

@@ -1,5 +1,4 @@
-﻿using ByteShop.Exceptions;
-using ByteShop.Exceptions.Exceptions;
+﻿using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Xunit;
 
@@ -26,12 +25,11 @@ public class ProductTest
                 categoryId: 65
             );
 
-        var action = () =>
-        {
+  
             product.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
-        };
-        
-        action.Should().Throw<DomainExecption>().WithMessage(ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+
+
+        product.ValidationResult.Errors.Should().ContainSingle(ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 
     [Fact]

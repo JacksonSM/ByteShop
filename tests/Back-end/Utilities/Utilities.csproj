@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\backend\ByteShop.Application\ByteShop.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\ByteShop.Application\ByteShop.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\ByteShop.Domain\ByteShop.Domain.csproj" />
   </ItemGroup>
 
 </Project>

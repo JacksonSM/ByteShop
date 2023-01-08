@@ -1,5 +1,5 @@
 ﻿using ByteShop.Application.Product.UpdateProduct;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Entities;
@@ -8,7 +8,7 @@ using Utilities.Repositories;
 using Utilities.Services;
 using Xunit;
 
-namespace Handlers.Test.Product;
+namespace Application.Test.CommandHandlers.Product;
 public class UpdateProductHandlerTest
 {
     [Fact]
@@ -16,8 +16,10 @@ public class UpdateProductHandlerTest
     {
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         var productToUpdate = ProductBuilder.ProductBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
-        var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        command.CategoryId = category.Id;
+        var handler = CreateUpdateProductHandler(category, productToUpdate);
 
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
@@ -30,15 +32,16 @@ public class UpdateProductHandlerTest
     {
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         var productToUpdate = ProductBuilder.ProductBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
-        command.CategoryId = 0;
-        var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        command.CategoryId = category.Id + 3;
+        var handler = CreateUpdateProductHandler(category, productToUpdate);
         CancellationTokenSource cts = new CancellationTokenSource();
 
         var response = await handler.Handle(command, cts.Token);
 
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_DOES_NOT_EXIST))
+        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST))
             .Should().BeTrue();
     }
 
@@ -47,9 +50,11 @@ public class UpdateProductHandlerTest
     {
         var productToUpdate = ProductBuilder.ProductBuild();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         command.SetId(productToUpdate.Id);
+        command.CategoryId = category.Id;
         var productRepo = ProductRepositoryBuilder.Instance().SetupGetById(productToUpdate).Build();
-        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
+        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupGetById(category).Build();
         var imageService = ImageServiceBuilder.Instance()
             .SetupUpload()
             .GetMock();
@@ -80,12 +85,14 @@ public class UpdateProductHandlerTest
     public async void OperacaoOKProdutoComNenhumaImagem()
     {
         var productToUpdate = ProductBuilder.ProductBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild(
             changeMainImage: false,
             numberOfSecondaryImagesToAdd: 0,
             numberOfSecondaryImagesToRemove: 0);
         command.SetId(productToUpdate.Id);
-        var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        command.CategoryId = category.Id;
+        var handler = CreateUpdateProductHandler(category, productToUpdate);
 
         CancellationTokenSource cts = new CancellationTokenSource();
         var response = await handler.Handle(command, cts.Token);
@@ -97,11 +104,13 @@ public class UpdateProductHandlerTest
     public async void ProdutoApenasComAImagemPrincipal()
     {
         var productToUpdate = ProductBuilder.ProductBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         command.SetId(productToUpdate.Id);
         command.AddSecondaryImageBase64 = null;
+        command.CategoryId = category.Id;
         var productRepo = ProductRepositoryBuilder.Instance().SetupGetById(productToUpdate).Build();
-        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
+        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupGetById(category).Build();
         var imageService = ImageServiceBuilder.Instance()
             .SetupUpload()
             .GetMock();
@@ -124,10 +133,11 @@ public class UpdateProductHandlerTest
     public async void ProdutoInexistente()
     {
         var productToUpdate = ProductBuilder.ProductBuild();
+        var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild();
         productToUpdate.Id = 3;
         command.SetId(5);
-        var handler = CreateUpdateProductHandler(command.CategoryId, productToUpdate);
+        var handler = CreateUpdateProductHandler(category, productToUpdate);
         CancellationTokenSource cts = new CancellationTokenSource();
 
         var response = await handler.Handle(command, cts.Token);
@@ -135,11 +145,12 @@ public class UpdateProductHandlerTest
         response.IsValid.Should().BeFalse();
     }
 
-    private static UpdateProductHandler CreateUpdateProductHandler(int categoryId,
+    private static UpdateProductHandler CreateUpdateProductHandler(
+        ByteShop.Domain.Entities.Category category,
         ByteShop.Domain.Entities.Product product)
     {
         var productRepo = ProductRepositoryBuilder.Instance().SetupGetById(product).Build();
-        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(categoryId).Build();
+        var categoryRepo = CategoryRepositoryBuilder.Instance().SetupGetById(category).Build();
         var imageService = ImageServiceBuilder.Instance()
             .SetupUpload()
             .Build();

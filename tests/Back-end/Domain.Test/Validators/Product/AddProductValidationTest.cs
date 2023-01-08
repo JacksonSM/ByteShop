@@ -1,5 +1,5 @@
 ﻿using ByteShop.Domain.Entities.Validations;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Xunit;
@@ -52,7 +52,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_NAME_EMPTY));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_NAME_EMPTY));
     }
     [Fact]
     public void ValidarErroNomeMaiorQue60Caracteres()
@@ -76,7 +76,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_NAME_MAXIMUMLENGTH));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_NAME_MAXIMUMLENGTH));
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_BRAND_EMPTY));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_BRAND_EMPTY));
     }
     [Fact]
     public void ValidarErroMarcaMaiorQue30Caracteres()
@@ -125,7 +125,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_BRAND_MAXIMUMLENGTH));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_BRAND_MAXIMUMLENGTH));
     }
 
     [Fact]
@@ -150,7 +150,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_DESCRIPTION_EMPTY));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_DESCRIPTION_EMPTY));
     }
     [Fact]
     public void ValidarErroSKUVazio()
@@ -174,7 +174,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_SKU_EMPTY));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_SKU_EMPTY));
     }
     [Fact]
     public void ValidarErroPesoMenorOuIgualZero()
@@ -198,7 +198,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO));
     }
     [Fact]
     public void ValidarErroAlturaMenorOuIgualZero()
@@ -221,7 +221,7 @@ public class AddProductValidationTest
             );
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO));
     }
     [Fact]
     public void ValidarErroLarguraMenorOuIgualZero()
@@ -244,7 +244,7 @@ public class AddProductValidationTest
             );
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO));
     }
     [Fact]
     public void ValidarErroComprimentoMenorOuIgualZero()
@@ -268,7 +268,7 @@ public class AddProductValidationTest
 
         product.IsValid().Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO));
     }
   
 }

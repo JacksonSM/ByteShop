@@ -1,6 +1,6 @@
 ﻿using ByteShop.Domain.Entities;
 using ByteShop.Domain.Entities.Validations;
-using ByteShop.Exceptions;
+using ByteShop.Domain.DomainMessages;
 using FluentAssertions;
 using Utilities.Commands;
 using Utilities.Entities;
@@ -29,7 +29,7 @@ public class CategoryValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_NAME_EMPTY));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_EMPTY));
     }
     [Fact]
     public void ValidarErroNomeMaiorQue50Caracteres()
@@ -41,6 +41,6 @@ public class CategoryValidationTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceErrorMessages.CATEGORY_NAME_MAXIMUMLENGTH));
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_MAXIMUMLENGTH));
     }
 }
