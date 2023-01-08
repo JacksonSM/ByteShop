@@ -8,6 +8,7 @@ import {
   Modal,
   Button,
   FormControlProps,
+  Spinner,
 } from "react-bootstrap";
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
@@ -291,6 +292,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
 
 const GerenciamentoDeCategorias: React.FC = () => {
   //states
+  const [isLoding, setIsLoding] = useState(false)
   const [data, setData] = useState<Icategory[]>([]);
   const [main, setMain] = useState<Icategory[]>([]);
   const [sub1, setSub1] = useState<Icategory[]>([]);
@@ -330,7 +332,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
     let search = data.filter((categ) => reg.test(categ.name));
 
+    setIsLoding(true)
     setTimeout(() => {
+      setIsLoding(false)
       setMain(search.filter((item) => !item.parentCategoryId));
       setSub1(
         data.filter((item) =>
@@ -347,14 +351,17 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
   // useEffects
   useEffect(() => {
+    setIsLoding(true)
     Category.getAll().then((result) => {
       if (result instanceof Error) {
+        setIsLoding(false)
         alert(
           `Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`
         );
         return;
       } else {
         setData(result);
+        setIsLoding(false)
       }
     });
   }, []);
@@ -427,6 +434,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
         >
           + categorias
         </Button>
+        {isLoding ?(   <Spinner className="ms-3" animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>): null}
         {showModalAddCateg && (
           <ModalCriacaoCategoria
             showModalAddCateg={showModalAddCateg}
