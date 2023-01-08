@@ -109,6 +109,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
               >
                 <option
                   key={0}
+                  value=""
                   className="parent-class-item parent-class-item--empty "
                 >
                   Categoria Principal
