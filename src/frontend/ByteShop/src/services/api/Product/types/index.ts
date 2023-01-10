@@ -53,3 +53,12 @@ export interface IProductPost extends IProduct {
   mainImageBase64: IImgsJson;
   secondaryImagesBase64: IImgsJson[];
 }
+
+export interface IProductPut extends IProduct {
+  id: number;
+  categoryId: number;
+  removeImageUrl?: Array<String> | null;
+  setMainImageBase64?: IImgsJson | null;
+  setMainImageUrl?: string | null;
+  addSecondaryImageBase64?: IImgsJson[] | null;
+}

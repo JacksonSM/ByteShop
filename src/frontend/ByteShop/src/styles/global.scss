@@ -98,6 +98,7 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
@@ -122,12 +123,12 @@ section {
   background: rgba(236, 218, 227, 0.9);
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 body {
@@ -137,14 +138,17 @@ body {
   color: $secondary;
   background: $body-bg-color;
 }
+
 ol,
 ul {
   list-style: none;
 }
+
 blockquote,
 q {
   quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
@@ -152,6 +156,7 @@ q:after {
   content: "";
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -164,6 +169,7 @@ table {
 
 .offcanvas {
   max-width: 360px;
+
   .offcanvas-body {
     background: $indigo-100;
     font-weight: 700;
@@ -183,12 +189,10 @@ textarea {
   border-radius: 10px;
 }
 
-.breadcrumb {
-}
-
 a {
   text-decoration: none;
   font-size: 1rem;
+  color: $Primary;
 }
 
 .form-inventario {
@@ -196,12 +200,46 @@ a {
   border-radius: 10px;
 }
 
-.category:hover{
+.main-category:hover,.sub-category:hover {
   transform: scaleX(0.95);
   --#{$prefix}badge-color: #{#38E54D};
   cursor: pointer;
 }
 
-.category:active{
+.main-category:active, .sub-category:active {
   --#{$prefix}badge-color: #{$Primary};
+}
+
+.btn-product-change:hover,
+.btn-product-delete:hover {
+  transform: scaleY(0.95);
+
+}
+
+button:hover {
+  transform: scaleX(0.95);
+}
+
+.btn-primary {
+  background: $Primary;
+
+  &:active {
+    background: #3D1766;
+    --#{$prefix}btn-border-color: #270e43;
+  }
+
+  &:hover {
+    background: #4404acdc;
+
+
+  }
+}
+
+.btn-outline-primary {
+  color: $Primary;
+  --#{$prefix}btn-border-color: #6610f2;
+
+  &:hover {
+    background: $Primary;
+  }
 }

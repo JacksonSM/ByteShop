@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../axios-config";
-import { IProductGet, IProductPost, IResponseProduct } from "./types";
+import { IProductGet, IProductPost, IProductPut, IResponseProduct } from "./types";
 
 type IParameters = {
   [key: string]: IProductGet;
@@ -56,4 +56,19 @@ async function post(parameters: IProductPost): Promise<IResponseProduct | Error>
   }
 }
 
-export const Product = { get, post, getById };
+async function put(parameters: IProductPut): Promise<IResponseProduct | Error> {
+  const {id} = parameters;
+  try {
+    const { data } = await api.put(`product/${id}`, parameters);
+    if (data) {
+      return data;
+    }
+    return new Error("Erro ao atualizar o produto");
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message || "Erro ao atualizar o produto"
+    );
+  }
+}
+
+export const Product = { get, post, getById, put };

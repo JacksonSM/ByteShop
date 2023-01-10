@@ -7,6 +7,8 @@ import {
   Form,
   Modal,
   Button,
+  FormControlProps,
+  Spinner,
 } from "react-bootstrap";
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
@@ -108,8 +110,11 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
               >
                 <option
                   key={0}
+                  value=""
                   className="parent-class-item parent-class-item--empty "
-                >Categoria Principal</option>
+                >
+                  Categoria Principal
+                </option>
                 {validParentCategs(allCategories).map((item, index) => (
                   <option
                     id={`categ${item.id}`}
@@ -287,6 +292,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
 
 const GerenciamentoDeCategorias: React.FC = () => {
   //states
+  const [isLoding, setIsLoding] = useState(false)
   const [data, setData] = useState<Icategory[]>([]);
   const [main, setMain] = useState<Icategory[]>([]);
   const [sub1, setSub1] = useState<Icategory[]>([]);
@@ -295,6 +301,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
   const [showModalChanges, setShowModalChanges] = useState(false);
   const [showModalAddCateg, setShowModalAddCateg] = useState(false);
   const [modalInfo, SetmodalInfo] = useState<Icategory>({} as Icategory);
+
+  // ref para campo de pesquisa de categorias
+  const refSearchCateg = useRef<HTMLInputElement>(null);
 
   // functions
   function setCategories() {
@@ -317,16 +326,42 @@ const GerenciamentoDeCategorias: React.FC = () => {
     SetmodalInfo(values);
   };
 
+  function handleSearch() {
+    const value = String(refSearchCateg.current?.value);
+    const reg = RegExp(value, "i");
+
+    let search = data.filter((categ) => reg.test(categ.name));
+
+    setIsLoding(true)
+    setTimeout(() => {
+      setIsLoding(false)
+      setMain(search.filter((item) => !item.parentCategoryId));
+      setSub1(
+        data.filter((item) =>
+          main.map((lvl1Item) => lvl1Item.id === item.parentCategoryId)
+        )
+      );
+      setSub2(
+        data.filter((item) =>
+          sub2.map((lvl2Item) => lvl2Item.id === item.parentCategoryId)
+        )
+      );
+    }, 500);
+  }
+
   // useEffects
   useEffect(() => {
+    setIsLoding(true)
     Category.getAll().then((result) => {
       if (result instanceof Error) {
+        setIsLoding(false)
         alert(
           `Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`
         );
         return;
       } else {
         setData(result);
+        setIsLoding(false)
       }
     });
   }, []);
@@ -354,12 +389,14 @@ const GerenciamentoDeCategorias: React.FC = () => {
               as="li"
               key={index}
               className="border-0 d-flex flex-column shadow my-1 opacity-hover:.75"
+              style={{ width: "min-content" }}
             >
               <Badge
                 bg="secondary"
                 id={String(subCategoryItem.id)}
-                className="category opacity-75-hover fs-5"
+                className="sub-category opacity-75-hover fs-5"
                 onClick={() => handleClick(subCategoryItem)}
+                style={{ width: "min-content" }}
               >
                 {`${prefix} ${subCategoryItem.name}`}
               </Badge>
@@ -375,21 +412,31 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-left fs-2 ms-2">Gereciamento de Categorias</h2>
-      <Form.Group className="d-flex align-items-center">
+      <h2 className="text-center fs-2 fw-bold ms-2">
+        Gereciamento de Categorias
+      </h2>
+      <Form.Group
+        className="d-flex mx-auto align-items-center"
+        style={{ width: "500px" }}
+      >
         <Form.Control
           className="search-categ m-3"
           type="text"
-          placeholder="Digite uma Categoria.."
+          ref={refSearchCateg}
+          placeholder="Digite o nome da categoria principal"
+          onInput={() => handleSearch()}
           style={{ maxWidth: "20rem" }}
         />
         <Button
-          style={{ height: "fit-content" }}
+          className="btn-new-categories text-center p-1"
+          style={{ width: "fit-content", height: "fit-content" }}
           onClick={() => setShowModalAddCateg(true)}
         >
-          {" "}
-          Novas categorias
+          + categorias
         </Button>
+        {isLoding ?(   <Spinner className="ms-3" animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>): null}
         {showModalAddCateg && (
           <ModalCriacaoCategoria
             showModalAddCateg={showModalAddCateg}
@@ -419,7 +466,8 @@ const GerenciamentoDeCategorias: React.FC = () => {
                     <Badge
                       bg="dark"
                       id={String(mainCategoryItem.id)}
-                      className="category fs-5"
+                      className="main-category text-center fs-5"
+                      style={{ width: "min-content" }}
                       onClick={() => handleClick(mainCategoryItem)}
                     >
                       {"- " + mainCategoryItem.name}

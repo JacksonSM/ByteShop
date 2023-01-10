@@ -26,6 +26,7 @@ const Inventario: React.FC = () => {
   const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
   const [activeItem, setActiveItem] = useState(1);
   const [data, setData] = useState<any>([]);
+  const [itemsTotal,setItemsTotal] = useState(0);
   const { id, setID } = useDataProductID();
 
   const numberOfItemsRef = useRef<HTMLSelectElement>(null);
@@ -52,6 +53,7 @@ const Inventario: React.FC = () => {
       setShowAlert(true);
       setData(false);
     } else {
+      value.pagination && setItemsTotal(value.pagination.itemsTotal)
       setData(value.content);
       setShowAlert(false);
     }
@@ -68,16 +70,14 @@ const Inventario: React.FC = () => {
     return;
   }
 
-  useEffect(() => {
-    getData("");
-    getActiveCategories();
-  }, []);
 
+  
   useEffect(() => {
     getData({
       itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
       actualPage: { actualPage: Number(activeItem) },
     });
+    getActiveCategories();
   }, [activeItem]);
 
   function handleInputNumberOfItems() {}
@@ -105,11 +105,15 @@ const Inventario: React.FC = () => {
     nameRef.current!.value = "";
     brandRef.current!.value = "";
     categRef.current!.value = "";
-    getData("");
+    getData({
+      itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
+      actualPage: { actualPage: Number(activeItem) },
+    });
+    getActiveCategories();
   }
 
   return (
-    <Container fluid className="vw-100">
+    <Container fluid>
       <Breadcrumb className="d-flex justify-content-center">
         <BreadcrumbItem href="/">Início</BreadcrumbItem>
         <BreadcrumbItem href="/inventario" active>
@@ -192,8 +196,7 @@ const Inventario: React.FC = () => {
             size="sm"
             title="escolha a quantidade de itens por página"
           >
-            <option>1</option>
-            <option>3</option>
+            <option>10</option>
             <option>25</option>
             <option>50</option>
           </FormSelect>
@@ -221,7 +224,7 @@ const Inventario: React.FC = () => {
         </FormGroup>
       </Form>
       <h2 className=" m-1 text-end">
-        {data.length > 0 ? data.length : 0}{" "}
+        {itemsTotal > 0 ? itemsTotal : 0}{" "}
         {`resultado${pluralForm} encontrado${pluralForm}`}
       </h2>
       {showAlert ? (
@@ -283,14 +286,14 @@ const Inventario: React.FC = () => {
                   <td className="text-center align-middle">{item.stock} un</td>
                   <td className="text-center align-middle border">
                     <button
-                      className="border border-0 bg-body rounded me-2 my-auto"
+                      className="btn-product-change border border-0 bg-body rounded me-2 my-auto"
                       onClick={() =>
                         handleClickProductChange(item.id ? item.id : 0)
                       }
                     >
                       <img alt="ícone lixeira" src={takeNoteIcon} />
                     </button>
-                    <button className="border border-0 rounded bg-body my-auto">
+                    <button className="btn-product-delete border border-0 rounded bg-body my-auto">
                       <img alt="ícone papel e lápis" src={trashIcon} />
                     </button>
                   </td>
@@ -301,7 +304,7 @@ const Inventario: React.FC = () => {
         </Table>
       ) : null}
       <Paginacao
-        dataSize={2}
+        dataSize={itemsTotal}
         itemsPerPage={Number(numberOfItemsRef.current?.value)}
         activeItem={activeItem}
         setActiveItem={setActiveItem}
