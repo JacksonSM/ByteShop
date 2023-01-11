@@ -133,6 +133,15 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imagem a ser removida nao existe no produto!.
+        /// </summary>
+        public static string IMAGE_URL_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("IMAGE_URL_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Imagem está incorreta. verifique os campos de base64 e extension..
         /// </summary>
         public static string INCORRECT_IMAGE {

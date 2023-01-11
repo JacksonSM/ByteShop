@@ -1,6 +1,7 @@
 ﻿using ByteShop.Application.Product.Base;
 using ByteShop.Domain.DomainMessages;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace ByteShop.Application.Product.UpdateProduct;
 public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCommand>
@@ -15,9 +16,15 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
         RuleFor(x => x.SetMainImageUrl)
-            .Must(x => string.IsNullOrEmpty(x))
-            .When(x => x.SetMainImageBase64 is null)
+            .Must(x => x is null)
+            .When(x => x.SetMainImageBase64 is not null)
             .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+
+
+        RuleFor(x => x).Custom((command, context) =>
+        {
+            ThereIsImage(command.RemoveImageUrl, product.GetAllImages(), context);
+        });
 
         RuleFor(x => x).Custom((command, context) =>
         {
@@ -48,7 +55,28 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         });
     }
 
-    private static int GetTotalAmountOfImages(Domain.Entities.Product product, UpdateProductCommand command)
+    private void ThereIsImage(
+        string[] removeImageUrl,
+        List<string> productImages,
+        ValidationContext<UpdateProductCommand> context)
+    {
+        foreach (var imageUrl in removeImageUrl)
+        {
+            if(!productImages.Exists(x => x.Equals(imageUrl)))
+            {
+                var error = new ValidationFailure
+                    (
+                        "RemoveImageUrl",
+                        ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST,
+                        imageUrl
+                    );
+                context.AddFailure(error);
+            }
+        }
+    }
+
+    private static int GetTotalAmountOfImages(
+        Domain.Entities.Product product, UpdateProductCommand command)
     {
         if (product == null) return 0;
         var afterRemoved = product.GetImagesTotal() - command.GetTotalImagesToRemove();

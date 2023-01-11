@@ -81,7 +81,10 @@ public class Product : Entity, IAggregateRoot
 
     public void AddSecondaryImage(string imageUrl)
     {
-        ThereisMainImage();
+        var exists = string.IsNullOrEmpty(MainImageUrl);
+        if (exists)
+            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+
         SecondaryImageUrl += imageUrl + " ";
     }
 
@@ -125,11 +128,12 @@ public class Product : Entity, IAggregateRoot
         SecondaryImageUrl = string.Join(" ", urls);
     }
 
-    private void ThereisMainImage()
+    public List<string> GetAllImages()
     {
-        var exists = string.IsNullOrEmpty(MainImageUrl);
-        if (exists)
-            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+        var images = new List<string>();
+        images.Add(MainImageUrl);
+        images.AddRange(GetSecondaryImageUrl());
+        return images;
     }
 
     public override bool IsValid()
