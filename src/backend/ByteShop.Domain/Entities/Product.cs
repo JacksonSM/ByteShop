@@ -1,6 +1,7 @@
 ﻿using ByteShop.Domain.DomainMessages;
 using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
+using FluentValidation;
 
 namespace ByteShop.Domain.Entities;
 public class Product : Entity, IAggregateRoot
@@ -81,8 +82,7 @@ public class Product : Entity, IAggregateRoot
 
     public void AddSecondaryImage(string imageUrl)
     {
-        var exists = string.IsNullOrEmpty(MainImageUrl);
-        if (exists)
+        if (string.IsNullOrEmpty(MainImageUrl))
             AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
 
         SecondaryImageUrl += imageUrl + " ";
@@ -139,7 +139,8 @@ public class Product : Entity, IAggregateRoot
     public override bool IsValid()
     {
         var validator = new ProductValidation();
-        ValidationResult = validator.Validate(this);
+        var result = validator.Validate(this);
+        ValidationResult.Errors.AddRange(result.Errors);
         return ValidationResult.IsValid;
     }
 }

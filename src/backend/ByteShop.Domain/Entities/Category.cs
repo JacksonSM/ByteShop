@@ -10,9 +10,9 @@ public class Category : Entity, IAggregateRoot
     public int? ParentCategoryId { get; private set; }
     public CategoryLevel CategoryLevel { get; private set; }
     public Category ParentCategory { get; private set; }
-    public List<Category> ChildCategories { get; private set; }
+    public List<Category> ChildCategories { get; private set; } = new();
 
-    public List<Product> Products { get; private set; }
+    public List<Product> Products { get; private set; } = new();
 
     //For EF
     public Category() {
@@ -82,5 +82,10 @@ public class Category : Entity, IAggregateRoot
         var result = validator.Validate(this);
         ValidationResult.Errors.AddRange(result.Errors);
         return ValidationResult.IsValid;
+    }
+
+    public void AddProduct(Product product)
+    {
+        Products.Add(product);
     }
 }

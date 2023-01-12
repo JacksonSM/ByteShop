@@ -54,7 +54,9 @@ public class ProductValidation : AbstractValidator<Product>
             .GreaterThanOrEqualTo(1)
             .WithMessage(ResourceValidationErrorMessage.PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO);
 
-
+        RuleFor(c => c.CategoryId)
+            .GreaterThanOrEqualTo(1)
+            .WithMessage(ResourceValidationErrorMessage.PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO);
 
     }
 }

@@ -177,6 +177,9 @@
   <data name="PRODUCT_BRAND_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo marca suporta apenas 30 caracteres.</value>
   </data>
+  <data name="PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>Valor inválido! Não é permitido um category id menor que um.</value>
+  </data>
   <data name="PRODUCT_DESCRIPTION_EMPTY" xml:space="preserve">
     <value>O campo descrição é obrigatório.</value>
   </data>

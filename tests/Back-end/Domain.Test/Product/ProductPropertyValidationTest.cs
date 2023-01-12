@@ -36,6 +36,39 @@ public class AddProductValidationTest
         result.Should().BeTrue();
     }
 
+    [Theory]
+    [Trait("Product", "PropertyValidation")]
+    [InlineData(0)]
+    [InlineData(-4)]
+    public void PropertyCategoryId_CategoryIdWithValueEqualToOrLessThan0_ShouldReturnFalseWithErrorMessage(int categoryId)
+    {
+        //Arrange
+        var product = new ByteShop.Domain.Entities.Product
+            (
+                name: "Memoria Ram 4g",
+                description: "Memoria da boa!",
+                sku: "RAM-234",
+                price: 342.45m,
+                costPrice: 240.54m,
+                stock: 45,
+                warranty: 90,
+                brand: "GOODRAM",
+                weight: 43.56f,
+                height: 34.54f,
+                length: 65.82f,
+                width: 76,
+                categoryId: categoryId
+            );
+
+        //Act
+        var result = product.IsValid();
+
+        //Assert
+        result.Should().BeFalse();
+        product.ValidationResult.Errors.Should().ContainSingle().And
+            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO));
+    }
+
     [Fact]
     [Trait("Product", "PropertyValidation")]
     public void PropertyName_EmptyName_ShouldReturnFalseWithErrorMessage()

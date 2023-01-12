@@ -241,6 +241,15 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Valor inválido! Não é permitido um category id menor que um..
+        /// </summary>
+        public static string PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo descrição é obrigatório..
         /// </summary>
         public static string PRODUCT_DESCRIPTION_EMPTY {
