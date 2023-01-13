@@ -31,8 +31,9 @@ public class CategoryPropertyValidationTest
 
         //Assert
         result.Should().BeFalse();
-        category.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_EMPTY));
+        category.ValidationResult.Errors
+            .Should()
+            .ContainSingle(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_EMPTY));
     }
     [Fact]
     [Trait("Category", "FieldValidation")]
@@ -47,7 +48,8 @@ public class CategoryPropertyValidationTest
 
         //Assert
         result.Should().BeFalse();
-        category.ValidationResult.Errors.Should().ContainSingle().And
-            .Contain(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_MAXIMUMLENGTH));
+        category.ValidationResult.Errors
+            .Should()
+            .ContainSingle(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_NAME_MAXIMUMLENGTH));
     }
 }

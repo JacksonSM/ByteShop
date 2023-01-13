@@ -124,6 +124,15 @@ namespace ByteShop.Domain.DomainMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to os identificados são diferentes.
+        /// </summary>
+        public static string ID_CONFLICT {
+            get {
+                return ResourceManager.GetString("ID_CONFLICT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg..
         /// </summary>
         public static string IMAGE_EXTENSION {

@@ -138,6 +138,9 @@
   <data name="EMPTY_USERNAME" xml:space="preserve">
     <value>O Campo usuario é obrigatorio.</value>
   </data>
+  <data name="ID_CONFLICT" xml:space="preserve">
+    <value>os identificados são diferentes</value>
+  </data>
   <data name="IMAGE_EXTENSION" xml:space="preserve">
     <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
   </data>

@@ -33,6 +33,7 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
         total += AddSecondaryImageBase64?.Length ?? 0;
         return total;
     }
+
     public bool IsValid(Domain.Entities.Product product, Domain.Entities.Category category)
     {
         var validator = new UpdateProductCommandValidation(category, product);

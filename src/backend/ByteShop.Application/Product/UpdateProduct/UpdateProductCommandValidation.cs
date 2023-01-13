@@ -1,7 +1,6 @@
 ﻿using ByteShop.Application.Product.Base;
 using ByteShop.Domain.DomainMessages;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace ByteShop.Application.Product.UpdateProduct;
 public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCommand>
@@ -10,35 +9,37 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 
     public UpdateProductCommandValidation(Domain.Entities.Category category, Domain.Entities.Product product)
     {
+        if (product is null)
+        {
+            RuleFor(x => x.Id)
+                .Must(x => product is not null)
+                .WithMessage(ResourceValidationErrorMessage.PRODUCT_DOES_NOT_EXIST);
+        }
+        else
+        {
+            RuleFor(x => x.Id)
+                .Equal(product.Id)
+                .WithMessage(ResourceValidationErrorMessage.ID_CONFLICT);
+
+            IsThereAnImageToRemove(product);
+            ValidateMainImage(product);
+        }
+
+        RuleFor(x => x.CategoryId)
+            .Must(x => category is not null)
+            .WithMessage(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
+
         RuleFor(x => x.SetMainImageBase64)
             .Must(x => x is null)
             .When(x => !string.IsNullOrEmpty(x.SetMainImageUrl))
             .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
-        RuleFor(x => x.SetMainImageUrl)
-            .Must(x => x is null)
-            .When(x => x.SetMainImageBase64 is not null)
-            .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
-
-
-        RuleFor(x => x).Custom((command, context) =>
-        {
-            ThereIsImage(command.RemoveImageUrl, product.GetAllImages(), context);
-        });
-
-        RuleFor(x => x).Custom((command, context) =>
-        {
-
-            if (product == null)
-                context.AddFailure("Id", ResourceValidationErrorMessage.PRODUCT_DOES_NOT_EXIST);
-
-            if (category is null)
-                context.AddFailure("CategoryId", ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST);
-        });
-
         RuleFor(x => x.SetMainImageBase64).SetValidator(new ImageBase64Validation());
         RuleForEach(x => x.AddSecondaryImageBase64).SetValidator(new ImageBase64Validation());
+    }
 
+    private void ValidateMainImage(Domain.Entities.Product product)
+    {
         When(x => x.AddSecondaryImageBase64?.Length > 0, () =>
         {
             RuleFor(x => x).Custom((command, context) =>
@@ -55,32 +56,25 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         });
     }
 
-    private void ThereIsImage(
-        string[] removeImageUrl,
-        List<string> productImages,
-        ValidationContext<UpdateProductCommand> context)
+    private void IsThereAnImageToRemove(Domain.Entities.Product product)
     {
-        foreach (var imageUrl in removeImageUrl)
+        When(x => x.RemoveImageUrl.Any(), () =>
         {
-            if(!productImages.Exists(x => x.Equals(imageUrl)))
-            {
-                var error = new ValidationFailure
-                    (
-                        "RemoveImageUrl",
-                        ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST,
-                        imageUrl
-                    );
-                context.AddFailure(error);
-            }
-        }
+            RuleForEach(x => x.RemoveImageUrl)
+                .Must(url => product.GetAllImages().Contains(url))
+                .WithMessage(url => ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST);
+        });
     }
 
     private static int GetTotalAmountOfImages(
         Domain.Entities.Product product, UpdateProductCommand command)
     {
         if (product == null) return 0;
-        var afterRemoved = product.GetImagesTotal() - command.GetTotalImagesToRemove();
-        var final = afterRemoved + command.GetTotalImagesToAdd();
-        return final;
+
+        return product.GetImagesTotal()
+            - command.GetTotalImagesToRemove()
+            + command.GetTotalImagesToAdd();
     }
+
+
 }
