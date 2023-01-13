@@ -11,35 +11,44 @@ namespace Application.Test.CommandHandlers.Product;
 public class AddProductHandlerTest
 {
     [Fact]
-    public async void Sucesso()
+    [Trait("Product", "Handler")]
+    public async void AddProductHandler_WithValidData_ShouldReturnTrue()
     {
+        //Arrange
         var command = ProductCommandBuilder.AddProductCommandBuild();
         var handler = CreateAddProductHandler(command.CategoryId);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+        //Assert
         response.ValidationResult.IsValid.Should().BeTrue();
     }
 
     [Fact]
-    public async void CategoriaInexistente()
+    [Trait("Product", "Handler")]
+    public async void AddProductHandler_CategoryDoesNotExist_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var command = ProductCommandBuilder.AddProductCommandBuild();
         command.CategoryId = 0;
         var handler = CreateAddProductHandler(command.CategoryId);
         CancellationTokenSource cts = new CancellationTokenSource();
 
+        //Act
         var response = await handler.Handle(command, cts.Token);
 
+        //Assert
         response.ValidationResult.IsValid.Should().BeFalse();
-        response.ValidationResult.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST))
-            .Should().BeTrue();
+        response.ValidationResult.Errors.Should()
+                    .ContainSingle(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST));
     }
 
     [Fact]
-    public async void ImageServiceRecebendoDadosCorretos()
+    [Trait("Product", "Handler")]
+    public async void UploadBase64ImageAsync_WithValidData_ShouldReturnTrueAndTheServiceWillReceiveTheCorrectValues()
     {
+        //Arrange
         var command = ProductCommandBuilder.AddProductCommandBuild();
         var productRepo = ProductRepositoryBuilder.Instance().Build();
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
@@ -53,9 +62,11 @@ public class AddProductHandlerTest
 
         var handler = new AddProductHandler(productRepo, categoryRepo, uow, imageService.Object);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+
+        //Assert
         response.ValidationResult.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,
@@ -69,21 +80,26 @@ public class AddProductHandlerTest
         }
     }
     [Fact]
-    public async void ProdutoComNenhumaImagem()
+    [Trait("Product", "Handler")]
+    public async void AddProductHandler_CommandNoImage_ShouldReturnTrue()
     {
+        //Arrange
         var command = ProductCommandBuilder.AddProductCommandBuild(numberSecondaryImages: 0);
         command.MainImageBase64 = null;
         var handler = CreateAddProductHandler(command.CategoryId);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+        //Assert
         response.ValidationResult.IsValid.Should().BeTrue();
     }
 
     [Fact]
-    public async void AdicionarProdutoApenasComAImagemPrincipal()
+    [Trait("Product", "Handler")]
+    public async void AddProductHandler_AddProductWithMainImageOnly_ShouldReturnTrue()
     {
+        //Arrange
         var command = ProductCommandBuilder.AddProductCommandBuild();
         var productRepo = ProductRepositoryBuilder.Instance().Build();
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupExistById(command.CategoryId).Build();
@@ -97,10 +113,11 @@ public class AddProductHandlerTest
         var logger = LoggerBuilder<AddProductHandler>.Instance().Build();
 
         var handler = new AddProductHandler(productRepo, categoryRepo, uow, imageService.Object);
-        CancellationTokenSource cts = new CancellationTokenSource();
 
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+        //Assert
         response.ValidationResult.IsValid.Should().BeTrue();
         imageService
             .Verify(m => m.UploadBase64ImageAsync(command.MainImageBase64.Base64,

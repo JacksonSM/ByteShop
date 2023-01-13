@@ -64,9 +64,7 @@ public class AddCategoryHandlerTest
             .Instance()
             .SetupGetByIdWithAssociationAsync(category)
             .Build();
-        var mapper = MapperBuilder.Instance();
         var uow = UnitOfWorkBuilder.Instance().Build();
-        var logger = LoggerBuilder<AddCategoryHandler>.Instance().Build();
 
         return new AddCategoryHandler(categoryRepo, uow);
     }
