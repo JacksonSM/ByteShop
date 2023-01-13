@@ -189,7 +189,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
 
   // função para deletar a categoria
   const handleDelete = (id: number) => {
-    Category.getById(id).then((status) =>
+    Category.deleteById(id).then((status) =>
       status !== 202 ? alert("Erro ao deletar a categoria") : location.reload()
     );
   };
