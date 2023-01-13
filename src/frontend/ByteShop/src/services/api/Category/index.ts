@@ -48,7 +48,7 @@ async function getAll(): Promise<Icategory[] | Error> {
   }
 }
 
-async function getById(id: number): Promise<any | Error> {
+async function deleteById(id: number): Promise<any | Error> {
   try {
     const { status } = await api.delete(`category/${id}`);
 
@@ -61,4 +61,4 @@ async function getById(id: number): Promise<any | Error> {
   }
 }
 
-export const Category = { getAll, getById, put, post };
+export const Category = { getAll, deleteById, put, post };
