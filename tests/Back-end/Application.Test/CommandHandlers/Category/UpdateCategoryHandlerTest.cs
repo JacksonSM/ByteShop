@@ -10,44 +10,47 @@ namespace Application.Test.CommandHandlers.Category;
 public class UpdateCategoryHandlerTest
 {
     [Fact]
-    public async void Sucesso()
+    [Trait("Category", "Handler")]
+    public async void UpdateCategoryHandler_WithValidData_ShouldReturnTrue()
     {
+        //Arrange
         var parentCategory = CategoryBuilder.BuildCategoryWithoutLevel();
         var category = CategoryBuilder.BuildCategoryWithoutLevel(parentCategory);
-
         var command = new UpdateCategoryCommand { Name = "Processador", ParentCategoryId = parentCategory.ParentCategoryId.Value };
         command.SetId(category.Id);
-
         var handler = CreateUpdateCategoryHandler(category, parentCategory);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+        //Assert
         response.IsValid.Should().BeTrue();
     }
 
     [Fact]
-    public async void AtualizarComIdInexistente()
+    [Trait("Category", "Handler")]
+    public async void UpdateCategoryHandler_UpdateWithIdThatDoesNotExist_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
-
         var command = new UpdateCategoryCommand { Name = "Placa Mãe", ParentCategoryId = 67 };
         command.SetId(category.Id + 23);
-
         var handler = CreateUpdateCategoryHandler(category);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
-
+        //Assert
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST))
-            .Should().BeTrue();
+        response.Errors.Should().ContainSingle(error => error.ErrorMessage
+            .Equals(ResourceValidationErrorMessage.CATEGORY_DOES_NOT_EXIST));
     }
 
     [Fact]
-    public async void AtualizarComCategoriaPaiInexistente()
+    [Trait("Category", "Handler")]
+    public async void UpdateCategoryHandler_UpdateWithParentCategoryThatDoesNotExist_ShouldReturnFalseWithErrorMessage()
     {
+        //Arrange
         var category = new ByteShop.Domain.Entities.Category("Coller");
         category.Id = 65;
         var command = new UpdateCategoryCommand { Name = "Cooler", ParentCategoryId = 69 };
@@ -55,12 +58,13 @@ public class UpdateCategoryHandlerTest
 
         var handler = CreateUpdateCategoryHandler(category);
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        var response = await handler.Handle(command, cts.Token);
+        //Act
+        var response = await handler.Handle(command, CancellationToken.None);
 
+        //Assert
         response.IsValid.Should().BeFalse();
-        response.Errors.Any(error => error.ErrorMessage.Equals(ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST))
-            .Should().BeTrue();
+        response.Errors.Should().ContainSingle(error => error.ErrorMessage
+            .Equals(ResourceValidationErrorMessage.PARENT_CATEGORY_DOES_NOT_EXIST));
     }
 
     private static UpdateCategoryHandler CreateUpdateCategoryHandler(
