@@ -240,6 +240,7 @@ const Inventario: React.FC = () => {
           <thead>
             <tr>
               <th className="fs-5  text-center align-middle border">#</th>
+              <th className="fs-5 text-center align-middle border">Status</th>
               <th className="fs-5 text-center align-middle border">SKU</th>
               <th className="fs-5 text-center align-middle border">Imagem</th>
               <th className="fs-5 text-center align-middle border">Nome</th>
@@ -262,16 +263,17 @@ const Inventario: React.FC = () => {
                   <td className="fs-6 fw-bold text-center align-middle border">
                     {index + 1}
                   </td>
+                    <td className="text-center align-middle">{item.isActive ? "Ativo": "Inativo"}</td>
                   <td className="text-center align-middle">{item.sku}</td>
                   <td className="text-center align-middle">
                     {item.mainImageUrl && (
                       <Image
-                        alt={`imagem do produto ${index}`}
-                        src={item.mainImageUrl}
-                        thumbnail
-                        style={{ width: "6rem", height: "6rem" }}
+                      alt={`imagem do produto ${index}`}
+                      src={item.mainImageUrl}
+                      thumbnail
+                      style={{ width: "6rem", height: "6rem" }}
                       />
-                    )}
+                      )}
                   </td>
                   <td className="text-center align-middle">{item.name}</td>
 

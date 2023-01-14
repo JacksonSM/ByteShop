@@ -28,6 +28,7 @@ export interface IProductGet extends IProduct {
     itemsTotal: number;
     totalPage: number;
   } | null;
+  isActive?: boolean;
   createdOn?: Date;
 }
 
