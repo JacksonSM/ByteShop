@@ -28,7 +28,6 @@ const Inventario: React.FC = () => {
   const [data, setData] = useState<any>([]);
   const [itemsTotal,setItemsTotal] = useState(0);
   const { id, setID } = useDataProductID();
-
   const numberOfItemsRef = useRef<HTMLSelectElement>(null);
   const skuRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -171,7 +170,6 @@ const Inventario: React.FC = () => {
           <FormSelect
             ref={categRef}
             id="categoria"
-            // onInput={() => console.log(categRef.current?.value)}
             size="sm"
             title="escolha a quantidade de itens por página"
           >

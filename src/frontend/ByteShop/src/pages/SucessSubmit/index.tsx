@@ -15,7 +15,7 @@ import { IProductGet } from "../../services/api/Product/types";
 
 const SucessSubmit = () => {
   const { id } = useDataProductID();
-  console.log(id);
+
   const [data, setdata] = useState<IProductGet>({});
   useEffect(() => {
     Product.getById(id).then((response) => response && setdata(response));
