@@ -34,6 +34,11 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             .When(x => !string.IsNullOrEmpty(x.SetMainImageUrl))
             .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
+        RuleFor(x => x.SetMainImageUrl)
+            .Must(x => x is null)
+            .When(x => x.SetMainImageBase64 is not null)
+            .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
+
         RuleFor(x => x.SetMainImageBase64).SetValidator(new ImageBase64Validation());
         RuleForEach(x => x.AddSecondaryImageBase64).SetValidator(new ImageBase64Validation());
     }
@@ -58,7 +63,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 
     private void IsThereAnImageToRemove(Domain.Entities.Product product)
     {
-        When(x => x.RemoveImageUrl.Any(), () =>
+        When(x => x.RemoveImageUrl?.Length > 0, () =>
         {
             RuleForEach(x => x.RemoveImageUrl)
                 .Must(url => product.GetAllImages().Contains(url))

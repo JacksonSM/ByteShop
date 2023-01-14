@@ -17,5 +17,6 @@ public class ProductDTO
     public CategoryDTO Category { get; set; }
     public string MainImageUrl { get; set; }
     public string[] SecondaryImageUrl { get; set; }
+    public bool IsActive { get;  set; }
     public DateTime CreatedOn { get; set; }
 }
