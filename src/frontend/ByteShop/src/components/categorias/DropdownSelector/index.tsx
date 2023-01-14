@@ -3,15 +3,23 @@ import { Dropdown, FormControl } from "react-bootstrap";
 import { Category } from "../../../services/api/Category";
 import { Icategory } from "../../../services/api/Category/types";
 
+interface IPropsDropdownSelector {
+  onclick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  categoryIDPutProp?: number;
+}
 
-
-const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>)=>void}) => {
+const DropdownSelector = ({
+  onclick,
+  categoryIDPutProp,
+}: IPropsDropdownSelector) => {
   const [data, setDate] = useState<Icategory[]>([]);
 
   useEffect(() => {
     Category.getAll().then((result) => {
       if (result instanceof Error) {
-        alert(`Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`);
+        alert(
+          `Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`
+        );
         return;
       } else {
         setDate(result);
@@ -51,12 +59,10 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
     labeledBy?: string;
   };
 
-  // forwardRef again here!
-  // Dropdown needs access to the DOM of the Menu to measure it
   const CustomMenu = React.forwardRef(
     (props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
       const [value, setValue] = useState("");
-      let reg = new RegExp(value, 'i')
+      let reg = new RegExp(value, "i");
 
       return (
         <div
@@ -72,10 +78,12 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
             onChange={(e) => setValue(e.target.value)}
             value={value}
           />
-          <ul className="list-unstyled overflow-auto"  style={{height:" 18.75rem"}}>
+          <ul
+            className="list-unstyled overflow-auto"
+            style={{ height: " 18.75rem" }}
+          >
             {React.Children.toArray(props.children).filter(
-              (child: any) =>
-                !value || reg.test(child.props.children)
+              (child: any) => !value || reg.test(child.props.children)
             )}
           </ul>
         </div>
@@ -86,8 +94,12 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
   const [selectedCateg, setSelectedCateg] = useState(0);
 
   const theChosenCategory = () => {
-    const chosenCategory: Icategory | undefined = categories.find(
-      (categ) => categ.id === selectedCateg
+    useEffect(() => {
+      categoryIDPutProp && setSelectedCateg(categoryIDPutProp);
+    }, []);
+
+    const chosenCategory: Icategory | undefined = categories.find((categ) =>
+      categoryIDPutProp ? categ.id === categoryIDPutProp : selectedCateg
     );
 
     const parent = categories.find(
@@ -105,8 +117,13 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
           chosenCategory.name || ""
       : "Selecione uma Categoria";
   };
+
+  const handleSelectCategory = (e: string | null) => {
+    setSelectedCateg(Number(e));
+  };
+
   return (
-    <Dropdown id="category" onSelect={(e) => setSelectedCateg(Number(e))}>
+    <Dropdown id="category" onSelect={(e) => handleSelectCategory(e)}>
       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
         {theChosenCategory()}
       </Dropdown.Toggle>
@@ -116,7 +133,7 @@ const DropdownSelector = ({onclick}:{onclick: (event: React.MouseEvent<HTMLAncho
           return (
             <Dropdown.Item
               className="mb-3"
-              id={category.id && category.id.toString() || ""}
+              id={(category.id && category.id.toString()) || ""}
               key={index}
               onClick={onclick}
               eventKey={category.id && category.id.toString()}

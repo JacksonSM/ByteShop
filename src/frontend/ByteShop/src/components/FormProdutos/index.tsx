@@ -39,6 +39,12 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
 
   const [imgSrc, setImgSrc] = useState<TImgSrc[]>([]);
   const [imagesIsInvalid, setImagesIsInvalid] = useState(false);
+  const [deletedImages, setDeletedImages] = useState<Array<string>>([""]);
+  const [addSecImagesB64, setAddSecImagesB64] = useState<any[]>([]);
+
+  const [changeMImageB64, setChangeMImageB64] = useState<TImgSrc | null>(null);
+
+  const [changeMImageURL, setChangeMImageURL] = useState<string |null>(null);
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
@@ -67,13 +73,19 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
   }, []);
 
   useEffect(() => {
-    if ((changeData !== null) && (location.pathname == "/alteracao-de-produtos")) {
+    console.log(deletedImages)
+  }, [deletedImages]);
+
+
+
+  useEffect(() => {
+    if (changeData !== null && location.pathname == "/alteracao-de-produtos") {
       skuRef.current!.value = String(changeData.sku);
       nameRef.current!.value = String(changeData.name);
       brandRef.current!.value = String(changeData.brand);
       descriptionRef.current!.value = String(changeData.description);
       warrantyRef.current!.value = String(changeData.warranty);
-      // categoryCurrentID
+      setCategoryCurrentID(Number(changeData.category?.id));
       lengthRef.current!.value = String(changeData.length);
       widthRef.current!.value = String(changeData.width);
       heightRef.current!.value = String(changeData.height);
@@ -81,10 +93,15 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       costPriceRef.current!.value = replacingDot(String(changeData.costPrice));
       priceRef.current!.value = replacingDot(String(changeData.price));
       stockRef.current!.value = String(changeData.stock);
-      let secondaryImageUrl: Array<object> = []
-      changeData.secondaryImageUrl?.map((src, index )=> {secondaryImageUrl.push({id: String(index + 1), base64: src})})
-      setImgSrc([{id: String(changeData.id), base64: changeData.mainImageUrl}, ...secondaryImageUrl ])
-      // console.log([{id: String(changeData.id), base64: changeData.mainImageUrl}, ...test ])
+      let secondaryImageUrl: Array<object> = [];
+      changeData.secondaryImageUrl?.map((src, index) => {
+        secondaryImageUrl.push({ id: String(index + 1), base64: src });
+      });
+      setImgSrc([
+        { id: String(changeData.id), base64: changeData.mainImageUrl },
+        ...secondaryImageUrl,
+      ]);
+      // console.log(imgSrc)
     } else {
       skuRef.current!.value = "";
       nameRef.current!.value = "";
@@ -114,48 +131,108 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       e.stopPropagation();
     }
 
-    const mainImageBase64: IImgsJson = {
-      base64: imgSrc[0]?.base64,
-      extension: imgSrc[0].extension.replace(/^\w*[/]/, "."),
-    };
+    if (location.pathname === "/cadastro-de-produtos") {
+      const mainImageBase64: IImgsJson = {
+        base64: imgSrc[0]?.base64,
+        extension: imgSrc[0].extension.replace(/^\w*[/]/, "."),
+      };
 
-    let secondaryImagesBase64: IImgsJson[] = [];
+      let secondaryImagesBase64: IImgsJson[] = [];
 
-    for (let i = 1; i < imgSrc.length; i++) {
-      secondaryImagesBase64.push({
-        base64: imgSrc[i]?.base64,
-        extension: imgSrc[i].extension.replace(/^\w*[/]/, "."),
+      for (let i = 1; i < imgSrc.length; i++) {
+        secondaryImagesBase64.push({
+          base64: imgSrc[i]?.base64,
+          extension: imgSrc[i].extension.replace(/^\w*[/]/, "."),
+        });
+      }
+
+      Product.post({
+        sku: String(skuRef.current?.value),
+        name: String(nameRef.current?.value),
+        brand: String(brandRef.current?.value),
+        categoryId: Number(categoryCurrentID),
+        warranty: Number(warrantyRef.current?.value),
+        description: String(descriptionRef.current?.value),
+        length: Number(lengthRef.current!.value),
+        width: Number(widthRef.current!.value),
+        height: Number(heightRef.current!.value),
+        weight: Number(weightRef.current?.value),
+        costPrice: Number(replacingComma(costPriceRef.current!.value)),
+        price: Number(replacingComma(priceRef.current!.value)),
+        stock: Number(stockRef.current?.value),
+        mainImageBase64,
+        secondaryImagesBase64,
+      }).then((response) => {
+        if (response instanceof Error) {
+          alert(response.stack);
+          rota("/fail-submit");
+        } else {
+          <ContextProductID.Provider
+            value={{ id, setID }}
+          ></ContextProductID.Provider>;
+          setID(Number(response.productId));
+          rota("/sucess-submit");
+        }
       });
     }
+    if (location.pathname === "/alteracao-de-produtos") {
+      // console.log(
+      //   JSON.stringify({
+      //     id: id,
+      //     sku: String(skuRef.current?.value),
+      //     name: String(nameRef.current?.value),
+      //     brand: String(brandRef.current?.value),
+      //     categoryId: Number(categoryCurrentID),
+      //     warranty: Number(warrantyRef.current?.value),
+      //     description: String(descriptionRef.current?.value),
+      //     length: Number(lengthRef.current!.value),
+      //     width: Number(widthRef.current!.value),
+      //     height: Number(heightRef.current!.value),
+      //     weight: Number(weightRef.current?.value),
+      //     costPrice: Number(replacingComma(costPriceRef.current!.value)),
+      //     price: Number(replacingComma(priceRef.current!.value)),
+      //     stock: Number(stockRef.current?.value),
+      //     removeImageUrl: [...deletedImages].slice(1) ?? null,
+      //     setMainImageUrl: changeMImageURL,
+      //     setMainImageBase64: changeMImageB64,
+      //     addSecondaryImageBase64: addSecImagesB64,
+          
+      //   })
+      // );
 
-    Product.post({
-      sku: String(skuRef.current?.value),
-      name: String(nameRef.current?.value),
-      brand: String(brandRef.current?.value),
-      categoryId: Number(categoryCurrentID),
-      warranty: Number(warrantyRef.current?.value),
-      description: String(descriptionRef.current?.value),
-      length: Number(lengthRef.current!.value),
-      width: Number(widthRef.current!.value),
-      height: Number(heightRef.current!.value),
-      weight: Number(weightRef.current?.value),
-      costPrice: Number(replacingComma(costPriceRef.current!.value)),
-      price: Number(replacingComma(priceRef.current!.value)),
-      stock: Number(stockRef.current?.value),
-      mainImageBase64,
-      secondaryImagesBase64,
-    }).then((response) => {
-      if (response instanceof Error) {
-        alert(response.stack);
-        rota("/fail-submit");
-      } else {
-        <ContextProductID.Provider
-          value={{ id, setID }}
-        ></ContextProductID.Provider>;
-        setID(Number(response.productId));
-        rota("/sucess-submit");
-      }
-    });
+      Product.put({
+        id: id,
+        sku: String(skuRef.current?.value),
+        name: String(nameRef.current?.value),
+        brand: String(brandRef.current?.value),
+        categoryId: Number(categoryCurrentID),
+        warranty: Number(warrantyRef.current?.value),
+        description: String(descriptionRef.current?.value),
+        length: Number(lengthRef.current!.value),
+        width: Number(widthRef.current!.value),
+        height: Number(heightRef.current!.value),
+        weight: Number(weightRef.current?.value),
+        costPrice: Number(replacingComma(costPriceRef.current!.value)),
+        price: Number(replacingComma(priceRef.current!.value)),
+        stock: Number(stockRef.current?.value),
+        // removeImageUrl: null,
+        // setMainImageUrl: null,
+        // setMainImageBase64: null,
+        // addSecondaryImageBase64: null,
+        removeImageUrl: [...deletedImages].slice(1) ?? null,
+        setMainImageUrl: changeMImageURL,
+        setMainImageBase64: changeMImageB64,
+        addSecondaryImageBase64: addSecImagesB64,
+      })
+      .then((response) => {
+        if (response instanceof Error) {
+          alert(response.stack);
+          // rota("/fail-submit");
+        } else {
+          rota("/");
+        }
+      });
+    }
     return;
   }
 
@@ -163,6 +240,10 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     rota("/");
     return;
   }
+
+  // useEffect(() => {
+  //   console.log(categoryCurrentID);
+  // }, [categoryCurrentID]);
 
   function handleImagesInput(e: React.RefObject<HTMLInputElement>) {
     const files = e.current!.files;
@@ -178,7 +259,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
           imgSrc.length < 5
         ) {
           reader.readAsDataURL(files[i]);
-          reader.onload = () =>
+          reader.onload = () => {
             setImgSrc([
               ...imgSrc,
               {
@@ -187,6 +268,16 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
                 extension: files[i].type,
               },
             ]);
+            if (location.pathname == "/alteracao-de-produtos") {
+              setAddSecImagesB64([
+                ...addSecImagesB64,
+                {
+                  base64: reader.result,
+                  extension: files[i].type.replace(/^\w*[/]/, "."),
+                },
+              ]);
+            }
+          };
           setImagesIsInvalid(false);
         } else if (Number((files[i].size / 1024).toFixed(2)) >= 350) {
           alert("foto maior que 350KB");
@@ -195,6 +286,36 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       }
     }
   }
+
+  function handleDeleteImage(
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) {
+    const img = e.currentTarget;
+        
+    // console.log(img.id)
+    // alert(JSON.stringify(imgSrc))
+
+    if(imgSrc.length === 1) return;
+
+    if(imgSrc.find((item, index) => (item.id === img.id) && (index === 0) )){
+      img.src.includes("https://") ? setChangeMImageURL(imgSrc[1].base64): setChangeMImageURL(null)
+  
+      img.src.includes("data:image/") ? setChangeMImageB64({
+        base64: imgSrc[1].base64,
+        extension: imgSrc[1].extension,
+      }): setChangeMImageB64(null)
+      // alert("ok")
+    }
+    
+    setImgSrc(imgSrc.filter((item) => item.id !== img.id));
+    
+
+    setDeletedImages([...deletedImages, img.src]);
+  }
+
+  useEffect(() => {
+    console.log([...deletedImages].slice(1));
+  }, [deletedImages]);
 
   Category.getAll();
 
@@ -211,7 +332,9 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
           <Breadcrumb className="align-self-center">
             <BreadcrumbItem href="/">Início</BreadcrumbItem>
             <BreadcrumbItem href="/cadastro-de-produtos" active>
-              Cadastrar Produtos
+              {location.pathname == "/alteracao-de-produtos"
+                ? "Alterar Produtos"
+                : "Cadastrar Produtos"}
             </BreadcrumbItem>
           </Breadcrumb>
           <Form
@@ -279,9 +402,10 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
                   </FormLabel>
                   {
                     <DropdownSelector
-                      onclick={(e) =>
-                        setCategoryCurrentID(Number(e.currentTarget.id))
-                      }
+                      categoryIDPutProp={categoryCurrentID}
+                      onclick={(e) => {
+                        setCategoryCurrentID(Number(e.currentTarget.id));
+                      }}
                     />
                   }
                 </FormGroup>
@@ -311,7 +435,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
                   <FormLabel>Imagens do Produto</FormLabel>
                   <Form.Control
                     type="file"
-                    required
+                    // required
                     isInvalid={imagesIsInvalid}
                     accept="image/jpeg, image/jpg, image/webp,  image/jpe"
                     ref={refImages}
@@ -342,13 +466,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
                                 <Image
                                   key={src!.id}
                                   className="m-3 w-75"
-                                  onDoubleClick={(e) =>
-                                    setImgSrc(
-                                      imgSrc.filter(
-                                        (item) => item.id !== e.currentTarget.id
-                                      )
-                                    )
-                                  }
+                                  onDoubleClick={(e) => handleDeleteImage(e)}
                                   style={{
                                     maxWidth: "9.61rem",
                                     maxHeight: "9.5rem",
