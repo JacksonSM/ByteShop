@@ -1,7 +1,7 @@
 import Paginacao from "../../components/Paginacao";
 import React, { useEffect, useRef, useState } from "react";
-import trashIcon from "./assets/img/trash-icon.svg";
 import takeNoteIcon from "./assets/img/takeNote-icon.svg";
+import closeThick from "./assets/img/closeThick-icon.svg";
 import {
   Alert,
   Breadcrumb,
@@ -355,7 +355,7 @@ const Inventario: React.FC = () => {
                         <img alt="ícone lixeira" src={takeNoteIcon} />
                       </button>
                       <button className="btn-product-delete border border-0 rounded bg-body my-auto">
-                        <img alt="ícone papel e lápis" src={trashIcon} />
+                        <img alt="ícone papel e lápis" src={closeThick} />
                       </button>
                     </td>
                   </tr>
