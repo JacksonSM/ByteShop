@@ -243,3 +243,8 @@ button:hover {
     background: $Primary;
   }
 }
+.product-mainImg-inventory {
+  &:hover {
+    cursor: pointer;
+  }
+}

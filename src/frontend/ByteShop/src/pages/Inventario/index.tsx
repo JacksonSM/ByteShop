@@ -323,6 +323,7 @@ const Inventario: React.FC = () => {
                     <td className="text-center align-middle">
                       {item.mainImageUrl && (
                         <Image
+                          className="product-mainImg-inventory"
                           alt={`imagem do produto ${index}`}
                           src={item.mainImageUrl}
                           thumbnail
