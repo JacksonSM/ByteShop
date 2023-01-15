@@ -128,7 +128,7 @@ const Inventario: React.FC = () => {
           <Modal.Title className="fw-bold">{data.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Image src={data.mainImageUrl} className={"w-75 p-2"} />
+          <Image src={data.mainImageUrl} alt="foto do produto" className={"w-75 p-2"} />
           <br />
           <p className="text-start">
             Estoque
@@ -348,6 +348,7 @@ const Inventario: React.FC = () => {
                     <td className="text-center align-middle border">
                       <button
                         className="btn-product-change border border-0 bg-body rounded me-2 my-auto"
+                        title="alterar produto"
                         onClick={() =>
                           handleClickProductChange(item.id ? item.id : 0)
                         }
@@ -355,7 +356,7 @@ const Inventario: React.FC = () => {
                         <img alt="ícone lixeira" src={takeNoteIcon} />
                       </button>
                       <button className="btn-product-delete border border-0 rounded bg-body my-auto">
-                        <img alt="ícone papel e lápis" src={closeThick} />
+                        <img alt="ícone papel e lápis" title="inativar produto" src={closeThick} />
                       </button>
                     </td>
                   </tr>
