@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormSelect,
   Image,
+  Modal,
   Table,
 } from "react-bootstrap";
 import { Product } from "../../services/api/Product";
@@ -26,13 +27,17 @@ const Inventario: React.FC = () => {
   const [activeCategories, setActiveCategories] = useState<Array<string>>([]);
   const [activeItem, setActiveItem] = useState(1);
   const [data, setData] = useState<any>([]);
-  const [itemsTotal,setItemsTotal] = useState(0);
+  const [itemsTotal, setItemsTotal] = useState(0);
   const { id, setID } = useDataProductID();
   const numberOfItemsRef = useRef<HTMLSelectElement>(null);
   const skuRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const brandRef = useRef<HTMLInputElement>(null);
   const categRef = useRef<HTMLSelectElement>(null);
+
+  // modal de imagens do produto
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [showImageModalData, setShowImageModalData] = useState<IProductGet>({});
 
   const rota = useNavigate();
 
@@ -52,7 +57,7 @@ const Inventario: React.FC = () => {
       setShowAlert(true);
       setData(false);
     } else {
-      value.pagination && setItemsTotal(value.pagination.itemsTotal)
+      value.pagination && setItemsTotal(value.pagination.itemsTotal);
       setData(value.content);
       setShowAlert(false);
     }
@@ -69,8 +74,6 @@ const Inventario: React.FC = () => {
     return;
   }
 
-
-  
   useEffect(() => {
     getData({
       itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
@@ -110,6 +113,53 @@ const Inventario: React.FC = () => {
     });
     getActiveCategories();
   }
+
+  const ModalImage: React.FC = () => {
+    const data = showImageModalData;
+    return (
+      <Modal
+        show={showImageModal}
+        onHide={() => setShowImageModal(false)}
+        // backdrop={false}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="fw-bold">{data.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Image src={data.mainImageUrl} className={"w-75 p-2"} />
+          <br />
+          <p className="text-start">
+            Estoque
+            <span className="ms-1 fw-bold">{data.stock}</span>
+          </p>
+          <br />
+          <p className="text-start">
+            status
+            <span className="ms-1 fw-bold">
+              {data.isActive ? "Ativo" : "Inativo"}
+            </span>
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="w-10">
+          <p className="text-start">
+            Preço
+            <span className="ms-1 fw-bold">
+              {Formatter.format(Number(data.price))}
+            </span>
+          </p>
+          <br />
+          <p>
+            Custo
+            <span className="ms-1 fw-bold">
+              {Formatter.format(Number(data.costPrice))}
+            </span>
+          </p>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
 
   return (
     <Container fluid>
@@ -232,76 +282,89 @@ const Inventario: React.FC = () => {
         </Alert>
       ) : null}
       {data ? (
-        <Table
-          size="lg"
-          className="mt-3 border bg-white shadow-sm"
-          bordered={true}
-        >
-          <thead>
-            <tr>
-              <th className="fs-5  text-center align-middle border">#</th>
-              <th className="fs-5 text-center align-middle border">Status</th>
-              <th className="fs-5 text-center align-middle border">SKU</th>
-              <th className="fs-5 text-center align-middle border">Imagem</th>
-              <th className="fs-5 text-center align-middle border">Nome</th>
-              <th className="fs-5 text-center align-middle border">Preço</th>
-              <th className="fs-5 text-center align-middle border">
-                Categoria
-              </th>
-              <th className="fs-5 text-center align-middle border">Estoque</th>
-              <th className="fs-5 text-center align-middle border">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item: IProductGet, index: number) => {
-              return (
-                <tr
-                  id={String(item.id)}
-                  key={index}
-                  className="border text-start"
-                >
-                  <td className="fs-6 fw-bold text-center align-middle border">
-                    {index + 1}
-                  </td>
-                    <td className="text-center align-middle">{item.isActive ? "Ativo": "Inativo"}</td>
-                  <td className="text-center align-middle">{item.sku}</td>
-                  <td className="text-center align-middle">
-                    {item.mainImageUrl && (
-                      <Image
-                      alt={`imagem do produto ${index}`}
-                      src={item.mainImageUrl}
-                      thumbnail
-                      style={{ width: "6rem", height: "6rem" }}
-                      />
+        <>
+          <Table
+            size="lg"
+            className="mt-3 border bg-white shadow-sm"
+            bordered={true}
+          >
+            <thead>
+              <tr>
+                <th className="fs-5  text-center align-middle border">#</th>
+                <th className="fs-5 text-center align-middle border">Status</th>
+                <th className="fs-5 text-center align-middle border">SKU</th>
+                <th className="fs-5 text-center align-middle border">Imagem</th>
+                <th className="fs-5 text-center align-middle border">Nome</th>
+                <th className="fs-5 text-center align-middle border">Preço</th>
+                <th className="fs-5 text-center align-middle border">
+                  Categoria
+                </th>
+                <th className="fs-5 text-center align-middle border">
+                  Estoque
+                </th>
+                <th className="fs-5 text-center align-middle border">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item: IProductGet, index: number) => {
+                return (
+                  <tr
+                    id={String(item.id)}
+                    key={index}
+                    className="border text-start"
+                  >
+                    <td className="fs-6 fw-bold text-center align-middle border">
+                      {index + 1}
+                    </td>
+                    <td className="text-center align-middle">
+                      {item.isActive ? "Ativo" : "Inativo"}
+                    </td>
+                    <td className="text-center align-middle">{item.sku}</td>
+                    <td className="text-center align-middle">
+                      {item.mainImageUrl && (
+                        <Image
+                          alt={`imagem do produto ${index}`}
+                          src={item.mainImageUrl}
+                          thumbnail
+                          onClick={() => {
+                            setShowImageModalData(item);
+                            setShowImageModal(true);
+                          }}
+                          style={{ width: "6rem", height: "6rem" }}
+                        />
                       )}
-                  </td>
-                  <td className="text-center align-middle">{item.name}</td>
+                    </td>
+                    <td className="text-center align-middle">{item.name}</td>
 
-                  <td className="text-center align-middle">
-                    {Formatter.format(Number(item.price))}
-                  </td>
-                  <td className="text-center align-middle">
-                    {item.category?.name}
-                  </td>
-                  <td className="text-center align-middle">{item.stock} un</td>
-                  <td className="text-center align-middle border">
-                    <button
-                      className="btn-product-change border border-0 bg-body rounded me-2 my-auto"
-                      onClick={() =>
-                        handleClickProductChange(item.id ? item.id : 0)
-                      }
-                    >
-                      <img alt="ícone lixeira" src={takeNoteIcon} />
-                    </button>
-                    <button className="btn-product-delete border border-0 rounded bg-body my-auto">
-                      <img alt="ícone papel e lápis" src={trashIcon} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+                    <td className="text-center align-middle">
+                      {Formatter.format(Number(item.price))}
+                    </td>
+                    <td className="text-center align-middle">
+                      {item.category?.name}
+                    </td>
+                    <td className="text-center align-middle">
+                      {item.stock} un
+                    </td>
+                    <td className="text-center align-middle border">
+                      <button
+                        className="btn-product-change border border-0 bg-body rounded me-2 my-auto"
+                        onClick={() =>
+                          handleClickProductChange(item.id ? item.id : 0)
+                        }
+                      >
+                        <img alt="ícone lixeira" src={takeNoteIcon} />
+                      </button>
+                      <button className="btn-product-delete border border-0 rounded bg-body my-auto">
+                        <img alt="ícone papel e lápis" src={trashIcon} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+          <ModalImage />
+        </>
       ) : null}
       <Paginacao
         dataSize={itemsTotal}
