@@ -34,10 +34,18 @@ const Inventario: React.FC = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const brandRef = useRef<HTMLInputElement>(null);
   const categRef = useRef<HTMLSelectElement>(null);
+  const productIdRef = useRef<any>(undefined);
 
   // modal de imagens do produto
   const [showImageModal, setShowImageModal] = useState(false);
   const [showImageModalData, setShowImageModalData] = useState<IProductGet>({});
+
+  // modal de aviso de inativação do produto
+  const [showWarningInativeProduct, setShowWarningInativeProduct] =
+    useState(false);
+  const [idInactiveProductTarget, setIdInactiveProductTarget] = useState<
+    number | null
+  >(null);
 
   const rota = useNavigate();
 
@@ -114,6 +122,16 @@ const Inventario: React.FC = () => {
     getActiveCategories();
   }
 
+  function handleClickInativeProduct(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+    setShowWarningInativeProduct(true);
+    const target: any = e.currentTarget!.parentNode!.parentNode;
+
+    console.log(target.id);
+    setIdInactiveProductTarget(target.id);
+  }
+
   const ModalImage: React.FC = () => {
     const data = showImageModalData;
     return (
@@ -128,7 +146,11 @@ const Inventario: React.FC = () => {
           <Modal.Title className="fw-bold">{data.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Image src={data.mainImageUrl} alt="foto do produto" className={"w-75 p-2"} />
+          <Image
+            src={data.mainImageUrl}
+            alt="foto do produto"
+            className={"w-75 p-2"}
+          />
           <br />
           <p className="text-start">
             Estoque
@@ -142,7 +164,7 @@ const Inventario: React.FC = () => {
             </span>
           </p>
         </Modal.Body>
-        <Modal.Footer className="w-10">
+        <Modal.Footer className="w-100">
           <p className="text-start">
             Preço
             <span className="ms-1 fw-bold">
@@ -156,6 +178,81 @@ const Inventario: React.FC = () => {
               {Formatter.format(Number(data.costPrice))}
             </span>
           </p>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  const WarningInativeProduct: React.FC = () => {
+    const id = idInactiveProductTarget;
+    const [productData, setProductData] = useState<IProductGet | null>(null);
+
+    useEffect(() => {
+      id
+        ? Product.getById(id).then((data) => setProductData(data))
+        : setShowWarningInativeProduct(false);
+    }, []);
+
+    function handleClickYes() {
+      id
+        ? Product.InativeById(id).then((status) => {
+            if (status === 202) {
+              location.reload();
+            } else alert("erro ao inativar o produto");
+          })
+        : null;
+      return;
+    }
+
+    return (
+      <Modal
+        show={showWarningInativeProduct}
+        onHide={() => setShowWarningInativeProduct(false)}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className=" fs-5 text-danger fw-bold">
+            Inativação de produtos
+          </Modal.Title>
+        </Modal.Header>
+        {productData ? (
+          <Modal.Body>
+            <h3 className="fs-5">{productData.name}</h3>
+            <Image
+              src={productData.mainImageUrl}
+              alt="foto do produto"
+              className={"w-75 p-2"}
+            />
+            <br />
+            <p className="text-start">
+              status
+              <span className="ms-1 fw-bold">
+                {productData.isActive ? "Ativo" : "Inativo"}
+              </span>
+            </p>
+          </Modal.Body>
+        ) : null}
+
+        <Modal.Footer className="w-100 d-flex justify-content-center">
+          <p className="text-danger">Deseja inativar este produto? </p>
+          <Container className="ms-3 w-auto">
+            <Button
+              type="submit"
+              variant="outline-danger"
+              className="me-3"
+              onClick={() => handleClickYes()}
+            >
+              Sim
+            </Button>
+            <Button
+              id="btnCancelar"
+              variant="outline-primary"
+              onClick={() => setShowWarningInativeProduct(false)}
+            >
+              Não
+            </Button>
+          </Container>
         </Modal.Footer>
       </Modal>
     );
@@ -311,6 +408,7 @@ const Inventario: React.FC = () => {
                   <tr
                     id={String(item.id)}
                     key={index}
+                    ref={productIdRef}
                     className="border text-start"
                   >
                     <td className="fs-6 fw-bold text-center align-middle border">
@@ -356,8 +454,15 @@ const Inventario: React.FC = () => {
                       >
                         <img alt="ícone lixeira" src={takeNoteIcon} />
                       </button>
-                      <button className="btn-product-delete border border-0 rounded bg-body my-auto">
-                        <img alt="ícone papel e lápis" title="inativar produto" src={closeThick} />
+                      <button
+                        className="btn-product-delete border border-0 rounded bg-body my-auto"
+                        onClick={(e) => handleClickInativeProduct(e)}
+                      >
+                        <img
+                          alt="ícone papel e lápis"
+                          title="inativar produto"
+                          src={closeThick}
+                        />
                       </button>
                     </td>
                   </tr>
@@ -366,6 +471,7 @@ const Inventario: React.FC = () => {
             </tbody>
           </Table>
           <ModalImage />
+          <WarningInativeProduct />
         </>
       ) : null}
       <Paginacao

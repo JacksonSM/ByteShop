@@ -71,4 +71,17 @@ async function put(parameters: IProductPut): Promise<IResponseProduct | Error> {
   }
 }
 
-export const Product = { get, post, getById, put };
+async function InativeById(id: number): Promise<number | Error> {
+  try {
+    const { status } = await api.delete(`product/${id}`);
+
+    if (status) {
+      return status;
+    }
+    return new Error("Erro ao inativar o produto!");
+  } catch (error) {
+    return error as AxiosError;
+  }
+}
+
+export const Product = { get, post, getById, put, InativeById };
