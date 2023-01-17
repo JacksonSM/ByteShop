@@ -10,6 +10,7 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
     public ImageBase64 SetMainImageBase64 { get; set; }
     public string SetMainImageUrl { get; set; }
     public ImageBase64[] AddSecondaryImageBase64 { get; set; }
+    public string[] AddSecondaryImageUrl { get; set; }
 
     /// <summary>
     /// Retorna o valor total de imagens para serem removidas, 

@@ -1,7 +1,6 @@
 ﻿using ByteShop.Domain.DomainMessages;
 using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
-using FluentValidation;
 
 namespace ByteShop.Domain.Entities;
 public class Product : Entity, IAggregateRoot
@@ -18,11 +17,19 @@ public class Product : Entity, IAggregateRoot
     public float Height { get; private set; }
     public float Length { get; private set; }
     public float Width { get; private set; }
-    public string MainImageUrl { get; private set; } = string.Empty;
-    public string SecondaryImageUrl { get; private set; } = string.Empty;
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
     public bool IsActive { get; private set; }
+
+    public string MainImageUrl { get; private set; } = string.Empty;
+    private string secondaryImageUrl = string.Empty;
+
+    public List<string> SecondaryImageUrl 
+    { 
+        get => secondaryImageUrl.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+
+
 
     public Product() { }
 
@@ -85,20 +92,19 @@ public class Product : Entity, IAggregateRoot
         if (string.IsNullOrEmpty(MainImageUrl))
             AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
 
-        SecondaryImageUrl += imageUrl + " ";
-    }
-
-    public string[] GetSecondaryImageUrl()
-    {
-        if (SecondaryImageUrl is not null)
-        {
-            string[] urls = SecondaryImageUrl
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            return urls;
-        }
+        if (SecondaryImageUrl.Count == 0)
+            secondaryImageUrl = imageUrl;
         else
+            secondaryImageUrl += $" {imageUrl}";
+    }
+    public void AddSecondaryImage(string[] imageUrls)
+    {
+        if (string.IsNullOrEmpty(MainImageUrl))
+            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
+
+        foreach (var url in imageUrls)
         {
-            return null;
+            AddSecondaryImage(url);
         }
     }
 
@@ -106,8 +112,7 @@ public class Product : Entity, IAggregateRoot
     {
         int total = 0;
         if (!string.IsNullOrEmpty(MainImageUrl)) total++;
-        var secondary = GetSecondaryImageUrl();
-        total += secondary?.Length ?? 0;
+        total += SecondaryImageUrl?.Count ?? 0;
         return total;
     }
 
@@ -118,21 +123,24 @@ public class Product : Entity, IAggregateRoot
 
     public void RemoveSecondaryImage(string url)
     {
-        var urls = GetSecondaryImageUrl().ToList();
-        urls.Remove(url);
-        SetSecondaryImageUrl(urls.ToArray());
+        var result = SecondaryImageUrl.Remove(url);
+        if (result)
+        {
+            secondaryImageUrl = string.Join(" ", SecondaryImageUrl);
+        }
+        else
+        {
+            AddValidationError("SecondaryImageUrl",
+                ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST);
+        }
     }
 
-    private void SetSecondaryImageUrl(string[] urls)
-    {
-        SecondaryImageUrl = string.Join(" ", urls);
-    }
 
     public List<string> GetAllImages()
     {
         var images = new List<string>();
         images.Add(MainImageUrl);
-        images.AddRange(GetSecondaryImageUrl());
+        images.AddRange(SecondaryImageUrl);
         return images;
     }
 

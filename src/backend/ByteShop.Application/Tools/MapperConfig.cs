@@ -14,7 +14,7 @@ public class MapperConfig : Profile
     {
         CreateMap<Domain.Entities.Product, ProductDTO>()
             .ForMember(x => x.SecondaryImageUrl,
-            x => x.MapFrom(x => x.GetSecondaryImageUrl()));
+            x => x.MapFrom(x => x.SecondaryImageUrl));
 
         CreateMap<Domain.Entities.Category, CategoryDTO>();
         CreateMap<Domain.Entities.Category, CategoryWithAssociationDTO>();

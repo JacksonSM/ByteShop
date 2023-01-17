@@ -99,6 +99,14 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
                 product.AddSecondaryImage(url);
             }
         }
+
+        if (command.AddSecondaryImageUrl?.Length > 0)
+        {
+            foreach (var imageUrl in command.AddSecondaryImageUrl)
+            {
+                product.AddSecondaryImage(imageUrl);
+            }
+        }
     }
 }
 

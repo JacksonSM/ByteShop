@@ -57,6 +57,10 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .WithMany(r => r.Products)
                .HasForeignKey(f => f.CategoryId);
 
+        builder.Property("secondaryImageUrl")
+               .HasColumnName("SecondaryImageUrl");
+
         builder.Ignore(c => c.ValidationResult);
+        builder.Ignore(c => c.SecondaryImageUrl);
     }
 }

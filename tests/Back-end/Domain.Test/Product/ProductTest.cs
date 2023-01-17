@@ -264,6 +264,7 @@ public class ProductTest
                 width: 34f,
                 categoryId: 65
             );
+
         product.SetMainImage("https://umaimagem.com");
         product.AddSecondaryImage("https://umaimagem.com");
         product.AddSecondaryImage("https://umaimagem.com");

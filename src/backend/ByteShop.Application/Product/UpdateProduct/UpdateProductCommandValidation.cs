@@ -34,11 +34,6 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
             .When(x => !string.IsNullOrEmpty(x.SetMainImageUrl))
             .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
 
-        RuleFor(x => x.SetMainImageUrl)
-            .Must(x => x is null)
-            .When(x => x.SetMainImageBase64 is not null)
-            .WithMessage(ResourceValidationErrorMessage.UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE);
-
         RuleFor(x => x.SetMainImageBase64).SetValidator(new ImageBase64Validation());
         RuleForEach(x => x.AddSecondaryImageBase64).SetValidator(new ImageBase64Validation());
     }

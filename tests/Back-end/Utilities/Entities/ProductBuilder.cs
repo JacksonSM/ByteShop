@@ -6,7 +6,7 @@ public class ProductBuilder
 {
     public static Product BuildProduct(int numberSecondaryImages = 3)
     {
-        return new Faker<Product>()
+        var productFaker = new Faker<Product>()
             .RuleFor(c => c.Id, f => f.Random.Number(0, 500))
             .RuleFor(c => c.Name, f => f.Commerce.ProductName())
             .RuleFor(c => c.Description, f => f.Commerce.ProductDescription())
@@ -21,8 +21,11 @@ public class ProductBuilder
             .RuleFor(c => c.Width, f => f.Random.Float(1))
             .RuleFor(c => c.Length, f => f.Random.Float(1))
             .RuleFor(c => c.CategoryId, f => f.Random.Number(0, 500))
-            .RuleFor(c => c.MainImageUrl, f => f.Internet.Url())
-            .RuleFor(c => c.SecondaryImageUrl, f => string.Join(" ", f.Make(numberSecondaryImages,
-            () => f.Internet.Url()).ToArray()));
+            .RuleFor(c => c.MainImageUrl, f => f.Internet.Url()).Generate();
+
+        var faker = new Faker();
+        string[] urls = faker.Make(numberSecondaryImages,() => faker.Internet.Url()).ToArray();
+        productFaker.AddSecondaryImage(urls);
+        return productFaker;
     }
 }

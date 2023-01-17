@@ -47,7 +47,7 @@ namespace ByteShop.Infrastructure.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("ByteShop.Domain.Entities.Product", b =>
@@ -117,7 +117,7 @@ namespace ByteShop.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("ByteShop.Infrastructure.Identity.ApplicationUser", b =>
