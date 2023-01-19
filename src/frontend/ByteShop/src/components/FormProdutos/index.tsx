@@ -24,7 +24,7 @@ import { DropdownSelector } from "../categorias/DropdownSelector";
 import { Category } from "../../services/api/Category";
 import { ContextProductID, useDataProductID } from "../context";
 import { ContextProductChangeDataProvider } from "../../pages/AlteracaoProduto/context/provider";
-import { replacingComma, replacingDot } from "../../utils";
+import { replacingComma, replacingDot, urlRegex, base64Regex, base64ReplacePatternRegex, base64ExtensionReplaceReg } from "../../utils";
 
 type TBtnText = { btnText?: string };
 
@@ -39,12 +39,21 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
 
   const [imgSrc, setImgSrc] = useState<TImgSrc[]>([]);
   const [imagesIsInvalid, setImagesIsInvalid] = useState(false);
-  const [deletedImages, setDeletedImages] = useState<Array<string>>([""]);
+  const [deletedImages, setDeletedImages] = useState<Array<string | URL>>([""]);
   const [addSecImagesB64, setAddSecImagesB64] = useState<any[]>([]);
 
   const [changeMImageB64, setChangeMImageB64] = useState<TImgSrc | null>(null);
 
-  const [changeMImageURL, setChangeMImageURL] = useState<string |null>(null);
+  const [changeMImageURL, setChangeMImageURL] = useState<string | null>(null);
+
+  // verificando se é uma URL valida
+  function checkUrl(url: string) {
+      if (urlRegex.test(url)) return true
+      else {
+        console.error("URL inválida!");
+        return false;
+      }
+    }
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
@@ -73,10 +82,8 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
   }, []);
 
   useEffect(() => {
-    console.log(deletedImages)
+    console.log(deletedImages);
   }, [deletedImages]);
-
-
 
   useEffect(() => {
     if (changeData !== null && location.pathname == "/alteracao-de-produtos") {
@@ -101,14 +108,12 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
         { id: String(changeData.id), base64: changeData.mainImageUrl },
         ...secondaryImageUrl,
       ]);
-      // console.log(imgSrc)
     } else {
       skuRef.current!.value = "";
       nameRef.current!.value = "";
       brandRef.current!.value = "";
       descriptionRef.current!.value = "";
       warrantyRef.current!.value = "";
-      // categoryCurrentID
       lengthRef.current!.value = "";
       widthRef.current!.value = "";
       heightRef.current!.value = "";
@@ -134,7 +139,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     if (location.pathname === "/cadastro-de-produtos") {
       const mainImageBase64: IImgsJson = {
         base64: imgSrc[0]?.base64,
-        extension: imgSrc[0].extension.replace(/^\w*[/]/, "."),
+        extension: imgSrc[0].extension.replace(base64ExtensionReplaceReg, "."),
       };
 
       let secondaryImagesBase64: IImgsJson[] = [];
@@ -176,30 +181,6 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       });
     }
     if (location.pathname === "/alteracao-de-produtos") {
-      // console.log(
-      //   JSON.stringify({
-      //     id: id,
-      //     sku: String(skuRef.current?.value),
-      //     name: String(nameRef.current?.value),
-      //     brand: String(brandRef.current?.value),
-      //     categoryId: Number(categoryCurrentID),
-      //     warranty: Number(warrantyRef.current?.value),
-      //     description: String(descriptionRef.current?.value),
-      //     length: Number(lengthRef.current!.value),
-      //     width: Number(widthRef.current!.value),
-      //     height: Number(heightRef.current!.value),
-      //     weight: Number(weightRef.current?.value),
-      //     costPrice: Number(replacingComma(costPriceRef.current!.value)),
-      //     price: Number(replacingComma(priceRef.current!.value)),
-      //     stock: Number(stockRef.current?.value),
-      //     removeImageUrl: [...deletedImages].slice(1) ?? null,
-      //     setMainImageUrl: changeMImageURL,
-      //     setMainImageBase64: changeMImageB64,
-      //     addSecondaryImageBase64: addSecImagesB64,
-          
-      //   })
-      // );
-
       Product.put({
         id: id,
         sku: String(skuRef.current?.value),
@@ -215,10 +196,6 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
         costPrice: Number(replacingComma(costPriceRef.current!.value)),
         price: Number(replacingComma(priceRef.current!.value)),
         stock: Number(stockRef.current?.value),
-        // removeImageUrl: null,
-        // setMainImageUrl: null,
-        // setMainImageBase64: null,
-        // addSecondaryImageBase64: null,
         removeImageUrl: [...deletedImages].slice(1) ?? null,
         setMainImageUrl: changeMImageURL,
         setMainImageBase64: changeMImageB64,
@@ -227,7 +204,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
       .then((response) => {
         if (response instanceof Error) {
           alert(response.stack);
-          // rota("/fail-submit");
+          rota("/fail-submit");
         } else {
           rota("/");
         }
@@ -241,9 +218,6 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     return;
   }
 
-  // useEffect(() => {
-  //   console.log(categoryCurrentID);
-  // }, [categoryCurrentID]);
 
   function handleImagesInput(e: React.RefObject<HTMLInputElement>) {
     const files = e.current!.files;
@@ -291,26 +265,28 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     e: React.MouseEvent<HTMLImageElement, MouseEvent>
   ) {
     const img = e.currentTarget;
-        
-    // console.log(img.id)
-    // alert(JSON.stringify(imgSrc))
 
-    if(imgSrc.length === 1) return;
+    if (imgSrc.length === 1) return;
 
-    if(imgSrc.find((item, index) => (item.id === img.id) && (index === 0) )){
-      img.src.includes("https://") ? setChangeMImageURL(imgSrc[1].base64): setChangeMImageURL(null)
-  
-      img.src.includes("data:image/") ? setChangeMImageB64({
-        base64: imgSrc[1].base64,
-        extension: imgSrc[1].extension,
-      }): setChangeMImageB64(null)
+    if (imgSrc.find((item, index) => item.id === img.id && index === 0)) {
+      urlRegex.test(imgSrc[1].base64)
+        ? setChangeMImageURL(imgSrc[1].base64)
+        : setChangeMImageURL(null);
+
+     if(base64Regex.test(imgSrc[1].base64.replace(base64ReplacePatternRegex, ""))){
+        setChangeMImageB64({
+            base64: imgSrc[1].base64,
+            extension: imgSrc[1].extension.replace(base64ExtensionReplaceReg, "."),
+          })
+          setAddSecImagesB64(addSecImagesB64.filter(img => img.base64 !== changeMImageB64.base64))
+          } else setChangeMImageB64(null);
+
       // alert("ok")
     }
-    
-    setImgSrc(imgSrc.filter((item) => item.id !== img.id));
-    
 
-    setDeletedImages([...deletedImages, img.src]);
+    setImgSrc(imgSrc.filter((item) => item.id !== img.id));
+
+    checkUrl(img.src) && setDeletedImages([...deletedImages, img.src]);
   }
 
   useEffect(() => {
