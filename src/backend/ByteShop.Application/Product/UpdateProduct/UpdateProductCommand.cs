@@ -35,7 +35,7 @@ public class UpdateProductCommand : ProductCommand<ValidationResult>
         return total;
     }
 
-    public bool IsValid(Domain.Entities.Product product, Domain.Entities.Category category)
+    public bool IsValid(Domain.Entities.ProductAggregate.Product product, Domain.Entities.Category category)
     {
         var validator = new UpdateProductCommandValidation(category, product);
         ValidationResult = validator.Validate(this);

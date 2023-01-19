@@ -1,4 +1,4 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.Entities.ProductAggregate;
 using ByteShop.Domain.Interfaces.Repositories;
 using ByteShop.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;

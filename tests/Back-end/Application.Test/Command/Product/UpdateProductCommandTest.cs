@@ -58,7 +58,7 @@ public class UpdateProductCommandTest
         command.SetMainImageUrl = "https://www.google.com.br/";
 
         //Act
-        var result = command.IsValid(new ByteShop.Domain.Entities.Product(),
+        var result = command.IsValid(new ByteShop.Domain.Entities.ProductAggregate.Product(),
             new ByteShop.Domain.Entities.Category());
             
         //Assert
@@ -77,7 +77,7 @@ public class UpdateProductCommandTest
             numberOfSecondaryImagesToAdd: 0);
 
         //Act
-        var result = command.IsValid(new ByteShop.Domain.Entities.Product(),
+        var result = command.IsValid(new ByteShop.Domain.Entities.ProductAggregate.Product(),
             new ByteShop.Domain.Entities.Category());
 
         //Assert
@@ -96,7 +96,7 @@ public class UpdateProductCommandTest
         command.SetMainImageUrl = "https://www.google.com.br/seila";
 
         //Act
-        var result = command.IsValid(new ByteShop.Domain.Entities.Product(),
+        var result = command.IsValid(new ByteShop.Domain.Entities.ProductAggregate.Product(),
             new ByteShop.Domain.Entities.Category());
 
         //Assert
@@ -115,7 +115,7 @@ public class UpdateProductCommandTest
         command.SetMainImageUrl = "https://www.google.com.br/seila";
 
         //Act
-        var result = command.IsValid(new ByteShop.Domain.Entities.Product(),
+        var result = command.IsValid(new ByteShop.Domain.Entities.ProductAggregate.Product(),
             new ByteShop.Domain.Entities.Category());
 
         //Assert

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ByteShop.Application.DTOs;
-using ByteShop.Domain.Entities;
 
 namespace ByteShop.Application.Tools;
 public class MapperConfig : Profile
@@ -12,9 +11,9 @@ public class MapperConfig : Profile
 
     private void EntityForDTO()
     {
-        CreateMap<Domain.Entities.Product, ProductDTO>()
+        CreateMap<Domain.Entities.ProductAggregate.Product, ProductDTO>()
             .ForMember(x => x.SecondaryImageUrl,
-            x => x.MapFrom(x => x.SecondaryImageUrl));
+            x => x.MapFrom(x => x.ImagesUrl.SecondaryImages));
 
         CreateMap<Domain.Entities.Category, CategoryDTO>();
         CreateMap<Domain.Entities.Category, CategoryWithAssociationDTO>();

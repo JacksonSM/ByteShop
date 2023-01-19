@@ -1,5 +1,7 @@
 ﻿using ByteShop.Domain.DomainMessages;
+using ByteShop.Domain.Entities.ProductAggregate;
 using FluentValidation;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ByteShop.Domain.Entities.Validations;
 public class ProductValidation : AbstractValidator<Product>
@@ -58,5 +60,14 @@ public class ProductValidation : AbstractValidator<Product>
             .GreaterThanOrEqualTo(1)
             .WithMessage(ResourceValidationErrorMessage.PRODUCT_CATEGORYID_LESS_OR_EQUAL_TO_ZERO);
 
+        ImageValidation();
+    }
+
+    private void ImageValidation()
+    {
+        RuleFor(c => c.ImagesUrl.MainImageUrl)
+            .Must(mainImage => !string.IsNullOrEmpty(mainImage))
+            .When(product => product.ImagesUrl.SecondaryImages?.Count > 0)
+            .WithMessage(ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 }

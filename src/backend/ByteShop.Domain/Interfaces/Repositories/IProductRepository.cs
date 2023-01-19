@@ -1,4 +1,4 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.Entities.ProductAggregate;
 
 namespace ByteShop.Domain.Interfaces.Repositories;
 public interface IProductRepository : IRepository<Product>

@@ -1,4 +1,4 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.Entities.ProductAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -57,10 +57,14 @@ public class ProductMap : IEntityTypeConfiguration<Product>
                .WithMany(r => r.Products)
                .HasForeignKey(f => f.CategoryId);
 
-        builder.Property("secondaryImageUrl")
+        builder.OwnsOne(x => x.ImagesUrl)
+               .Property("_mainImageUrl")
+               .HasColumnName("MainImageUrl");
+        
+        builder.OwnsOne(x => x.ImagesUrl)
+               .Property("_secondaryImageUrl")
                .HasColumnName("SecondaryImageUrl");
 
         builder.Ignore(c => c.ValidationResult);
-        builder.Ignore(c => c.SecondaryImageUrl);
     }
 }

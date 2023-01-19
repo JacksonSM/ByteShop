@@ -18,7 +18,7 @@ public class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, GetAll
 
     public async Task<GetAllProductsResponse> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
     {
-        (IEnumerable<Domain.Entities.Product> products, int quantityProduct) =
+        (IEnumerable<Domain.Entities.ProductAggregate.Product> products, int quantityProduct) =
             await _productRepo.GetAllAsync
         (
             sku: query.sku,

@@ -11,7 +11,7 @@ public class ProductTest
     public void ProductConstrutor_WithValidData_ValidProduct()
     {
         //Act
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Teclado yamp",
                 description: "Top",
@@ -49,7 +49,7 @@ public class ProductTest
     public void Update_WithNewCategory_ValidProduct()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Teclado Negativo",
                 description: "naquele preço",
@@ -106,7 +106,7 @@ public class ProductTest
     public void Update_WithoutNewCategory_ValidProduct()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Teclado Negativo",
                 description: "naquele preço",
@@ -162,7 +162,7 @@ public class ProductTest
     public void AddSecondaryImage_AddSecondaryImageWithoutValueToMainImage_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Mouse razer",
                 description: "Bom de mais",
@@ -180,9 +180,11 @@ public class ProductTest
             );
 
         //Act
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        var result = product.IsValid();
 
         //Assert
+        result.Should().BeFalse();
         product.ValidationResult.Errors.Should().ContainSingle(ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
     }
 
@@ -191,7 +193,7 @@ public class ProductTest
     public void GetImagesTotal_NoImage_ShouldReturn0()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product(
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product(
                 name: "Mouse razer",
                 description: "Bom de mais",
                 sku: "mouse-razer",
@@ -208,7 +210,7 @@ public class ProductTest
             );
 
         //Act
-        var result = product.GetImagesTotal();
+        var result = product.ImagesUrl.GetImagesTotal();
 
         //Assert
         result.Should().Be(0);
@@ -219,7 +221,7 @@ public class ProductTest
     public void GetImagesTotal_MainImageOnly_ShouldReturn1()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product(
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product(
                 name: "Mouse razer",
                 description: "Bom de mais",
                 sku: "mouse-razer",
@@ -234,10 +236,10 @@ public class ProductTest
                 width: 34f,
                 categoryId: 65
             );
-        product.SetMainImage("https://thumbs.dreamstime.com/z/helo-informal-hindi-word-hello-handwritten-white-background-171060017.jpg");
+        product.ImagesUrl.SetMainImage("https://thumbs.dreamstime.com/z/helo-informal-hindi-word-hello-handwritten-white-background-171060017.jpg");
 
         //Act
-        var result = product.GetImagesTotal();
+        var result = product.ImagesUrl.GetImagesTotal();
 
         //Assert
         result.Should().Be(1);
@@ -248,7 +250,7 @@ public class ProductTest
     public void GetImagesTotal_WithMainImageAnd3SecondaryOnes_ShouldReturn4()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Mouse razer",
                 description: "Bom de mais",
@@ -265,13 +267,13 @@ public class ProductTest
                 categoryId: 65
             );
 
-        product.SetMainImage("https://umaimagem.com");
-        product.AddSecondaryImage("https://umaimagem.com");
-        product.AddSecondaryImage("https://umaimagem.com");
-        product.AddSecondaryImage("https://umaimagem.com");
+        product.ImagesUrl.SetMainImage("https://umaimagem.com");
+        product.ImagesUrl.AddSecondaryImage("https://umaimagem.com");
+        product.ImagesUrl.AddSecondaryImage("https://umaimagem.com");
+        product.ImagesUrl.AddSecondaryImage("https://umaimagem.com");
 
         //Act
-        var result = product.GetImagesTotal();
+        var result = product.ImagesUrl.GetImagesTotal();
 
         //Assert
         result.Should().Be(4);
@@ -282,7 +284,7 @@ public class ProductTest
     public void AddSecondaryImage_WithValidData_TheSecondaryImageUrlPropertyMustContainTheNewImage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Mouse razer",
                 description: "Bom de mais",
@@ -299,11 +301,11 @@ public class ProductTest
                 categoryId: 65
             );
 
-        product.SetMainImage("https://m.media-amazon.com/images/I/712FFQs35IL._AC_SY741_.jpg");
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        product.ImagesUrl.SetMainImage("https://m.media-amazon.com/images/I/712FFQs35IL._AC_SY741_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
 
         //Act
-        var result = product.SecondaryImageUrl
+        var result = product.ImagesUrl.SecondaryImages
             .Contains("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
 
         //Assert
@@ -315,7 +317,7 @@ public class ProductTest
     public void AddSecondaryImage_ProductNoMainImage_InvalidProduct()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Mouse razer",
                 description: "Bom de mais",
@@ -333,7 +335,7 @@ public class ProductTest
             );
 
         //Act
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
 
         //Assert
         var result = product.IsValid();
@@ -347,7 +349,7 @@ public class ProductTest
     public void RemoveSecondaryImage_WithValidData_ImageMustBeRemovedFromSecondaryImages()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Mouse razer",
                 description: "Bom de mais",
@@ -363,16 +365,16 @@ public class ProductTest
                 width: 34f,
                 categoryId: 65
             );
-        product.SetMainImage("https://m.media-amazon.com/images/I/712FFQs35IL._AC_SY741_.jpg");
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71VQ3m40TKL._AC_SL1500_.jpg");
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
-        product.AddSecondaryImage("https://m.media-amazon.com/images/I/71ZZ0N1fOEL._AC_SL1500_.jpg");
+        product.ImagesUrl.SetMainImage("https://m.media-amazon.com/images/I/712FFQs35IL._AC_SY741_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71VQ3m40TKL._AC_SL1500_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        product.ImagesUrl.AddSecondaryImage("https://m.media-amazon.com/images/I/71ZZ0N1fOEL._AC_SL1500_.jpg");
 
         //Act
-        product.RemoveSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
+        product.ImagesUrl.RemoveSecondaryImage("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
 
         //Assert
-        product.SecondaryImageUrl
+        product.ImagesUrl.SecondaryImages
             .Should()
             .NotContain("https://m.media-amazon.com/images/I/71UU6EIWTBL._AC_SL1500_.jpg");
     }

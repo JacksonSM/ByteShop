@@ -1,8 +1,7 @@
-﻿using ByteShop.Domain.DomainMessages;
-using ByteShop.Domain.Entities.Validations;
+﻿using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
 
-namespace ByteShop.Domain.Entities;
+namespace ByteShop.Domain.Entities.ProductAggregate;
 public class Product : Entity, IAggregateRoot
 {
     public string Name { get; private set; }
@@ -20,15 +19,7 @@ public class Product : Entity, IAggregateRoot
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
     public bool IsActive { get; private set; }
-
-    public string MainImageUrl { get; private set; } = string.Empty;
-    private string secondaryImageUrl = string.Empty;
-
-    public List<string> SecondaryImageUrl 
-    { 
-        get => secondaryImageUrl.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
-    }
-
+    public ImagesUrl ImagesUrl { get; } = new();
 
 
     public Product() { }
@@ -82,67 +73,11 @@ public class Product : Entity, IAggregateRoot
 
     }
 
-    public void SetMainImage(string imageUrl)
-    {
-        MainImageUrl = imageUrl;
-    }
-
-    public void AddSecondaryImage(string imageUrl)
-    {
-        if (string.IsNullOrEmpty(MainImageUrl))
-            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
-
-        if (SecondaryImageUrl.Count == 0)
-            secondaryImageUrl = imageUrl;
-        else
-            secondaryImageUrl += $" {imageUrl}";
-    }
-    public void AddSecondaryImage(string[] imageUrls)
-    {
-        if (string.IsNullOrEmpty(MainImageUrl))
-            AddValidationError("MainImageUrl", ResourceDomainMessages.MUST_HAVE_A_MAIN_IMAGE);
-
-        foreach (var url in imageUrls)
-        {
-            AddSecondaryImage(url);
-        }
-    }
-
-    public int GetImagesTotal()
-    {
-        int total = 0;
-        if (!string.IsNullOrEmpty(MainImageUrl)) total++;
-        total += SecondaryImageUrl?.Count ?? 0;
-        return total;
-    }
-
     public void Disable()
     {
         IsActive = false;
     }
 
-    public void RemoveSecondaryImage(string url)
-    {
-        var result = SecondaryImageUrl.Remove(url);
-        if (result)
-        {
-            secondaryImageUrl = string.Join(" ", SecondaryImageUrl);
-        }
-        else
-        {
-            AddValidationError("SecondaryImageUrl",
-                ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST);
-        }
-    }
-
-
-    public List<string> GetAllImages()
-    {
-        var images = new List<string>();
-        images.Add(MainImageUrl);
-        images.AddRange(SecondaryImageUrl);
-        return images;
-    }
 
     public override bool IsValid()
     {

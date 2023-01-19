@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using ByteShop.Domain.Entities;
+using ByteShop.Domain.Entities.ProductAggregate;
 
 namespace Utilities.Entities;
 public class ProductBuilder
@@ -20,12 +20,12 @@ public class ProductBuilder
             .RuleFor(c => c.Height, f => f.Random.Float(1))
             .RuleFor(c => c.Width, f => f.Random.Float(1))
             .RuleFor(c => c.Length, f => f.Random.Float(1))
-            .RuleFor(c => c.CategoryId, f => f.Random.Number(0, 500))
-            .RuleFor(c => c.MainImageUrl, f => f.Internet.Url()).Generate();
+            .RuleFor(c => c.CategoryId, f => f.Random.Number(0, 500)).Generate();
 
         var faker = new Faker();
         string[] urls = faker.Make(numberSecondaryImages,() => faker.Internet.Url()).ToArray();
-        productFaker.AddSecondaryImage(urls);
+        productFaker.ImagesUrl.SetMainImage(faker.Internet.Url());
+        productFaker.ImagesUrl.AddSecondaryImage(urls);
         return productFaker;
     }
 }

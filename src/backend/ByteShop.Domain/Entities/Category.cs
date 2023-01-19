@@ -1,5 +1,6 @@
 ﻿using ByteShop.Domain.DomainMessages;
 using ByteShop.Domain.Emuns;
+using ByteShop.Domain.Entities.ProductAggregate;
 using ByteShop.Domain.Entities.Validations;
 using ByteShop.Domain.Interfaces.Mediator;
 

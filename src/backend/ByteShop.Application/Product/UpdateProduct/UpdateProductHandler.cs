@@ -59,11 +59,11 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
         return product.ValidationResult;
     }
 
-    private async Task RemoveImages(UpdateProductCommand command, Domain.Entities.Product product)
+    private async Task RemoveImages(UpdateProductCommand command, Domain.Entities.ProductAggregate.Product product)
     {
         if (command.SetMainImageBase64 is not null)
         {
-            await _imageService.DeleteImageAsync(product.MainImageUrl);
+            await _imageService.DeleteImageAsync(product.ImagesUrl.MainImageUrl);
         }
 
 
@@ -72,22 +72,22 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
             await _imageService.DeleteImageAsync(command.RemoveImageUrl);
             foreach (var url in command.RemoveImageUrl)
             {
-                product.RemoveSecondaryImage(url);
+                product.ImagesUrl.RemoveSecondaryImage(url);
             }
         }
     }
 
-    private async Task UploadImages(UpdateProductCommand command, Domain.Entities.Product product)
+    private async Task UploadImages(UpdateProductCommand command, Domain.Entities.ProductAggregate.Product product)
     {
         if (command.SetMainImageBase64 is not null)
         {
             var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.SetMainImageBase64.Base64,
                 command.SetMainImageBase64.Extension);
 
-            product.SetMainImage(mainImageUrl);
+            product.ImagesUrl.SetMainImage(mainImageUrl);
         }else if (command.SetMainImageUrl is not null)
         {
-            product.SetMainImage(command.SetMainImageUrl);
+            product.ImagesUrl.SetMainImage(command.SetMainImageUrl);
         }
 
         if (command.AddSecondaryImageBase64?.Length > 0)
@@ -96,7 +96,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
             {
                 var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
                     imageBase64.Extension);
-                product.AddSecondaryImage(url);
+                product.ImagesUrl.AddSecondaryImage(url);
             }
         }
 
@@ -104,7 +104,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, Valida
         {
             foreach (var imageUrl in command.AddSecondaryImageUrl)
             {
-                product.AddSecondaryImage(imageUrl);
+                product.ImagesUrl.AddSecondaryImage(imageUrl);
             }
         }
     }

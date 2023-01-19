@@ -1,4 +1,5 @@
 ﻿using ByteShop.Domain.Entities;
+using ByteShop.Domain.Entities.ProductAggregate;
 using ByteShop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

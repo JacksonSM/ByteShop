@@ -12,7 +12,7 @@ public class AddProductValidationTest
     public void ProductValidation_CreateProductWithValidData_ShouldReturnTrue()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -43,7 +43,7 @@ public class AddProductValidationTest
     public void PropertyCategoryId_CategoryIdWithValueEqualToOrLessThan0_ShouldReturnFalseWithErrorMessage(int categoryId)
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria Ram 4g",
                 description: "Memoria da boa!",
@@ -74,7 +74,7 @@ public class AddProductValidationTest
     public void PropertyName_EmptyName_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "",
                 description: "Memoria da boa!",
@@ -105,7 +105,7 @@ public class AddProductValidationTest
     public void PropertyName_NameWithMoreThan60Characters_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria rappppppppppppppppppppiiiiiiiiiiiiiiiiiipppuuuuuuuuuuuuuuuuuuuuuuuuum",
                 description: "Memoria da boa!",
@@ -136,7 +136,7 @@ public class AddProductValidationTest
     public void PropertyDescription_EmptyDescription_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "",
@@ -166,7 +166,7 @@ public class AddProductValidationTest
     public void PropertySKU_EmptySKU_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -196,7 +196,7 @@ public class AddProductValidationTest
     public void PropertyPrice_PriceWithNegativeValue_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -226,7 +226,7 @@ public class AddProductValidationTest
     public void PropertyCostPrice_CostPriceWithNegativeValue_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -256,7 +256,7 @@ public class AddProductValidationTest
     public void PropertyWarranty_WarrantyWithNegativeValue_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -286,7 +286,7 @@ public class AddProductValidationTest
     public void PropertyBrand_EmptyBrand_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -316,7 +316,7 @@ public class AddProductValidationTest
     public void PropertyBrand_BrandWithMoreThan30Characters_ShouldReturnFalseWithErrorMessage()
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -349,7 +349,7 @@ public class AddProductValidationTest
     public void PropertyWeight_WeightWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -381,7 +381,7 @@ public class AddProductValidationTest
     public void PropertyHeight_HeightWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -413,7 +413,7 @@ public class AddProductValidationTest
     [InlineData(-56.34f)]
     public void PropertyWidth_WidthWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",
@@ -442,7 +442,7 @@ public class AddProductValidationTest
     public void PropertyLength_LengthWithValueLessThanOne_ShouldReturnFalseWithErrorMessage(float value)
     {
         //Arrange
-        var product = new ByteShop.Domain.Entities.Product
+        var product = new ByteShop.Domain.Entities.ProductAggregate.Product
             (
                 name: "Memoria ram",
                 description: "Memoria da boa!",

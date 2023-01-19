@@ -122,7 +122,7 @@ public class UpdateProductHandlerTest
     {
         //Arrange
         var productToUpdate = ProductBuilder.BuildProduct();
-        var oldMainImage = productToUpdate.MainImageUrl;
+        var oldMainImage = productToUpdate.ImagesUrl.MainImageUrl;
         var category = CategoryBuilder.BuildCategoryWithoutLevel();
         var command = ProductCommandBuilder.UpdateProductCommandBuild(
             numberOfSecondaryImagesToRemove: 0,
@@ -180,7 +180,7 @@ public class UpdateProductHandlerTest
 
     private static UpdateProductHandler CreateUpdateProductHandler(
         ByteShop.Domain.Entities.Category category,
-        ByteShop.Domain.Entities.Product product)
+        ByteShop.Domain.Entities.ProductAggregate.Product product)
     {
         var productRepo = ProductRepositoryBuilder.Instance().SetupGetById(product).Build();
         var categoryRepo = CategoryRepositoryBuilder.Instance().SetupGetById(category).Build();

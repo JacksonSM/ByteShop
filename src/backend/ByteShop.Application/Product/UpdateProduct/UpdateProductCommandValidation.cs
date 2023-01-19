@@ -7,7 +7,7 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
 {
     private const int MAXIMUM_AMOUNT_OF_IMAGES = 5;
 
-    public UpdateProductCommandValidation(Domain.Entities.Category category, Domain.Entities.Product product)
+    public UpdateProductCommandValidation(Domain.Entities.Category category, Domain.Entities.ProductAggregate.Product product)
     {
         if (product is null)
         {
@@ -38,13 +38,13 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         RuleForEach(x => x.AddSecondaryImageBase64).SetValidator(new ImageBase64Validation());
     }
 
-    private void ValidateMainImage(Domain.Entities.Product product)
+    private void ValidateMainImage(Domain.Entities.ProductAggregate.Product product)
     {
         When(x => x.AddSecondaryImageBase64?.Length > 0, () =>
         {
             RuleFor(x => x).Custom((command, context) =>
             {
-                if (string.IsNullOrEmpty(product?.MainImageUrl)
+                if (string.IsNullOrEmpty(product?.ImagesUrl .MainImageUrl)
                     && command.SetMainImageBase64 is null)
                     context.AddFailure(ResourceValidationErrorMessage.MUST_HAVE_A_MAIN_IMAGE);
 
@@ -56,22 +56,22 @@ public class UpdateProductCommandValidation : AbstractValidator<UpdateProductCom
         });
     }
 
-    private void IsThereAnImageToRemove(Domain.Entities.Product product)
+    private void IsThereAnImageToRemove(Domain.Entities.ProductAggregate.Product product)
     {
         When(x => x.RemoveImageUrl?.Length > 0, () =>
         {
             RuleForEach(x => x.RemoveImageUrl)
-                .Must(url => product.GetAllImages().Contains(url))
+                .Must(url => product.ImagesUrl.GetAll().Contains(url))
                 .WithMessage(url => ResourceValidationErrorMessage.IMAGE_URL_DOES_NOT_EXIST);
         });
     }
 
     private static int GetTotalAmountOfImages(
-        Domain.Entities.Product product, UpdateProductCommand command)
+        Domain.Entities.ProductAggregate.Product product, UpdateProductCommand command)
     {
         if (product == null) return 0;
 
-        return product.GetImagesTotal()
+        return product.ImagesUrl.GetImagesTotal()
             - command.GetTotalImagesToRemove()
             + command.GetTotalImagesToAdd();
     }

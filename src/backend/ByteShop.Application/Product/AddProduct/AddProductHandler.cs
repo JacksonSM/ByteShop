@@ -30,7 +30,7 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
         if (!commandValidationResult.IsValid)
             return new AddProductResponse(commandValidationResult);
 
-        var newProduct = new Domain.Entities.Product
+        var newProduct = new Domain.Entities.ProductAggregate.Product
             (
                 name: command.Name,
                 description: command.Description,
@@ -56,14 +56,14 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
         return new AddProductResponse(newProduct.Id, newProduct.ValidationResult);
     }
 
-    private async Task UploadImages(AddProductCommand command, Domain.Entities.Product newProduct)
+    private async Task UploadImages(AddProductCommand command, Domain.Entities.ProductAggregate.Product newProduct)
     {
         if (command.MainImageBase64 is not null)
         {
             var mainImageUrl = await _imageService.UploadBase64ImageAsync(command.MainImageBase64.Base64,
                 command.MainImageBase64.Extension);
 
-            newProduct.SetMainImage(mainImageUrl);
+            newProduct.ImagesUrl.SetMainImage(mainImageUrl);
         }
 
         if (command.SecondaryImagesBase64?.Length > 0)
@@ -72,7 +72,7 @@ public class AddProductHandler : IRequestHandler<AddProductCommand, AddProductRe
             {
                 var url = await _imageService.UploadBase64ImageAsync(imageBase64.Base64,
                     imageBase64.Extension);
-                newProduct.AddSecondaryImage(url);
+                newProduct.ImagesUrl.AddSecondaryImage(url);
             }
         }
     }
