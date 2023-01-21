@@ -70,6 +70,132 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo nome é obrigatório..
+        /// </summary>
+        public static string CATEGORY_NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("CATEGORY_NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo nome suporta apenas 50 caracteres..
+        /// </summary>
+        public static string CATEGORY_NAME_MAXIMUMLENGTH {
+            get {
+                return ResourceManager.GetString("CATEGORY_NAME_MAXIMUMLENGTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo CPF é obrigatorio..
+        /// </summary>
+        public static string EMPTY_CPF {
+            get {
+                return ResourceManager.GetString("EMPTY_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo email está vazio..
+        /// </summary>
+        public static string EMPTY_EMAIL {
+            get {
+                return ResourceManager.GetString("EMPTY_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O Campo usuario é obrigatorio..
+        /// </summary>
+        public static string EMPTY_USERNAME {
+            get {
+                return ResourceManager.GetString("EMPTY_USERNAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg..
+        /// </summary>
+        public static string IMAGE_EXTENSION {
+            get {
+                return ResourceManager.GetString("IMAGE_EXTENSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imagem está incorreta. verifique os campos de base64 e extension..
+        /// </summary>
+        public static string INCORRECT_IMAGE {
+            get {
+                return ResourceManager.GetString("INCORRECT_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Esta solicitação contém base64 inválida..
+        /// </summary>
+        public static string INVALID_BASE64 {
+            get {
+                return ResourceManager.GetString("INVALID_BASE64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O CPF informado não é valido..
+        /// </summary>
+        public static string INVALID_CPF {
+            get {
+                return ResourceManager.GetString("INVALID_CPF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo email está invalido..
+        /// </summary>
+        public static string INVALID_EMAIL {
+            get {
+                return ResourceManager.GetString("INVALID_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O tamanho maximo para uma imagem é de 350kb..
+        /// </summary>
+        public static string MAX_IMAGE_SIZE {
+            get {
+                return ResourceManager.GetString("MAX_IMAGE_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to É permitido apenas 5 imagens..
+        /// </summary>
+        public static string MAXIMUM_AMOUNT_OF_IMAGES {
+            get {
+                return ResourceManager.GetString("MAXIMUM_AMOUNT_OF_IMAGES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to É necessario ter uma imagem principal..
+        /// </summary>
+        public static string MUST_HAVE_A_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("MUST_HAVE_A_MAIN_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A categoria pai não existe.
+        /// </summary>
+        public static string PARENT_CATEGORY_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("PARENT_CATEGORY_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo marca é obrigatório..
         /// </summary>
         public static string PRODUCT_BRAND_EMPTY {
@@ -97,6 +223,33 @@ namespace ByteShop.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Produto inexistente..
+        /// </summary>
+        public static string PRODUCT_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("PRODUCT_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo altura deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo comprimento deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo nome é obrigatório..
         /// </summary>
         public static string PRODUCT_NAME_EMPTY {
@@ -111,6 +264,42 @@ namespace ByteShop.Exceptions {
         public static string PRODUCT_NAME_MAXIMUMLENGTH {
             get {
                 return ResourceManager.GetString("PRODUCT_NAME_MAXIMUMLENGTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo SKU é obrigatório..
+        /// </summary>
+        public static string PRODUCT_SKU_EMPTY {
+            get {
+                return ResourceManager.GetString("PRODUCT_SKU_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo peso deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo largura deve ser maior que zero..
+        /// </summary>
+        public static string PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO {
+            get {
+                return ResourceManager.GetString("PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Falha ao envia imagem principal. envie como base64 ou link.
+        /// </summary>
+        public static string UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE {
+            get {
+                return ResourceManager.GetString("UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE", resourceCulture);
             }
         }
     }

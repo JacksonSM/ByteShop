@@ -120,6 +120,48 @@
   <data name="CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
     <value>Categoria inexistente.</value>
   </data>
+  <data name="CATEGORY_NAME_EMPTY" xml:space="preserve">
+    <value>O campo nome é obrigatório.</value>
+  </data>
+  <data name="CATEGORY_NAME_MAXIMUMLENGTH" xml:space="preserve">
+    <value>O campo nome suporta apenas 50 caracteres.</value>
+  </data>
+  <data name="EMPTY_CPF" xml:space="preserve">
+    <value>O campo CPF é obrigatorio.</value>
+  </data>
+  <data name="EMPTY_EMAIL" xml:space="preserve">
+    <value>O campo email está vazio.</value>
+  </data>
+  <data name="EMPTY_USERNAME" xml:space="preserve">
+    <value>O Campo usuario é obrigatorio.</value>
+  </data>
+  <data name="IMAGE_EXTENSION" xml:space="preserve">
+    <value>Apenas as seguintes extensões são permitidas: webp, jpe, jpg, jpeg.</value>
+  </data>
+  <data name="INCORRECT_IMAGE" xml:space="preserve">
+    <value>Imagem está incorreta. verifique os campos de base64 e extension.</value>
+  </data>
+  <data name="INVALID_BASE64" xml:space="preserve">
+    <value>Esta solicitação contém base64 inválida.</value>
+  </data>
+  <data name="INVALID_CPF" xml:space="preserve">
+    <value>O CPF informado não é valido.</value>
+  </data>
+  <data name="INVALID_EMAIL" xml:space="preserve">
+    <value>O campo email está invalido.</value>
+  </data>
+  <data name="MAXIMUM_AMOUNT_OF_IMAGES" xml:space="preserve">
+    <value>É permitido apenas 5 imagens.</value>
+  </data>
+  <data name="MAX_IMAGE_SIZE" xml:space="preserve">
+    <value>O tamanho maximo para uma imagem é de 350kb.</value>
+  </data>
+  <data name="MUST_HAVE_A_MAIN_IMAGE" xml:space="preserve">
+    <value>É necessario ter uma imagem principal.</value>
+  </data>
+  <data name="PARENT_CATEGORY_DOES_NOT_EXIST" xml:space="preserve">
+    <value>A categoria pai não existe</value>
+  </data>
   <data name="PRODUCT_BRAND_EMPTY" xml:space="preserve">
     <value>O campo marca é obrigatório.</value>
   </data>
@@ -129,10 +171,31 @@
   <data name="PRODUCT_DESCRIPTION_EMPTY" xml:space="preserve">
     <value>O campo descrição é obrigatório.</value>
   </data>
+  <data name="PRODUCT_DOES_NOT_EXIST" xml:space="preserve">
+    <value>Produto inexistente.</value>
+  </data>
+  <data name="PRODUCT_HEIGHT_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo altura deve ser maior que zero.</value>
+  </data>
+  <data name="PRODUCT_LENGTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo comprimento deve ser maior que zero.</value>
+  </data>
   <data name="PRODUCT_NAME_EMPTY" xml:space="preserve">
     <value>O campo nome é obrigatório.</value>
   </data>
   <data name="PRODUCT_NAME_MAXIMUMLENGTH" xml:space="preserve">
     <value>O campo nome suporta apenas 60 caracteres.</value>
+  </data>
+  <data name="PRODUCT_SKU_EMPTY" xml:space="preserve">
+    <value>O campo SKU é obrigatório.</value>
+  </data>
+  <data name="PRODUCT_WEIGHT_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo peso deve ser maior que zero.</value>
+  </data>
+  <data name="PRODUCT_WIDTH_LESS_OR_EQUAL_TO_ZERO" xml:space="preserve">
+    <value>O campo largura deve ser maior que zero.</value>
+  </data>
+  <data name="UPDATE_PRODUCT_WITH_INVALID_MAIN_IMAGE" xml:space="preserve">
+    <value>Falha ao envia imagem principal. envie como base64 ou link</value>
   </data>
 </root>

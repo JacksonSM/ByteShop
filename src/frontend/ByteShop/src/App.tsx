@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { Container } from "react-bootstrap";
+// import Paginacao from "./components/Paginacao";
+import SideMenu from "./components/SideMenu";
+import FormProduto from "./components/FormProdutos";
+import Inventario from "./pages/Inventario";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SucessSubmit from "./pages/SucessSubmit";
+import { useState } from "react";
+import FailSubmit from "./pages/FailSubmit";
+import GerenciamentoDeCategorias from "./pages/GerenciamentoDeCategorias";
+import CadastroProduto from "./pages/CadastroProduto";
+import AlteracaoProduto from "./pages/AlteracaoProduto";
+import { ContextProductIDProvider } from "./components/context/provider";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [id, setID] = useState(12);
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <Container fluid className="vw-100 vh-100 m-0 p-0 overflow-auto">
+      <ContextProductIDProvider>
+        <Router>
+          <SideMenu />
+          <Routes>
+            <Route path={"/"} element={<Inventario />} />
+            <Route
+              path={"/gerenciamento-de-categorias"}
+              element={<GerenciamentoDeCategorias />}
+            />
+            <Route
+              path={"/cadastro-de-produtos"}
+              element={<CadastroProduto />}
+            />
+            <Route
+              path={"/alteracao-de-produtos"}
+              element={<AlteracaoProduto />}
+            />
+            <Route path={"/sucess-submit"} element={<SucessSubmit />} />
+            <Route path={"/fail-submit"} element={<FailSubmit />} />
+          </Routes>
+        </Router>
+      </ContextProductIDProvider>
+    </Container>
+  );
 }
 
-export default App
+export default App;

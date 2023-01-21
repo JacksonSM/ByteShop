@@ -1,7 +1,10 @@
-﻿using ByteShop.Domain.Entities;
+﻿using ByteShop.Domain.Entities.ProductAggregate;
 
 namespace ByteShop.Domain.Interfaces.Repositories;
-public interface IProductRepository
+public interface IProductRepository : IRepository<Product>
 {
-    Task AddAsync(Product product);
+    Task<(IEnumerable<Product> products, int quantityProduct)> GetAllAsync(
+    string sku, string name, string brand, string category, int? actualPage, int? itemsPerPage);
+
+    
 }
