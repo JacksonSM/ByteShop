@@ -117,8 +117,9 @@ const Inventario: React.FC = () => {
     categRef.current!.value = "";
     getData({
       itemsPerPage: { itemsPerPage: Number(numberOfItemsRef.current?.value) },
-      actualPage: { actualPage: Number(activeItem) },
+      actualPage: { actualPage: 1 },
     });
+    setActiveItem(1)
     getActiveCategories();
   }
 
