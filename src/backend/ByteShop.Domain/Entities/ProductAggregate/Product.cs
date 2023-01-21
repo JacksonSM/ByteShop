@@ -78,7 +78,6 @@ public class Product : Entity, IAggregateRoot
         IsActive = false;
     }
 
-
     public override bool IsValid()
     {
         var validator = new ProductValidation();
