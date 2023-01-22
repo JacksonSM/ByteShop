@@ -45,8 +45,7 @@ Além disso, na ByteShop também será feito o gerenciamento destes produtos e a
 
 **Client:** React, Typescript, Bootstrap
 
-**Server:** C#
-
+**Server:** C#, ASPNET, SQL Server, Azure Storage
 
 ## Documentação
 <details>
@@ -57,7 +56,12 @@ Além disso, na ByteShop também será feito o gerenciamento destes produtos e a
 - [TypeScript](https://www.typescriptlang.org/)
 - [Bootstrap 5.2.3](https://getbootstrap.com/docs/5.2/)
 - [react-bootstrap](https://react-bootstrap.github.io/getting-started/introduction/)
-
+- [AutoMapper](https://docs.automapper.org/en/stable/Getting-started.html)
+- [FluentValidation](https://docs.fluentvalidation.net/en/latest/)
+- [FluentAssertions](https://fluentassertions.com/)
+- [Bogus](https://github.com/bchavez/Bogus)
+- [Moq](https://documentation.help/Moq/)
+- [xUnit](https://xunit.net/)
 </details>
 
 **Patterns**
