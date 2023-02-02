@@ -31,11 +31,13 @@ interface IModalChangeProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   data: Icategory;
   allCategories: Icategory[];
+  setAllCategories: React.Dispatch<React.SetStateAction<Icategory[]> | any>;
 }
 interface IModalAddProps {
   allCategories: Icategory[];
   showModalAddCateg: boolean;
   setShowModalAddCateg: React.Dispatch<React.SetStateAction<boolean>>;
+  setAllCategories: React.Dispatch<React.SetStateAction<Icategory[]> | any>;
 }
 
 //modal para Criar as categorias
@@ -43,6 +45,7 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
   showModalAddCateg,
   setShowModalAddCateg,
   allCategories,
+  setAllCategories,
 }: IModalAddProps) => {
   const categNameRef = useRef<HTMLInputElement>(null);
   const parentCategoryId = useRef<HTMLSelectElement>(null);
@@ -65,7 +68,10 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
     }).then(
       (status) =>
         (status !== 201 && alert("Erro ao atulizar o produto!")) ||
-        location.reload()
+        Category.getAll().then((data) => {
+          setAllCategories(data);
+          setShowModalAddCateg(false);
+        })
     );
   }
 
@@ -151,6 +157,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
   setShowModal,
   data: modalInfo,
   allCategories,
+  setAllCategories,
 }: IModalChangeProps) => {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -180,17 +187,25 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
             ? categParentNameRef.current.value
             : 0)
       ),
-    }).then(
-      (status) =>
-        (status !== 200 && alert("Erro ao atualizar a categoria")) ||
-        location.reload()
+    }).then((status) =>
+      status !== 200
+        ? alert("Erro ao atualizar a categoria")
+        : Category.getAll().then((data) => {
+            setAllCategories(data);
+            handleClose();
+          })
     );
   }
 
   // função para deletar a categoria
   const handleDelete = (id: number) => {
     Category.deleteById(id).then((status) =>
-      status !== 202 ? alert("Erro ao deletar a categoria") : location.reload()
+      status !== 202
+        ? alert("Erro ao deletar a categoria")
+        : Category.getAll().then((data) => {
+            setAllCategories(data);
+            handleClose();
+          })
     );
   };
 
@@ -292,7 +307,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
 
 const GerenciamentoDeCategorias: React.FC = () => {
   //states
-  const [isLoding, setIsLoding] = useState(false)
+  const [isLoding, setIsLoding] = useState(false);
   const [data, setData] = useState<Icategory[]>([]);
   const [main, setMain] = useState<Icategory[]>([]);
   const [sub1, setSub1] = useState<Icategory[]>([]);
@@ -332,9 +347,9 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
     let search = data.filter((categ) => reg.test(categ.name));
 
-    setIsLoding(true)
+    setIsLoding(true);
     setTimeout(() => {
-      setIsLoding(false)
+      setIsLoding(false);
       setMain(search.filter((item) => !item.parentCategoryId));
       setSub1(
         data.filter((item) =>
@@ -351,17 +366,17 @@ const GerenciamentoDeCategorias: React.FC = () => {
 
   // useEffects
   useEffect(() => {
-    setIsLoding(true)
+    setIsLoding(true);
     Category.getAll().then((result) => {
       if (result instanceof Error) {
-        setIsLoding(false)
+        setIsLoding(false);
         alert(
           `Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`
         );
         return;
       } else {
         setData(result);
-        setIsLoding(false)
+        setIsLoding(false);
       }
     });
   }, []);
@@ -434,14 +449,17 @@ const GerenciamentoDeCategorias: React.FC = () => {
         >
           + categorias
         </Button>
-        {isLoding ?(   <Spinner className="ms-3" animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>): null}
+        {isLoding ? (
+          <Spinner className="ms-3" animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : null}
         {showModalAddCateg && (
           <ModalCriacaoCategoria
             showModalAddCateg={showModalAddCateg}
             setShowModalAddCateg={setShowModalAddCateg}
             allCategories={data}
+            setAllCategories={setData}
           />
         )}
       </Form.Group>
@@ -450,6 +468,7 @@ const GerenciamentoDeCategorias: React.FC = () => {
           showModal={showModalChanges}
           setShowModal={setShowModalChanges}
           data={modalInfo}
+          setAllCategories={setData}
           allCategories={data}
         />
       )}
