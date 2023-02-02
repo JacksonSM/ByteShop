@@ -182,7 +182,7 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
       ),
     }).then(
       (status) =>
-        (status !== 200 && alert("Erro ao atulizar o produto!")) ||
+        (status !== 200 && alert("Erro ao atualizar a categoria")) ||
         location.reload()
     );
   }
