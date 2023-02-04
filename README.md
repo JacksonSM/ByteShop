@@ -1,6 +1,5 @@
 
-![Logo](https://www.imagemhost.com.br/images/2023/01/22/banner-logo3aed8d14f9caac78.png)
-
+![logo](https://user-images.githubusercontent.com/76600539/216772488-ab8eab36-3a2e-4a5e-a740-5002107a84b5.png)
 
 ![status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
 
