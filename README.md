@@ -41,6 +41,17 @@ Além disso, na ByteShop também será feito o gerenciamento destes produtos e a
 - [ ] Criar Sistema de Login
 - [ ] Criar Site da loja Virtual
 
+<details>
+
+<summary>Extras</summary>
+
+- [ ] adição de seção de comentários no anúncio
+- [ ] adição de selos nos anúncios
+- [ ] adição de ficha técnica de acordo com a categoria do produto
+- [ ] alteração do layout de exibição de fotos do produtos
+
+</details>
+
 ## Tech Stack / Tecnologias
 
 **Client:** React, Typescript, Bootstrap
