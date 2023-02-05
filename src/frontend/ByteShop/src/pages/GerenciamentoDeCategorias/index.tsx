@@ -12,6 +12,8 @@ import {
 } from "react-bootstrap";
 import { Icategory } from "../../services/api/Category/types";
 import { Category } from "../../services/api/Category";
+import Alert from "../../components/Alert";
+import { useContextAlert } from "../../components/Alert/context";
 
 // funções para os modais
 // retorna uma array com todas as categorias principais
@@ -49,13 +51,18 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
 }: IModalAddProps) => {
   const categNameRef = useRef<HTMLInputElement>(null);
   const parentCategoryId = useRef<HTMLSelectElement>(null);
+  const { setShowToast, setAlertMessage, setAlertMessageColor } =
+    useContextAlert();
 
   // função para adicionar a categoria
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (categNameRef.current?.value === "") {
-      alert("O nome da categoria não pode estar vazio!");
+      setAlertMessage("O nome da categoria não pode estar vazio!");
+      setAlertMessageColor("danger");
+      setShowModalAddCateg(false);
+      setShowToast(true);
       return null;
     }
 
@@ -65,14 +72,22 @@ const ModalCriacaoCategoria: React.FC<IModalAddProps> = ({
         parentCategoryId.current &&
           (parentCategoryId.current.value ? parentCategoryId.current.value : 0)
       ),
-    }).then(
-      (status) =>
-        (status !== 201 && alert("Erro ao atulizar o produto!")) ||
+    }).then((status) => {
+      if (status !== 201) {
+        setShowModalAddCateg(false);
+        setAlertMessage("Erro ao cadastra a categoria!");
+        setAlertMessageColor("danger");
+        setShowModalAddCateg(false);
+        setShowToast(true);
+      } else
         Category.getAll().then((data) => {
           setAllCategories(data);
           setShowModalAddCateg(false);
-        })
-    );
+          setAlertMessage("Categoria Cadastrada Com Sucesso!");
+          setAlertMessageColor("success");
+          setShowToast(true);
+        });
+    });
   }
 
   return (
@@ -166,6 +181,9 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
   const categNameRef = useRef<HTMLInputElement>(null);
   const categParentNameRef = useRef<HTMLSelectElement>(null);
 
+  const { showToast, setShowToast, setAlertMessage, setAlertMessageColor } =
+    useContextAlert();
+
   const parent = allCategories.find(
     (item) => item.id === modalInfo.parentCategoryId
   );
@@ -174,7 +192,10 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
     e.preventDefault();
 
     if (categNameRef.current?.value === "") {
-      alert("O nome da categoria não pode estar vazio!");
+      setAlertMessage("O nome da categoria não pode estar vazio!");
+      setAlertMessageColor("danger");
+      handleClose();
+      setShowToast(true);
       return null;
     }
 
@@ -187,26 +208,37 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
             ? categParentNameRef.current.value
             : 0)
       ),
-    }).then((status) =>
-      status !== 200
-        ? alert("Erro ao atualizar a categoria")
-        : Category.getAll().then((data) => {
-            setAllCategories(data);
-            handleClose();
-          })
-    );
+    }).then((status) => {
+      if (status !== 200) {
+        setAlertMessage("Erro ao atualizar a categoria!");
+        setAlertMessageColor("danger");
+        handleClose();
+        setShowToast(true);
+      } else
+        Category.getAll().then((data) => {
+          setAllCategories(data);
+          handleClose();
+          setAlertMessage("Categoria Atualizada com sucesso!");
+          setAlertMessageColor("success");
+          setShowToast(true);
+        });
+    });
   }
 
   // função para deletar a categoria
   const handleDelete = (id: number) => {
-    Category.deleteById(id).then((status) =>
-      status !== 202
-        ? alert("Erro ao deletar a categoria")
-        : Category.getAll().then((data) => {
-            setAllCategories(data);
-            handleClose();
-          })
-    );
+    Category.deleteById(id).then((status) => {
+      if (status !== 202) {
+        handleClose();
+        setAlertMessage("Erro ao deletar a categoria!");
+        setAlertMessageColor("danger");
+        setShowToast(true);
+      } else
+        Category.getAll().then((data) => {
+          setAllCategories(data);
+          handleClose();
+        });
+    });
   };
 
   return (
@@ -320,6 +352,10 @@ const GerenciamentoDeCategorias: React.FC = () => {
   // ref para campo de pesquisa de categorias
   const refSearchCateg = useRef<HTMLInputElement>(null);
 
+  // useContext para o Alert
+  const { showToast, setShowToast, setAlertMessage, setAlertMessageColor } =
+    useContextAlert();
+
   // functions
   function setCategories() {
     setMain(data.filter((item) => !item.parentCategoryId));
@@ -370,9 +406,13 @@ const GerenciamentoDeCategorias: React.FC = () => {
     Category.getAll().then((result) => {
       if (result instanceof Error) {
         setIsLoding(false);
-        alert(
-          `Erro ao lista as categorias:\n message:\n  ${result.message}\n stack:\n  ${result.stack}`
+        setAlertMessage(
+          `Erro ao lista as categorias:
+
+          message:${result.message}`
         );
+        setAlertMessageColor("danger");
+        setShowToast(true);
         return;
       } else {
         setData(result);
@@ -430,6 +470,8 @@ const GerenciamentoDeCategorias: React.FC = () => {
       <h2 className="text-center fs-2 fw-bold ms-2">
         Gereciamento de Categorias
       </h2>
+      {showToast ? <Alert /> : null}
+
       <Form.Group
         className="d-flex mx-auto align-items-center"
         style={{ width: "500px" }}
