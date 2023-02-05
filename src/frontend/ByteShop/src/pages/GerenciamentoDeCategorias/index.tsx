@@ -234,9 +234,12 @@ const ModalAlteracaoCategoria: React.FC<IModalChangeProps> = ({
         setAlertMessageColor("danger");
         setShowToast(true);
       } else
-        Category.getAll().then((data) => {
-          setAllCategories(data);
-          handleClose();
+      Category.getAll().then((data) => {
+        setAllCategories(data);
+        handleClose();
+        setAlertMessage("Categoria deletada com sucesso!");
+        setAlertMessageColor("success");
+        setShowToast(true);
         });
     });
   };
