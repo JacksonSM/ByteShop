@@ -4,7 +4,7 @@ import SideMenu from "./components/SideMenu";
 import FormProduto from "./components/FormProdutos";
 import Inventario from "./pages/Inventario";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SucessSubmit from "./pages/SucessSubmit";
+import SuccessSubmit from "./pages/SuccessSubmit";
 import { useState } from "react";
 import FailSubmit from "./pages/FailSubmit";
 import GerenciamentoDeCategorias from "./pages/GerenciamentoDeCategorias";
@@ -53,7 +53,7 @@ function App() {
                 path={"/alteracao-de-produtos"}
                 element={<AlteracaoProduto />}
               />
-              <Route path={"/sucess-submit"} element={<SucessSubmit />} />
+              <Route path={"/success-submit"} element={<SuccessSubmit />} />
               <Route path={"/fail-submit"} element={<FailSubmit />} />
             </Routes>
           </Router>

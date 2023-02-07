@@ -187,7 +187,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
             value={{ id, setID }}
           ></ContextProductID.Provider>;
           setID(Number(response.productId));
-          rota("/sucess-submit");
+          rota("/success-submit");
         }
       });
     }

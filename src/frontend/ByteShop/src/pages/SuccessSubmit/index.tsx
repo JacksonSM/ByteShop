@@ -13,7 +13,7 @@ import {
 import { useDataProductID } from "../../components/context";
 import { IProductGet } from "../../services/api/Product/types";
 
-const SucessSubmit = () => {
+const SuccessSubmit = () => {
   const { id } = useDataProductID();
 
   const [data, setdata] = useState<IProductGet>({});
@@ -77,7 +77,9 @@ const SucessSubmit = () => {
           <Col>
             <article className="my-4">
               <h2 className="fs-4 ms-3 mb-2">Categoria</h2>
-              <p className="text-primary ms-3 fs-5 mb-2">{props.category?.id}</p>
+              <p className="text-primary ms-3 fs-5 mb-2">
+                {props.category?.id}
+              </p>
             </article>
             <article className="my-4">
               <h2 className="fs-4 ms-3 mb-2">Marca</h2>
@@ -143,4 +145,4 @@ const SucessSubmit = () => {
   );
 };
 
-export default SucessSubmit;
+export default SuccessSubmit;
