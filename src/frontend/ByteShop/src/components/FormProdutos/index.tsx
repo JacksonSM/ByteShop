@@ -24,7 +24,16 @@ import { DropdownSelector } from "../categorias/DropdownSelector";
 import { Category } from "../../services/api/Category";
 import { ContextProductID, useDataProductID } from "../context";
 import { ContextProductChangeDataProvider } from "../../pages/AlteracaoProduto/context/provider";
-import { replacingComma, replacingDot, urlRegex, base64Regex, base64ReplacePatternRegex, base64ExtensionReplaceReg } from "../../utils";
+import {
+  replacingComma,
+  replacingDot,
+  urlRegex,
+  base64Regex,
+  base64ReplacePatternRegex,
+  base64ExtensionReplaceReg,
+} from "../../utils";
+import Alert from "../../components/Alert";
+import { useContextAlert } from "../../components/Alert/context";
 
 type TBtnText = { btnText?: string };
 
@@ -46,14 +55,17 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
 
   const [changeMImageURL, setChangeMImageURL] = useState<string | null>(null);
 
+  const { showToast, setShowToast, setAlertMessage, setAlertMessageColor } =
+    useContextAlert();
+
   // verificando se é uma URL valida
   function checkUrl(url: string) {
-      if (urlRegex.test(url)) return true
-      else {
-        console.error("URL inválida!");
-        return false;
-      }
+    if (urlRegex.test(url)) return true;
+    else {
+      console.error("URL inválida!");
+      return false;
     }
+  }
 
   // refs
   const skuRef = useRef<HTMLInputElement>(null);
@@ -169,7 +181,6 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
         secondaryImagesBase64,
       }).then((response) => {
         if (response instanceof Error) {
-          alert(response.stack);
           rota("/fail-submit");
         } else {
           <ContextProductID.Provider
@@ -200,10 +211,8 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
         setMainImageUrl: changeMImageURL,
         setMainImageBase64: changeMImageB64,
         addSecondaryImageBase64: addSecImagesB64,
-      })
-      .then((response) => {
+      }).then((response) => {
         if (response instanceof Error) {
-          alert(response.stack);
           rota("/fail-submit");
         } else {
           rota("/");
@@ -217,7 +226,6 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     rota("/");
     return;
   }
-
 
   function handleImagesInput(e: React.RefObject<HTMLInputElement>) {
     const files = e.current!.files;
@@ -253,10 +261,19 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
             }
           };
           setImagesIsInvalid(false);
+          setAlertMessage("Imagem adicionada com sucesso!");
+          setAlertMessageColor("sucess");
+          setShowToast(true);
         } else if (Number((files[i].size / 1024).toFixed(2)) >= 350) {
-          alert("foto maior que 350KB");
+          setAlertMessage("Foto maior que 350KB");
+          setAlertMessageColor("danger");
+          setShowToast(true);
           setImagesIsInvalid(true);
-        } else if (imgSrc.length === 5) alert("limite de imagens atingido!");
+        } else if (imgSrc.length === 5) {
+          setAlertMessage("Limite de imagens atingido!");
+          setAlertMessageColor("danger");
+          setShowToast(true);
+        }
       }
     }
   }
@@ -273,13 +290,22 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
         ? setChangeMImageURL(imgSrc[1].base64)
         : setChangeMImageURL(null);
 
-     if(base64Regex.test(imgSrc[1].base64.replace(base64ReplacePatternRegex, ""))){
+      if (
+        base64Regex.test(
+          imgSrc[1].base64.replace(base64ReplacePatternRegex, "")
+        )
+      ) {
         setChangeMImageB64({
-            base64: imgSrc[1].base64,
-            extension: imgSrc[1].extension.replace(base64ExtensionReplaceReg, "."),
-          })
-          setAddSecImagesB64(addSecImagesB64.filter(img => img.base64 !== changeMImageB64.base64))
-          } else setChangeMImageB64(null);
+          base64: imgSrc[1].base64,
+          extension: imgSrc[1].extension.replace(
+            base64ExtensionReplaceReg,
+            "."
+          ),
+        });
+        setAddSecImagesB64(
+          addSecImagesB64.filter((img) => img.base64 !== changeMImageB64.base64)
+        );
+      } else setChangeMImageB64(null);
 
       // alert("ok")
     }
@@ -305,6 +331,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
     <>
       <ContextProductChangeDataProvider>
         <Container className="p-3 d-flex flex-column m-0 vw-100" fluid>
+          {showToast && <Alert />}
           <Breadcrumb className="align-self-center">
             <BreadcrumbItem href="/">Início</BreadcrumbItem>
             <BreadcrumbItem href="/cadastro-de-produtos" active>
