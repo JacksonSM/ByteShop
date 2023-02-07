@@ -262,7 +262,7 @@ const FormProduto: React.FC<TBtnText> = ({ btnText }: TBtnText) => {
           };
           setImagesIsInvalid(false);
           setAlertMessage("Imagem adicionada com sucesso!");
-          setAlertMessageColor("sucess");
+          setAlertMessageColor("success");
           setShowToast(true);
         } else if (Number((files[i].size / 1024).toFixed(2)) >= 350) {
           setAlertMessage("Foto maior que 350KB");
