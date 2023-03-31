@@ -51,6 +51,9 @@ Além disso, na ByteShop também será feito o gerenciamento destes produtos e a
 
 </details>
 
+## Design
+[Figma](https://www.figma.com/file/TwylEn2trstpLsgAyHmQCS/ByteShop?node-id=2417%3A1738&t=pDIbOoxZQZz9NMql-1)
+
 ## Tech Stack / Tecnologias
 
 **Client:** React, Typescript, Bootstrap
